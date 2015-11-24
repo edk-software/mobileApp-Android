@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    android:textColor="@color/white_on_black" >
+
+    <ScrollView
+        android:id="@+id/scrollViewRecords"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:id="@+id/linearLayoutRecords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/considerationsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:lineSpacingExtra="15sp"
+                android:textColor="@color/white_on_black"
+                android:textSize="@dimen/common_text_size" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/action_bar_height"
+        android:weightSum="5" >
+
+        <ImageButton
+            android:id="@+id/left"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:alpha="0.9"
+            android:background="@drawable/red_full_button"
+            android:contentDescription="@string/previous_considerations"
+            android:src="@drawable/lewa2" />
+
+        <Button
+            android:id="@+id/listen"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:alpha="0.9"
+            android:background="@drawable/red_full_button"
+            android:text="@string/listen"
+            android:textColor="@color/white_on_red"
+            android:textSize="@dimen/common_text_size" >
+        </Button>
+
+        <ImageButton
+            android:id="@+id/right"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:alpha="0.9"
+            android:background="@drawable/red_full_button"
+            android:contentDescription="@string/next_considerations"
+            android:src="@drawable/prawa2" />
+    </LinearLayout>
+
+</LinearLayout>

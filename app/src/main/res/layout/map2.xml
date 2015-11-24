@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <fragment 
+    android:id="@+id/map"
+    android:name="com.google.android.gms.maps.MapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+
+
+    <!-- ImageButton
+                    android:id="@+id/considerationsButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/considerations"
+            android:background="@null"
+        android:contentDescription="@string/go_to_consideration"/-->
+        <!-- ImageButton
+                    android:id="@+id/navigationButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/navigation"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:background="@null"
+        android:contentDescription="@string/start_navigation"/-->
+        <LinearLayout
+                    android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/action_bar_height"
+        android:weightSum="2">
+                                        <Button
+                    android:id="@+id/considerationsButton"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:text="@string/rozwazania"
+            android:textColor="@color/white_on_red"
+            android:textSize="@dimen/common_text_size"
+            android:background="@drawable/red_full_button"
+            android:layout_marginRight="1dp"
+            android:alpha="0.8"/>
+                                                                                <!-- Button
+                    android:id="@+id/separationButton"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:background="@color/white_on_red"
+                        android:alpha="0"/-->
+
+                <Button
+                    android:id="@+id/navigationButton"
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_weight="1"
+                    android:alpha="0.8"
+                    android:background="@color/red"
+                    android:text="@string/start_navigation"
+                    android:textColor="@color/white_on_red"
+                    android:textSize="@dimen/common_text_size" />
+
+                </LinearLayout>
+    <!-- RadioGroup 
+        android:id="@+id/radio_group_list_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:orientation="horizontal" 
+        android:background="#80000000"
+        android:padding="4dp" >
+
+        <RadioButton
+            android:id="@+id/radioPopular"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/rozwazania"
+            android:gravity="left|center_vertical"/>
+
+       
+    </RadioGroup-->
+
+</FrameLayout>

@@ -1,23 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pl.org.edk" >
+    package="pl.org.edk"
+    android:installLocation="preferExternal"
+    android:versionCode="6"
+    android:versionName="2.1" >
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".NavigationDrawerActivity"
+            android:name=".menu.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseThemeNoTitle" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".menu.CountyChooserActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".menu.CityChooserActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".menu.TrackChooserActivity"
+            android:label="Wybierz tras�:"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".menu.ConsiderationsYearChooserActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".menu.StationsChooserActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".menu.ConsiderationsViewActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".menu.EDKInfoActivity"
+            android:label="O EDK"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ActivityWithMap"
+            android:launchMode="singleTop" >
+        </activity>
+        <activity
+            android:name=".EndActivity"
+            android:theme="@style/AppBaseThemeNoTitle" >
+        </activity>
+
+        <service android:name=".GPSService" >
+        </service>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCE2XrLnvGdrYSuOIrRzC_Nk5E0-CJ676U" />
     </application>
 
 </manifest>

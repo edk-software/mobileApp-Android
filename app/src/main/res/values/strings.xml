@@ -1,8 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">EDK</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
+	<string name="app_name">EDK</string>
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+	<string name="action_settings">Settings</string>
+	<string name="action_opis">Opis trasy</string>
+	<string name="action_rozwazania">Rozważania</string>
+	<string name="action_GPS">Mapa</string>
+	<string name="background_gps_stop">Wyłącz aplikację</string>
+	<string name="trasy">Trasy</string>
+	<string name="podejmij_wyzwanie">Podejmij wyzwanie!</string>
+	<string name="rozwazania">Rozważania</string>
+	<string name="opcje">Opcje</string>
+	<string name="o_edk">Informacje o EDK</string>
+	<string name="trasy_text">Wybierz sobie trasę!</string>
+	<string name="podejmij_wyzwanie_text">Podejmij wyzwanie!</string>
+	<string name="rozwazania_text">Wybierz sobie rozwazania!</string>
+	<string name="o_edk_text">Droga Krzyżowa może zaboleć. Proponujemy Ci rozważanie jej na dystansie około 40 km, w nocy, w milczeniu i samotności. \nEDK to: Wyzwanie, Droga, Zmaganie, Spotkanie. \n \nW aplikacji i na naszej stronie proponujemy Ci przykładowe trasy, którymi możesz podążać. Możesz także wymyślić swoją trasę. \nJeśli masz pomysł na nową trasę lub chcesz stworzyć rejon EDK - skontaktuj się z nami. \n \nWięcej informacji znajdziesz na:</string>
+	<string-array name="stations">
+		<item>Wprowadzenie</item>
+		<item>Stacja I Pan Jezus skazany na śmierć</item>
+		<item>Stacja II Pan Jezus bierze krzyż na swe ramiona</item>
+		<item>Stacja III Pierwszy upadek Pana Jezusa</item>
+		<item>Stacja IV Pan Jezus spotyka swą matkę</item>
+		<item>Stacja V Szymon Cyrenejczyk pomaga nieść krzyż Jezusowi</item>
+		<item>Stacja VI Święta Weronika ociera Twarz Pana Jezusa</item>
+		<item>Stacja VII Pan Jezus upada pod krzyżem po raz drugi</item>
+		<item>Stacja VIII Pan Jezus pociesza płaczące niewiasty</item>
+		<item>Stacja IX Trzeci upadek Pana Jezusa</item>
+		<item>Stacja X Pan Jezus z szat obnażony</item>
+		<item>Stacja XI Pan Jezus przybity do krzyża</item>
+		<item>Stacja XII Pan Jezus umiera na krzyżu</item>
+		<item>Stacja XIII Pan Jezus zostaje zdjęty z krzyża</item>
+		<item>Stacja XIV Pan Jezus złożony do grobu</item>
+		<item>Podsumowanie</item>
+	</string-array>
+	<string-array name="considerations_years">
+		<item>2015</item>
+	</string-array>
+	<string name="out_of_track_message">Jesteś poza trasą</string>
+	<string name="go_to_consideration">Przejdź do rozważań</string>
+	<string name="near_checkpoint_message">"Jesteś w pobliżu stacji "</string>
+	<string name="back_on_track_message">Jesteś na trasie</string>
+	<string name="navigation_on_message">Nawigacja GPS włączona</string>
+	<string name="end_dialog_message">Czy na pewno chcesz zakończyć pracę aplikacji?</string>
+	<string name="no">Nie</string>
+	<string name="yes">Tak</string>
+	<string name="wait_for_position">Oczekiwanie na określenie Twojej pozycji</string>
+	<string name="title_activity_end">Zespół EDK</string>
+	<string name="thanks_in_the_end">Dziękujemy za skorzystanie z aplikacji</string>
+	<string name="listen">Odsłuchaj</string>
+	<string name="waiting_for_position_message">Określanie Twojej pozycji</string>
+	<string name="stop_listening">Zatrzymaj</string>
+	<string name="GPS_off_warning_message">GPS jest wyłączony - Twoja pozycja nie będzie dokładnie określana</string>
+	<string name="go_to_location_settings">Przejdź do ustawień lokalizacji</string>
+	<string name="ignore">Ignoruj</string>
+	<string name="description_to_station">"Dojście do stacji "</string>
+	<string name="track_overview">Podgląd trasy</string>
+	<string name="station">"Stacja "</string>
+	<string name="show_track_on_map">Pokaż trasę na mapie</string>
+	<string name="no_info_about_track_message">Brak informacji o wybranej trasie</string>
+	<string name="warning_dialog_title">Powiadomienie</string>
+	<string name="unrecognized_error_while_reading_track">Wystapił nieoczekiwany błąd przy próbie wczytania trasy</string>
+	<string name="no_info_about_tracks_in_region">Informacje o trasach w wybranym rejonie są niedostępne</string>
+	<string name="instruction_how_to_end_app">Naciśnij klawisz powrotu, aby wyjść</string>
+	<string name="start_navigation">Nawiguj</string>
+	<string name="next_considerations">Następne</string>
+	<string name="previous_considerations">Poprzednie</string>
+	<string name="track_chooser_title">Wybierz trasę:</string>
+	<string name="stations_chooser_title">Wybierz stację:</string>
+	<string name="city_chooser_title">Wybierz miasto:</string>
+	<string name="county_chooser_title">Wybierz województwo:</string>
+	<string name="considerations_year_chooser">Wybierz rocznik rozważań:</string>
+	<string-array name="tracks">
+		<item>1,pomorskie,Jastrzębia Góra,Hel</item>
+		<item>2,małopolskie,Bochnia,św. Mikołaja</item>
+		<item>3,śląskie,Bielsko-Biała,Św. Andrzeja Boboli</item>
+		<item>4,mazowieckie,Sochaczew,Sochaczew - Nowiny</item>
+		<item>5,wielkopolskie,Dolsk,Dolsk</item>
+		<item>6,mazowieckie,Warszawa Mokotów,Zielona</item>
+		<item>7,małopolskie,Zawoja,Zielona</item>
+		<item>8,lubelskie,Lublin,Żółta - św. Jana Pawła II</item>
+		<item>9,małopolskie,Gdów,Gdów - Limanowa</item>
+		<item>10,małopolskie,Zawoja,Niebieska</item>
+		<item>11,małopolskie,Kraków,Niebieska - bł. Karola de Foucauld</item>
+		<item>12,małopolskie,Kraków,Fioletowa - św. Krzysztofa</item>
+		<item>13,małopolskie,Zawoja,Czerwona</item>
+		<item>14,małopolskie,Kraków,Żółta - bł. Piotra Jerzego Frassatiego</item>
+		<item>15,małopolskie,Kraków,Czerwona - św. Rafała Kalinowskiego</item>
+		<item>16,małopolskie,Kraków,Zielona - św. Jana Pawła II</item>
+		<item>17,zagranica,Stoke-on-Trent,Stoke-on-Trent</item>
+		<item>18,mazowieckie,Warszawa Mokotów,Niebieska</item>
+		<item>19,małopolskie,Kraków,Purpurowa - Szymona z Cyreny</item>
+		<item>20,małopolskie,Kraków,Biała - św. Ignacego Loyoli</item>
+		<item>21,małopolskie,Kraków,Srebrna - św. Franciszka z Asyżu</item>
+		<item>22,małopolskie,Kraków,Pomarańczowa - św. Benedykta</item>
+		<item>23,mazowieckie,Warszawa Bemowo,Żółta - Bogurodzica</item>
+		<item>24,małopolskie,Kraków,Brązowa - św. Sylwestra</item>
+		<item>25,pomorskie,Pruszcz Gdański,Trójmiasto - Metropolitarna</item>
+		<item>26,małopolskie,Zabierzów,Szafirowa z Zabierzowa</item>
+		<item>27,małopolskie,Zabierzów,Szafirowa z Balic</item>
+		<item>28,małopolskie,Lachowice,Lachowice</item>
+		<item>29,małopolskie,Andrychów,Św. Macieja</item>
+		<item>30,wielkopolskie,Mosina,Czerwona - św. Mikołaja</item>
+		<item>31,wielkopolskie,Mosina,Żółta - św. Jakuba</item>
+		<item>32,mazowieckie,Piastów,Piastów - Góra Kalwaria</item>
+		<item>33,małopolskie,Andrychów,Zielona</item>
+		<item>34,podkarpackie,Dębica,Dębica Latoszyn - Zawada Mała Pętla</item>
+		<item>35,zachodniopomorskie,Szczecin,Kardynała Stefana Wyszyńskiego</item>
+		<item>36,warmińsko-mazurskie,Elbląg,Elbląg - Frombork</item>
+		<item>37,pomorskie,Nowy Dwór Gdański,Mierzeja</item>
+		<item>38,wielkopolskie,Gostyń,Gostyń</item>
+		<item>39,śląskie,Rybnik / Rudy,Rudy - Rybnik - Rudy</item>
+		<item>41,podkarpackie,Rzeszów,Żółta</item>
+		<item>42,podkarpackie,Rzeszów,Czerwona</item>
+		<item>43,podkarpackie,Rzeszów,Fioletowa</item>
+		<item>44,kujawsko-pomorskie,Bydgoszcz,Bydgoszcz - Toruń</item>
+		<item>45,małopolskie,Kraków,Szafirowa - św. Jacka</item>
+		<item>46,podkarpackie,Rzeszów,Niebieska</item>
+		<item>47,wielkopolskie,Piła,Niebieska - bł. Piotra Jerzego Frassatiego</item>
+		<item>48,łódzkie,Łódź,Łódź</item>
+		<item>49,małopolskie,Nowy Sącz,Nowy Sącz- Kozieniec</item>
+		<item>50,małopolskie,Kraków,Złota - Archaniołów</item>
+		<item>51,podkarpackie,Jarosław,Jarosław - Przemyśl</item>
+		<item>52,podkarpackie,Jarosław,Jarosław - Kalwaria Pacławska</item>
+		<item>53,podkarpackie,Jarosław,Jarosław - Przeworsk</item>
+		<item>54,małopolskie,Libiąż,Przemienienia</item>
+		<item>55,małopolskie,Oświęcim,Pomarańczowa - Karola Wojtyły Seniora</item>
+		<item>56,małopolskie,Oświęcim,Niebieska - bł. Jana Pawła II</item>
+		<item>57,śląskie,Zamarski,Zamarski - Szczyrk</item>
+		<item>58,lubelskie,Tomaszów Lubelski,Biała - św. Antoniego</item>
+		<item>59,lubelskie,Tomaszów Lubelski,Pomarańczowa - św. Jana Pawła II</item>
+		<item>60,lubelskie,Tomaszów Lubelski,Czerwona - bł. ks. Jerzego Popiełuszki</item>
+		<item>61,lubelskie,Tomaszów Lubelski,Zielona - św. Brata Alberta</item>
+		<item>62,wielkopolskie,Mosina,Zielona - Aniołów Sróżów</item>
+		<item>63,wielkopolskie,Mosina,Niebieska - Maryjna</item>
+		<item>64,mazowieckie,Radom,Czerwona</item>
+		<item>65,śląskie,Siemianowice Śląskie,Siemianowice Śląskie</item>
+		<item>66,zagranica,Princeton,Blue - Princeton - New Brunswick</item>
+		<item>67,świętokrzyskie,Kielce,Kielce Szymon z Cyreny</item>
+		<item>68,mazowieckie,Radom,Niebieska</item>
+		<item>69,małopolskie,Alwernia,Getsemani (czerwona)</item>
+		<item>70,małopolskie,Alwernia,Jerozolima (żółta)</item>
+		<item>71,małopolskie,Alwernia,Golgota (brązowa)</item>
+		<item>72,łódzkie,Piotrków Trybunalski,Piotrków Trybunalski - Paradyż</item>
+		<item>73,śląskie,Gliwice,Czerwona - św. Jana Nepomucena</item>
+		<item>74,śląskie,Gliwice,Niebieska - o. Pio</item>
+		<item>75,małopolskie,Skawina,Św. Faustyny</item>
+		<item>76,małopolskie,Kasinka Mała,Św. Józefa</item>
+		<item>77,podkarpackie,Mielec,Trasa karmelicka - św. Teresa z Avila</item>
+		<item>78,dolnośląskie,Wrocław,Pomarańczowa</item>
+		<item>79,opolskie,Gogolin,Gogolin</item>
+		<item>81,pomorskie,Trójmiasto,Trójmiejska - niebieska</item>
+		<item>82,łódzkie,Pabianice,Czerwona</item>
+		<item>83,dolnośląskie,Trzebnica,św. Jadwiga</item>
+		<item>84,mazowieckie,Warszawa Ursus,Pomarańczowa - NMP Niepokalanej i Ojca M.Kolbe</item>
+		<item>85,mazowieckie,Warszawa Ursus,Czerwona - Ks.Ignacego Skorupki</item>
+		<item>86,mazowieckie,Warszawa Ursus,Biała - Marszałka J. Piłsudskiego</item>
+		<item>87,opolskie,Kędzierzyn-Koźle,Świętej Anny</item>
+		<item>88,śląskie,Częstochowa,Św. Pawła</item>
+		<item>89,śląskie,Częstochowa,Św. Dominika</item>
+		<item>91,podkarpackie,Jarosław,Jarosław - Leżajsk</item>
+		<item>92,śląskie,Puńców,Śląsk Cieszyński</item>
+		<item>94,świętokrzyskie,Ostrowiec Świętokrzyski,Ostrowiec Świętokrzyski</item>
+		<item>96,dolnośląskie,Wrocław,Zielona</item>
+		<item>98,śląskie,Tychy,Trasa św. Walentego</item>
+		<item>99,małopolskie,Tymowa,Niebieska</item>
+		<item>100,małopolskie,Tymowa,Czerwona</item>
+		<item>101,małopolskie,Tarnów,Tarnów - Szczepanowice - Kozieniec</item>
+		<item>102,małopolskie,Tarnów,Tarnów - Pleśna - Kozieniec</item>
+		<item>104,mazowieckie,Sulbiny,bł. Jose</item>
+		<item>105,świętokrzyskie,Opatów,Czerwona</item>
+		<item>106,śląskie,Zamarski,Zamarski - Matyska</item>
+		<item>107,małopolskie,Tarnów,Tarnów - Wojnicz - Kozieniec</item>
+		<item>108,podkarpackie,Kolbuszowa,Kolbuszowa</item>
+		<item>109,małopolskie,Myślenice,Myślenice</item>
+		<item>110,mazowieckie,Sulbiny,bł. Jose</item>
+		<item>111,małopolskie,Tarnów,Tarnów - Jamna</item>
+		<item>112,podkarpackie,Dębica,Trasa „Jakubowa”</item>
+		<item>113,zagranica,Blackburn,Blackburn - Halifax</item>
+		<item>114,zagranica,Glasgow,Glasgow International</item>
+		<item>116,małopolskie,Bochnia,św. Joachima</item>
+		<item>117,podkarpackie,Tarnobrzeg,Droga Św. Jana Pawła II</item>
+		<item>118,małopolskie,Kraków,Czarna - św. Szymona z Lipnicy</item>
+		<item>119,podlaskie,Sokółka,Białystok 44km</item>
+	</string-array>
+	<string name="considerations_end_title">Podsumowanie</string>
+	<string name="considerations_start_title">Wstęp</string>
+	<string name="stop_navigation_message">Zatrzymaj</string>
 </resources>

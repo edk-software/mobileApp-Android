@@ -1,0 +1,46 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme for API 14+. This theme completely replaces
+        AppBaseTheme from BOTH res/values/styles.xml and
+        res/values-v11/styles.xml on API 14+ devices.
+    -->
+    <style name="AppBaseTheme" parent="@android:Theme.Holo.Light.DarkActionBar">
+                <item name="android:alertDialogTheme">@style/AppBaseTheme.AlertDialogTheme</item>
+    </style>
+
+    <!-- Local copy of android:Theme.Holo.Dialog.Alert -->
+    <style name="Theme_Holo_Dialog_Alert" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle_Holo</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
+    <!-- Local copy of android:DialogWindowTitle.Holo -->
+    <style name="DialogWindowTitle_Holo">
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Holo.DialogWindowTitle</item>
+    </style>
+
+    <style name="AppBaseTheme.AlertDialogTheme" parent="@style/Theme_Holo_Dialog_Alert">
+        <item name="android:windowTitleStyle">@style/AppBaseTheme.DialogWindowTitle</item>
+    </style>
+
+    <style name="AppBaseTheme.DialogWindowTitle" parent="@style/DialogWindowTitle_Holo">
+        <item name="android:textAppearance">@style/TextAppearance.AppBaseTheme.DialogWindowTitle</item>
+    </style>
+
+    <style name="TextAppearance.AppBaseTheme.DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">
+
+        <item name="android:textColor">@color/white_on_black</item>
+    </style>
+
+    <style name="AppBaseTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white_on_black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>
