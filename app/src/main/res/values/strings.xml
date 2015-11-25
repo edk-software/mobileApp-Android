@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="lorem_ipsum"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer id tempus massa, in faucibus magna. Pellentesque feugiat faucibus ex a efficitur. Phasellus velit enim, hendrerit vitae magna at, vulputate tincidunt nisi. Etiam id sagittis leo, vitae iaculis mi. Integer vel sapien purus. Proin est velit, dapibus et pulvinar in, porttitor eu odio. Sed tincidunt tincidunt urna, suscipit tincidunt quam scelerisque nec. Duis elementum tortor eu erat mollis pharetra. Integer egestas lorem ut turpis scelerisque pretium. Integer nec justo ut dui lobortis tincidunt non nec odio. Vivamus eu ligula eleifend, ornare leo nec, hendrerit dui. Sed convallis ex vel felis interdum aliquam. Donec quis velit et orci suscipit ornare eget eget purus. Curabitur lobortis ex eu enim finibus bibendum vel in libero.
+
+        Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin sodales ipsum orci, ut ornare purus congue molestie. Curabitur eu faucibus nisi, ultricies tempor orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus ut lobortis augue. Curabitur lobortis malesuada aliquet. Donec quis turpis vel enim fermentum dictum ac vitae nunc. Aliquam erat volutpat. Quisque rutrum in orci eu varius. Sed et quam sit amet ligula feugiat malesuada sed sit amet enim. Fusce ullamcorper feugiat commodo. Donec aliquam arcu quis nulla dictum commodo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </string>
+	<string name="map_loading">Trwa ładowanie mapy...</string>
+	<string name="welcome_start">Podejmij wyzwanie</string>
+	<string name="reflections">Rozważania</string>
+	<string name="description">Opis trasy</string>
+	<string name="about_edk">Ekstremalna Droga Krzyzowa to forma duchowości, która dla wielu staje się sposobem na życie. Prawdziwe Spotkanie z Nim pośrodku Zmagania sprawia, że nie chce się już żyć normalnie, tylko ekstremalnie, czyli w pełni.\n\nEkstremalna Droga Krzyżowa jest proponowaną formą duchowości.\n\nNie jest to pielgrzymka.\nEDK polega na pokonaniem w nocy wybranej trasy, medytowaniu rozważań i zmaganiu się z własnymi słabościami.\nMa charakter indywidualny, podczas przejścia wybraną trasą, w razie jakichkolwiek nieprzewidzianych zdarzeń, jesteś zdany wyłącznie na własne siły.\n\nWiecej informacji znajdziesz na naszej stronie:</string>
+	<string name="about_app">Aplikacja pomaga uczestnikom Ekstremalnej Drogi Krzyżowej przeżyć ją w pełni.\n\nZamieszczone przy każdej stacji wskazówki oraz nawigacja GPS pozwolą skupić się na pokonywaniu własnych słabości, bez konieczności przejmowania się szczegółami.\n\nEDK to jednak przede wszystkim forma duchowości. Medytacja załączonych rozważań pozwoli na jeszcze bliższe Spotkanie z Nim.\n\nAutorem aplikacji jest Paweł Wawrzynek. Jeżeli masz jakiekolwiek sugestie, napisz!</string>
+	<string name="station_contact">Jak chcesz się skontatkować z organizatorami?</string>
+	<string name="station_help">Czy napewno chcesz wezwać pomoc?</string>
+    <string name="main_gpsQuestion">Moduł GPS jest wyłączony a będzie potrzebny do nawigacji. Chcesz go teraz włączyć?
+    </string>
+    <string name="station_helpConfirmation">Twoje współrzędne zostały wysłane do organizatorów. Oczekuj na pomoc w tym
+        miejscu.
+    </string>
+	<string name="station_naviActive">Nawigacja</string>
+	<string name="station_naviInactive">Nawigacja niedostępna</string>
+
 	<string name="app_name">EDK</string>
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>

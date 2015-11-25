@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <!--View content-->
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+        <!--TopBar-->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Przebyto: "/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/station_txtDistDone"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="km"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Pozostało: "/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/station_txtDistLeft"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="km"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Logo-->
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="15dp"
+                android:src="@drawable/edk_logo"/>
+
+        <!--Main content-->
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0">
+            <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:rowCount="3"
+                    android:columnCount="2"
+                    android:id="@+id/station_mainLayout">
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_row="0" android:layout_column="0"
+                        android:layout_columnSpan="2"
+                        android:background="@drawable/active_border_transparent"
+                        android:layout_margin="5dp"
+                        android:padding="5dp"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/station_txtTitle"/>
+                <ImageButton style="@style/StationButton.Logo"
+                        android:src="@drawable/station_reflections_active"
+                        android:layout_column="0" android:layout_row="1"
+                        android:id="@+id/station_btnReflections"/>
+                <ImageButton style="@style/StationButton.Logo"
+                        android:layout_column="1" android:layout_row="1"
+                        android:src="@drawable/station_achieve_active"
+                        android:id="@+id/station_btnAchieved"/>
+                <ImageButton style="@style/StationButton.Logo"
+                        android:layout_column="0" android:layout_row="2"
+                        android:src="@drawable/station_navi_active"
+                        android:id="@+id/station_btnNavigationStart"/>
+                <ImageButton style="@style/StationButton.Logo"
+                        android:layout_column="1" android:layout_row="2"
+                        android:src="@drawable/station_desc_active"
+                        android:id="@+id/station_btnDescription"/>
+            </GridLayout>
+        </RelativeLayout>
+
+        <!--BottomBar-->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="70dp"
+                android:id="@+id/station_bottomBar">
+            <ImageButton style="@style/StationButton.BottomBar"
+                    android:src="@drawable/station_back"
+                    android:background="@drawable/station_button_selector"
+                    android:id="@+id/station_btnPreviousStation"/>
+            <ImageButton style="@style/StationButton.BottomBar"
+                    android:src="@drawable/station_next"
+                    android:background="@drawable/station_button_selector"
+                    android:id="@+id/station_btnNextStation"/>
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1.0">
+                <Button style="@style/StationButton.BottomBar"
+                        android:text="pomoc"
+                        android:background="@drawable/station_bottombar_selector"
+                        android:layout_marginTop="4dp" android:layout_marginBottom="4dp"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1.0"
+                        android:id="@+id/station_btnHelp"/>
+                <Button style="@style/StationButton.BottomBar"
+                        android:text="kontakt"
+                        android:background="@drawable/station_bottombar_selector"
+                        android:layout_marginTop="4dp" android:layout_marginBottom="4dp"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1.0"
+                        android:id="@+id/station_btnContact"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--Navigation button-->
+    <Button style="@style/PagerNavigationButton.Right"/>
+
+    <!--PopUp-->
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="50dp"
+            android:padding="5dp"
+            android:background="@drawable/station_popup_border"
+            android:id="@+id/station_popupScroll"
+            android:visibility="gone">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <!--PopUp type name-->
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/station_popup_border"
+                    android:textColor="@color/active_foreground"
+                    android:textStyle="italic|bold"
+                    android:textSize="20dp"
+                    android:padding="8dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:id="@+id/station_txtPopUpName"/>
+            <!--Station title-->
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="23dp"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
+                    android:id="@+id/station_txtPopUpTitle"/>
+            <!--Line-->
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_margin="8dp"
+                    android:background="@color/active_foreground"/>
+            <!--Main content-->
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
+                    android:id="@+id/station_txtPopUpContent"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

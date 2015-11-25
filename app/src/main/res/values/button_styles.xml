@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DefaultButton">
+        <item name="android:textColor">#FF0000</item>
+        <item name="android:background">@drawable/active_button_background_selector</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginTop">4.0dip</item>
+        <item name="android:layout_marginBottom">4.0dip</item>
+        <item name="android:padding">6dp</item>
+    </style>
+
+    <!--Welcome-->
+    <style name="WelcomeButton">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">@drawable/welcome_button</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_width">285dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="ListButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:paddingLeft">25dp</item>
+        <item name="android:background">@drawable/list_active_button_selector</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!--Station-->
+    <style name="StationButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/station_button_selector</item>
+    </style>
+    <style name="StationButton.Logo" parent="StationButton">
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:textSize">9dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">bottom|center_horizontal</item>
+    </style>
+    <style name="StationButton.BottomBar" parent="StationButton">
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">@color/active_foreground</item>
+    </style>
+
+    <style name="PagerNavigationButton">
+        <item name="android:layout_height">43dp</item>
+        <item name="android:layout_width">65dp</item>
+        <item name="android:layout_marginBottom">3dp</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+    <style name="PagerNavigationButton.Left" parent="PagerNavigationButton">
+        <item name="android:background">@drawable/pager_back</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:onClick">onPagerLeft</item>
+    </style>
+    <style name="PagerNavigationButton.Right" parent="PagerNavigationButton">
+        <item name="android:background">@drawable/pager_next</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:onClick">onPagerRight</item>
+    </style>
+</resources>
