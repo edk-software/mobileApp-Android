@@ -1,10 +1,10 @@
 package pl.org.edk;
 
 import android.content.Context;
-import pl.org.edk.Database.DbHelper;
 import pl.org.edk.Database.DbManager;
-import pl.org.edk.Database.Entities.Area;
 import pl.org.edk.Database.Entities.Route;
+
+import java.util.ArrayList;
 
 /**
  * Created by Admin on 2016-01-28.

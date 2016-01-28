@@ -1,13 +1,11 @@
 package pl.org.edk.Database.Services;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import pl.org.edk.Database.DbHelper;
-import pl.org.edk.Database.Entities.DbEntityBase;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by pwawrzynek on 2015-12-15.

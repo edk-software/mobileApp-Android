@@ -2,6 +2,7 @@ package pl.org.edk;
 
 import pl.org.edk.Database.DbManager;
 import pl.org.edk.Database.Entities.Area;
+import pl.org.edk.Database.Entities.Route;
 import pl.org.edk.Database.Entities.Territory;
 
 /**
@@ -36,7 +37,7 @@ public final class HardcodedDataManager {
         DbManager.getInstance().getTerritoryService().InsertTerritoryWithAreas(territory6);
 
         Territory territory7 = new Territory("mazowieckie");
-        territory7.getAreas().add(new Area("Warszwaw"));
+        territory7.getAreas().add(new Area("Warszwawa"));
         DbManager.getInstance().getTerritoryService().InsertTerritoryWithAreas(territory7);
 
         Territory territory8 = new Territory("opolskie");
@@ -84,6 +85,34 @@ public final class HardcodedDataManager {
     }
 
     public static void CreateRoutes() {
-        
+        // dolnośląskie
+        Route route1 = new Route(1, "2016-01-29 00:02", "Wrocław Główny");
+        // TODO: insert stations for the Route here
+        //route1.getStations().add()
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route1);
+
+        // kujawsko-pomorskie
+        Route route2 = new Route(3, "2016-01-29 00:02", "Toruń Główny");
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route2);
+
+        // mazowieckie
+        Route route3 = new Route(9, "2016-01-29 00:02", "Warszawa Centralna");
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route3);
+        Route route4 = new Route(9, "2016-01-29 00:02", "Warszawa Wschodnia");
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route4);
+        Route route5 = new Route(9, "2016-01-29 00:02", "Warszawa Zachodnia");
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route5);
+
+        // śląskie
+        Route route6 = new Route(15, "2016-01-29 00:02", "Gliwice");
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route6);
+        Route route7 = new Route(15, "2016-01-29 00:02", "Gliwice Labedy");
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route7);
+        Route route8 = new Route(15, "2016-01-29 00:02", "Gliwice Sikornik");
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route8);
+        Route route9 = new Route(18, "2016-01-29 00:02", "Halemba");
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route9);
+        Route route10 = new Route(14, "2016-01-29 00:02", "Katowice - Spodek");
+        DbManager.getInstance().getRouteService().InsertRouteWithStations(route10);
     }
 }
