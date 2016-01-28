@@ -23,6 +23,8 @@ public class Reflection extends DbEntityBase {
     private int stationIndex;
     private String displayName;
     private String content;
+    // External tables
+    private ReflectionList reflectionList;
 
     // ---------------------------------------
     // Static methods

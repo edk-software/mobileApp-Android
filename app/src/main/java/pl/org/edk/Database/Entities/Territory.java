@@ -3,29 +3,44 @@ package pl.org.edk.Database.Entities;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.util.ArrayList;
+
 /**
  * Created by pwawrzynek on 2015-12-15.
  */
-public class District extends DbEntityBase {
+public class Territory extends DbEntityBase {
     // ---------------------------------------
     // Constant variables
     // ---------------------------------------
-    public static final String TABLE_NAME = "District";
+    public static final String TABLE_NAME = "Territory";
     public static final String COLUMN_NAME_DISPLAY_NAME = "DisplayName";
+
+    // ---------------------------------------
+    // Constructors
+    // ---------------------------------------
+    public Territory() {
+        areas = new ArrayList<>();
+    }
+
+    public Territory(String displayName) {
+        this();
+        this.displayName = displayName;
+    }
 
     // ---------------------------------------
     // Class variables
     // ---------------------------------------
     private String displayName;
+    // External tables
+    private ArrayList<Area> areas;
 
     // ---------------------------------------
     // Static methods
     // ---------------------------------------
     public static String getCreateEntries() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + INTEGER_TYPE + PRIMARY_KEY +
-                COMMA + COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE +
-                ");";
+                _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
+                COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
@@ -72,5 +87,12 @@ public class District extends DbEntityBase {
     }
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public ArrayList<Area> getAreas() {
+        return areas;
+    }
+    public void setAreas(ArrayList<Area> areas) {
+        this.areas = areas;
     }
 }

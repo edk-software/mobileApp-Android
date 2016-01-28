@@ -23,7 +23,7 @@ public class Station extends DbEntityBase {
     // ---------------------------------------
     // Class variables
     // ---------------------------------------
-    private int routeID;
+    private long routeID;
     private int stationIndex;
     private float latitude;
     private float longitude;
@@ -38,14 +38,13 @@ public class Station extends DbEntityBase {
     // ---------------------------------------
     public static String getCreateEntries() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + INTEGER_TYPE + PRIMARY_KEY +
-                COMMA + COLUMN_NAME_ROUTE_ID + INTEGER_TYPE +
-                COMMA + COLUMN_NAME_STATION_INDEX + INTEGER_TYPE +
-                COMMA + COLUMN_NAME_LATITUDE + FLOAT_TYPE +
-                COMMA + COLUMN_NAME_LONGITUDE + FLOAT_TYPE +
-                COMMA + COLUMN_NAME_DISTANCE_DONE + FLOAT_TYPE +
-                COMMA + COLUMN_NAME_DISTANCE_LEFT + FLOAT_TYPE +
-                ");";
+                _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
+                COLUMN_NAME_ROUTE_ID + INTEGER_TYPE + COMMA +
+                COLUMN_NAME_STATION_INDEX + INTEGER_TYPE + COMMA +
+                COLUMN_NAME_LATITUDE + FLOAT_TYPE + COMMA +
+                COLUMN_NAME_LONGITUDE + FLOAT_TYPE + COMMA +
+                COLUMN_NAME_DISTANCE_DONE + FLOAT_TYPE + COMMA +
+                COLUMN_NAME_DISTANCE_LEFT + FLOAT_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
@@ -87,7 +86,7 @@ public class Station extends DbEntityBase {
     public boolean readFromCursor(Cursor cursor) {
         try {
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            this.routeID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_ROUTE_ID));
+            this.routeID = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_ROUTE_ID));
             this.stationIndex = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_STATION_INDEX));
             this.latitude = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_NAME_LATITUDE));
             this.longitude = cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_NAME_LONGITUDE));
@@ -102,10 +101,10 @@ public class Station extends DbEntityBase {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
-    public int getRouteID() {
+    public long getRouteID() {
         return routeID;
     }
-    public void setRouteID(int routeID) {
+    public void setRouteID(long routeID) {
         this.routeID = routeID;
     }
 

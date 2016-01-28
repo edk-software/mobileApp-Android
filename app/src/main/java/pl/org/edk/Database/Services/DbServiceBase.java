@@ -1,9 +1,12 @@
 package pl.org.edk.Database.Services;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import pl.org.edk.Database.DbHelper;
+import pl.org.edk.Database.Entities.DbEntityBase;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +29,11 @@ public class DbServiceBase {
         return dbClient.getWritableDatabase();
     }
 
-    protected Cursor executeQuery(String tableName, String[] columns, ArrayList<String> whereColumns, String[] whereArgs){
+    protected Cursor executeQueryGetAll(String tableName, String[] columns){
+        return dbRead().query(tableName, columns, null, null, null, null, null);
+    }
+
+    protected Cursor executeQueryWhere(String tableName, String[] columns, ArrayList<String> whereColumns, String[] whereArgs){
         // Format the statement
         String whereStatement = "";
         for(int i = 0; i < whereColumns.size(); i++){
@@ -38,13 +45,13 @@ public class DbServiceBase {
         return dbRead().query(tableName, columns, whereStatement, whereArgs, null, null, null);
     }
 
-    protected Cursor executeQuery(String tableName, String[] columns, String interestColumn, String interestValue){
+    protected Cursor executeQueryWhere(String tableName, String[] columns, String interestColumn, String interestValue){
         // Put the single values into containers
         ArrayList<String> whereColumns = new ArrayList<>();
         whereColumns.add(interestColumn);
         String[] whereValues = {interestValue};
 
-        return executeQuery(tableName, columns, whereColumns, whereValues);
+        return executeQueryWhere(tableName, columns, whereColumns, whereValues);
     }
 
     // ---------------------------------------

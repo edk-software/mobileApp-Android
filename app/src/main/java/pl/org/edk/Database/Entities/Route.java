@@ -16,17 +16,29 @@ public class Route extends DbEntityBase {
     // Constant variables
     // ---------------------------------------
     public static final String TABLE_NAME = "Route";
-    public static final String COLUMN_NAME_DISTRICT_ID = "DistrictID";
-    public static final String COLUMN_NAME_REGION_ID = "RegionID";
+    public static final String COLUMN_NAME_TERRITORY_ID = "TerritoryID";
+    public static final String COLUMN_NAME_AREA_ID = "RegionID";
     public static final String COLUMN_NAME_RELEASE_DATE = "ReleaseDate";
     public static final String COLUMN_NAME_DISPLAY_NAME = "Name";
     public static final String COLUMN_NAME_DISPLAY_KML_DATA = "KmlData";
 
     // ---------------------------------------
+    // Constructors
+    // ---------------------------------------
+    public Route(){}
+
+    public Route(int territoryId, int areaId, String releaseDate, String name) {
+        this.territoryId = territoryId;
+        this.areaId = areaId;
+        this.releaseDate = releaseDate;
+        this.name = name;
+    }
+
+    // ---------------------------------------
     // Class variables
     // ---------------------------------------
-    private int districtId;
-    private int regionId;
+    private long territoryId;
+    private long areaId;
     private String releaseDate;
     private String name;
     private String kmlData;
@@ -39,13 +51,12 @@ public class Route extends DbEntityBase {
     // ---------------------------------------
     public static String getCreateEntries() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + INTEGER_TYPE + PRIMARY_KEY +
-                COMMA + COLUMN_NAME_DISTRICT_ID + INTEGER_TYPE +
-                COMMA + COLUMN_NAME_REGION_ID + INTEGER_TYPE +
-                COMMA + COLUMN_NAME_RELEASE_DATE + TEXT_TYPE +
-                COMMA + COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE +
-                COMMA + COLUMN_NAME_DISPLAY_KML_DATA + TEXT_TYPE +
-                ");";
+                _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
+                COLUMN_NAME_TERRITORY_ID + INTEGER_TYPE + COMMA +
+                COLUMN_NAME_AREA_ID + INTEGER_TYPE + COMMA +
+                COLUMN_NAME_RELEASE_DATE + TEXT_TYPE + COMMA +
+                COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + COMMA +
+                COLUMN_NAME_DISPLAY_KML_DATA + TEXT_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
@@ -55,8 +66,8 @@ public class Route extends DbEntityBase {
     public static String[] getFullProjection(){
         String[] projection = {
                 _ID,
-                COLUMN_NAME_DISTRICT_ID,
-                COLUMN_NAME_REGION_ID,
+                COLUMN_NAME_TERRITORY_ID,
+                COLUMN_NAME_AREA_ID,
                 COLUMN_NAME_RELEASE_DATE,
                 COLUMN_NAME_DISPLAY_NAME,
                 COLUMN_NAME_DISPLAY_KML_DATA
@@ -72,8 +83,8 @@ public class Route extends DbEntityBase {
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
 
-        values.put(COLUMN_NAME_DISTRICT_ID, districtId);
-        values.put(COLUMN_NAME_REGION_ID, regionId);
+        values.put(COLUMN_NAME_TERRITORY_ID, territoryId);
+        values.put(COLUMN_NAME_AREA_ID, areaId);
         values.put(COLUMN_NAME_RELEASE_DATE, releaseDate);
         values.put(COLUMN_NAME_DISPLAY_NAME, name);
         values.put(COLUMN_NAME_DISPLAY_KML_DATA, kmlData);
@@ -85,8 +96,8 @@ public class Route extends DbEntityBase {
     public boolean readFromCursor(Cursor cursor) {
         try {
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            this.districtId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISTRICT_ID));
-            this.regionId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_REGION_ID));
+            this.territoryId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_TERRITORY_ID));
+            this.areaId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_AREA_ID));
             this.releaseDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_RELEASE_DATE));
             this.name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_NAME));
             this.kmlData = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_KML_DATA));
@@ -97,20 +108,20 @@ public class Route extends DbEntityBase {
     }
 
     // ---------------------------------------
-    // Public methods
+    // Getters and setters
     // ---------------------------------------
-    public int getDistrictId() {
-        return districtId;
+    public long getTerritoryId() {
+        return territoryId;
     }
-    public void setDistrictId(int districtId) {
-        this.districtId = districtId;
+    public void setTerritoryId(long territoryId) {
+        this.territoryId = territoryId;
     }
 
-    public int getRegionId() {
-        return regionId;
+    public long getAreaId() {
+        return areaId;
     }
-    public void setRegionId(int regionId) {
-        this.regionId = regionId;
+    public void setAreaId(long areaId) {
+        this.areaId = areaId;
     }
 
     public Date getReleaseDate(){

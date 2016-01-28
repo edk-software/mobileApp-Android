@@ -4,6 +4,7 @@ import android.content.Context;
 import pl.org.edk.Database.Services.DbServiceBase;
 import pl.org.edk.Database.Services.ReflectionService;
 import pl.org.edk.Database.Services.RouteService;
+import pl.org.edk.Database.Services.TerritoryService;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class DbManager {
     /* NOTE: Put all services' entities here */
     private ReflectionService reflectionService;
     private RouteService routeService;
+    private TerritoryService territoryService;
 
     // ---------------------------------------
     // Constructors
@@ -35,6 +37,21 @@ public class DbManager {
     }
 
     // ---------------------------------------
+    // Getters and setters
+    // ---------------------------------------
+    public ReflectionService getReflectionService() {
+        return reflectionService;
+    }
+
+    public RouteService getRouteService() {
+        return routeService;
+    }
+
+    public TerritoryService getTerritoryService() {
+        return territoryService;
+    }
+
+    // ---------------------------------------
     // Methods
     // ---------------------------------------
     public void Init(Context context){
@@ -45,7 +62,15 @@ public class DbManager {
         /* NOTE: Initialize all services here */
         reflectionService = new ReflectionService();
         routeService = new RouteService();
+        territoryService = new TerritoryService();
 
         initialized = true;
+    }
+
+    /**
+     * Removed the database. It will be recreated before the first usage
+     */
+    public void Reset(Context context){
+        dbClient.delete(context);
     }
 }

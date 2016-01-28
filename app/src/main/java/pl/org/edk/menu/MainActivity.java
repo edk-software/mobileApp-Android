@@ -1,10 +1,6 @@
 package pl.org.edk.menu;
 
-import pl.org.edk.ActivityWithGPSMenu;
-import pl.org.edk.ActivityWithMap;
-import pl.org.edk.GPSService;
-import pl.org.edk.R;
-import pl.org.edk.Settings;
+import pl.org.edk.*;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -47,7 +43,10 @@ public class MainActivity extends ActivityWithGPSMenu {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
-		
+
+		// Initialize application global stuff (singletons etc.)
+		Bootstrap.Initialize(getApplicationContext());
+
 		Settings settings = Settings.get(this);
 		if (settings.getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
 			Intent serviceIntent = new Intent(this, GPSService.class);

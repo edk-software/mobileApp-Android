@@ -19,27 +19,27 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         /* NOTE: Create all tables here */
-        db.execSQL(District.getCreateEntries());
+        db.execSQL(Area.getCreateEntries());
         db.execSQL(Reflection.getCreateEntries());
         db.execSQL(ReflectionList.getCreateEntries());
-        db.execSQL(Region.getCreateEntries());
         db.execSQL(Route.getCreateEntries());
         db.execSQL(RouteDesc.getCreateEntries());
         db.execSQL(Station.getCreateEntries());
         db.execSQL(StationDesc.getCreateEntries());
+        db.execSQL(Territory.getCreateEntries());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         /* NOTE: Delete all tables here */
-        db.execSQL(District.getDeleteEntries());
+        db.execSQL(Area.getDeleteEntries());
         db.execSQL(Reflection.getDeleteEntries());
         db.execSQL(ReflectionList.getDeleteEntries());
-        db.execSQL(Region.getDeleteEntries());
         db.execSQL(Route.getDeleteEntries());
         db.execSQL(RouteDesc.getDeleteEntries());
         db.execSQL(Station.getDeleteEntries());
         db.execSQL(StationDesc.getDeleteEntries());
+        db.execSQL(Territory.getDeleteEntries());
 
         onCreate(db);
     }
@@ -47,5 +47,9 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion){
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    public void delete(Context context) {
+        context.deleteDatabase(DB_FILE_NAME);
     }
 }

@@ -3,6 +3,8 @@ package pl.org.edk.Database.Entities;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.util.ArrayList;
+
 /**
  * Created by pwawrzynek on 2016-01-13.
  */
@@ -20,24 +22,26 @@ public class RouteDesc extends DbEntityBase {
     // ---------------------------------------
     // Class variables
     // ---------------------------------------
-    private int routeID;
+    private long routeID;
     private String language;
     private String releaseDate;
     private String displayName;
     private String description;
+    // External tables
+    private Route route;
+    private ArrayList<StationDesc> stationDescs;
 
     // ---------------------------------------
     // Static methods
     // ---------------------------------------
     public static String getCreateEntries() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + INTEGER_TYPE + PRIMARY_KEY +
-                COMMA + COLUMN_NAME_ROUTE_ID + INTEGER_TYPE +
-                COMMA + COLUMN_NAME_LANGUAGE + TEXT_TYPE +
-                COMMA + COLUMN_NAME_RELEASE_DATE + TEXT_TYPE +
-                COMMA + COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE +
-                COMMA + COLUMN_NAME_DESCRIPTION + TEXT_TYPE +
-                ");";
+                _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
+                COLUMN_NAME_ROUTE_ID + INTEGER_TYPE + COMMA +
+                COLUMN_NAME_LANGUAGE + TEXT_TYPE + COMMA +
+                COLUMN_NAME_RELEASE_DATE + TEXT_TYPE + COMMA +
+                COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + COMMA +
+                COLUMN_NAME_DESCRIPTION + TEXT_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
@@ -77,7 +81,7 @@ public class RouteDesc extends DbEntityBase {
     public boolean readFromCursor(Cursor cursor) {
         try {
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            this.routeID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_ROUTE_ID));
+            this.routeID = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_ROUTE_ID));
             this.language = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_LANGUAGE));
             this.releaseDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_RELEASE_DATE));
             this.displayName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_NAME));
@@ -92,10 +96,10 @@ public class RouteDesc extends DbEntityBase {
     // Public methods
     // ---------------------------------------
 
-    public int getRouteID() {
+    public long getRouteID() {
         return routeID;
     }
-    public void setRouteID(int routeID) {
+    public void setRouteID(long routeID) {
         this.routeID = routeID;
     }
 

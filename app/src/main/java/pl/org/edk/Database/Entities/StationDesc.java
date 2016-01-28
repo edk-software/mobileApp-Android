@@ -20,26 +20,26 @@ public class StationDesc extends DbEntityBase {
     // ---------------------------------------
     // Class variables
     // ---------------------------------------
-    private int stationID;
+    private long stationID;
     private String language;
     private String displayName;
     private String title;
     private String description;
     // External tables
-    private Station station;
+    private Station stationData;
+    private RouteDesc routeDesc;
 
     // ---------------------------------------
     // Static methods
     // ---------------------------------------
     public static String getCreateEntries() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + INTEGER_TYPE + PRIMARY_KEY +
-                COMMA + COLUMN_NAME_STATION_ID + INTEGER_TYPE +
-                COMMA + COLUMN_NAME_LANGUAGE + TEXT_TYPE +
-                COMMA + COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE +
-                COMMA + COLUMN_NAME_TITLE + TEXT_TYPE +
-                COMMA + COLUMN_NAME_DESCRIPTION + TEXT_TYPE +
-                ");";
+                _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
+                COLUMN_NAME_STATION_ID + INTEGER_TYPE + COMMA +
+                COLUMN_NAME_LANGUAGE + TEXT_TYPE + COMMA +
+                COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + COMMA +
+                COLUMN_NAME_TITLE + TEXT_TYPE + COMMA +
+                COLUMN_NAME_DESCRIPTION + TEXT_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
@@ -79,7 +79,7 @@ public class StationDesc extends DbEntityBase {
     public boolean readFromCursor(Cursor cursor) {
         try {
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            this.stationID = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_STATION_ID));
+            this.stationID = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_STATION_ID));
             this.language = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_LANGUAGE));
             this.displayName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_NAME));
             this.title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TITLE));
@@ -93,10 +93,10 @@ public class StationDesc extends DbEntityBase {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
-    public int getStationID() {
+    public long getStationID() {
         return stationID;
     }
-    public void setStationID(int stationID) {
+    public void setStationID(long stationID) {
         this.stationID = stationID;
     }
 

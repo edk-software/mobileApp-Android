@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -25,6 +26,8 @@ public class ReflectionList extends DbEntityBase {
     private String language;
     private int edition;
     private String releaseDate;
+    // External tables
+    private ArrayList<Reflection> reflections;
 
     // ---------------------------------------
     // Static methods
@@ -34,8 +37,7 @@ public class ReflectionList extends DbEntityBase {
                 _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
                 COLUMN_NAME_LANGUAGE+ TEXT_TYPE + COMMA +
                 COLUMN_NAME_EDITION + INTEGER_TYPE + COMMA +
-                COLUMN_NAME_RELEASE_DATE + TEXT_TYPE + COMMA +
-                ");";
+                COLUMN_NAME_RELEASE_DATE + TEXT_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
