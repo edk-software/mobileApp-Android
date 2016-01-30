@@ -1,6 +1,5 @@
 package pl.org.edk;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -35,7 +34,6 @@ import java.util.List;
 
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.kml.TrackerProvider;
-import pl.org.edk.menu.ConsiderationsViewActivity;
 import pl.org.edk.util.DialogUtil;
 import pl.org.edk.util.NumConverter;
 
@@ -379,11 +377,22 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
         }
 
         if (mMapFragment !=null){
-        mMapFragment.getMapAsync(this);
+            mMapFragment.getMapAsync(this);
         }
 
         return view;
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (mMap == null){
+            return;
+        }
+        if (this.isVisible()) {
+            mMap.setMyLocationEnabled(isVisibleToUser);
+        }
     }
 
 //    @Override

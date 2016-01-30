@@ -10,11 +10,10 @@ import android.widget.TextView;
 /**
  * Created by darekpap on 2015-11-30.
  */
-public class ReflectionsFragment extends Fragment implements MapFragment.OnStationSelectListener {
+public class ReflectionsFragment extends Fragment {
 
 
-    @Override
-    public void onStationSelect(int stationIndex) {
+    public void selectStation(int stationIndex) {
         TextView textView = (TextView) getActivity().findViewById(R.id.reflection);
         textView.setText("Obecna stacja to " + stationIndex);
     }
