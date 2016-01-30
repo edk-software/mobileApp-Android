@@ -9,26 +9,26 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class MainActivity extends ActivityWithGPSMenu {
+public class MainMenuActivity extends ActivityWithGPSMenu {
 
 	private final class InfoButtonListener implements OnClickListener {
 		public void onClick(View v) {
-			Intent i = new Intent(MainActivity.this, EDKInfoActivity.class);
-			MainActivity.this.startActivity(i);
+			Intent i = new Intent(MainMenuActivity.this, EDKInfoActivity.class);
+			MainMenuActivity.this.startActivity(i);
 		}
 	}
 
 	private final class ConsiderationsButtonListener implements OnClickListener {
 		public void onClick(View v) {
-			Intent i = new Intent(MainActivity.this, ConsiderationsYearChooserActivity.class);
-			MainActivity.this.startActivity(i);
+			Intent i = new Intent(MainMenuActivity.this, ConsiderationsYearChooserActivity.class);
+			MainMenuActivity.this.startActivity(i);
 		}
 	}
 
 	private final class TrackButtonListener implements OnClickListener {
 		public void onClick(View v) {
-			Intent i = new Intent(MainActivity.this, CountyChooserActivity.class);
-			MainActivity.this.startActivity(i);
+			Intent i = new Intent(MainMenuActivity.this, TerritoryChooserActivity.class);
+			MainMenuActivity.this.startActivity(i);
 		}
 	}
 
@@ -45,7 +45,7 @@ public class MainActivity extends ActivityWithGPSMenu {
 		setContentView(R.layout.activity_main2);
 
 		// Initialize application global stuff (singletons etc.)
-		Bootstrap.Initialize(getApplicationContext());
+		BootStrap.Initialize(getApplicationContext());
 
 		Settings settings = Settings.get(this);
 		if (settings.getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
@@ -60,7 +60,7 @@ public class MainActivity extends ActivityWithGPSMenu {
 		tracksButton = (Button) findViewById(R.id.tracksButton);
 		considerationsButton = (Button) findViewById(R.id.considerationsButton);
 		infoButton = (Button) findViewById(R.id.infoButton);
-		
+
 		tracksImageButton = (ImageButton) findViewById(R.id.tracksImageButton);
 		considerationsImageButton = (ImageButton) findViewById(R.id.considerationsImageButton);
 		infoImageButton = (ImageButton) findViewById(R.id.infoImageButton);

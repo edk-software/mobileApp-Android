@@ -59,6 +59,14 @@ public final class Settings {
 		return Integer.parseInt(result);
 	}
 
+	public long getLong(String key, long defaultValue) {
+		String result = get(key);
+		if (result == null) {
+			return defaultValue;
+		}
+		return Long.parseLong(result);
+	}
+
 	public float getFloat(String key, float defaultValue) {
 		String property = get(key);
 		if (property == null) {
@@ -91,6 +99,9 @@ public final class Settings {
 	}
 
 	public void set(String key, int value) {
+		set(key, String.valueOf(value));
+	}
+	public void set(String key, long value) {
 		set(key, String.valueOf(value));
 	}
 

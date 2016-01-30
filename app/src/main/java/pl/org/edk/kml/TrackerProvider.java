@@ -2,7 +2,11 @@ package pl.org.edk.kml;
 
 import java.io.InputStream;
 
+import pl.org.edk.Database.DbManager;
+import pl.org.edk.Database.Entities.Route;
+import pl.org.edk.Database.Services.RouteService;
 import pl.org.edk.R;
+import pl.org.edk.Settings;
 import pl.org.edk.menu.TrackInfo;
 import pl.org.edk.util.ResourcesUtil;
 import android.content.Context;
@@ -56,11 +60,17 @@ public class TrackerProvider {
 
 	private String getTrackId() {
 
-		int trackId = ResourcesUtil.getTrackId(mContext);
-		if (trackId == -1) {
-			throw new UnsupportedOperationException(mContext.getString(R.string.no_info_about_track_message));
-		}
-		return "edk-gps-trasa-" + trackId;
+        RouteService routeService = DbManager.getInstance().getRouteService();
+        Route route = routeService.GetRoute(Settings.get(mContext).getLong(Settings.TRACK_NAME, -1));
+        //TODO get path to kml from route
+
+        return "edk-gps-trasa-12";
+
+//        int trackId = ResourcesUtil.getTrackId(mContext);
+//		if (trackId == -1) {
+//			throw new UnsupportedOperationException(mContext.getString(R.string.no_info_about_track_message));
+//		}
+//		return "edk-gps-trasa-" + trackId;
 	}
 
 	// private String trackFromMalopolskie() {

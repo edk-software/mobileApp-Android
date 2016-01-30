@@ -9,8 +9,8 @@ import java.util.ArrayList;
 /**
  * Created by Admin on 2016-01-28.
  */
-public final class Bootstrap {
-    private Bootstrap(){}
+public final class BootStrap {
+    private BootStrap(){}
 
     private static boolean isInitialized = false;
 

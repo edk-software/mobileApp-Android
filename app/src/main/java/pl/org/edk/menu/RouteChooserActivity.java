@@ -1,0 +1,63 @@
+package pl.org.edk.menu;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import pl.org.edk.*;
+import pl.org.edk.Database.DbManager;
+import pl.org.edk.Database.Entities.Route;
+import pl.org.edk.Database.Services.RouteService;
+import pl.org.edk.util.DialogUtil;
+import pl.org.edk.util.ResourcesUtil;
+import android.content.Intent;
+
+
+public class RouteChooserActivity extends ChooserActivity {
+
+	private List<Route> mRoutes;
+
+	@Override
+	protected List<String> getItems() {
+
+		RouteService routeService = DbManager.getInstance().getRouteService();
+		mRoutes = routeService.GetRoutesForArea(Settings.get(this).getLong(Settings.CITY_NAME, -1), false);
+		if (mRoutes.isEmpty()){
+        	DialogUtil.showWarningDialog(getString(R.string.no_info_about_tracks_in_region), this);
+        	return Collections.emptyList();
+        }
+		if (mRoutes.size()==1){
+			startMapActivityWith(mRoutes.get(0).getId());
+		}
+		ArrayList<String> items = new ArrayList<>();
+		for (Route route : mRoutes) {
+			items.add(route.getName());
+		}
+
+
+		return items;
+	}
+
+	@Override
+	protected void onItemClick(int pos) {
+		startMapActivityWith(mRoutes.get(pos).getId());
+	}
+
+	private void startMapActivityWith(long routeId) {
+		Settings settings = Settings.get(this);
+		settings.set(Settings.TRACK_NAME, routeId);
+		Intent myIntent = new Intent(this, pl.org.edk.MainActivity.class);
+		
+		myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		
+		stopService(new Intent(this, GPSService.class));
+		Settings.get(this).set(Settings.IS_BACKGROUND_TRACKING_ON, false);
+		startActivity(myIntent);
+	}
+
+	@Override
+	protected String getChooserTitle() {
+		return getResources().getString(R.string.track_chooser_title);
+	}
+    
+}
