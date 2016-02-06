@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
 
         @Override
         public CharSequence getPageTitle(int position) {
-//         return null;
-            return mFragmentTitleList.get(position);
+         return null;
+//            return mFragmentTitleList.get(position);
         }
 
         @Override

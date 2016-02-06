@@ -10,10 +10,109 @@
 
     <ExpandableListView
         android:id="@+id/expandableList"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:divider="@color/red"
         android:dividerHeight="3px"
-        android:paddingTop="2dp"/>
+        android:paddingTop="2dp"
+        android:layout_above="@+id/player"
+        android:layout_alignParentTop="true"
+        android:layout_weight="1"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/player"
+        android:layout_alignParentBottom="true"
+        android:background="@color/red">
+
+        <SeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/prev"
+            android:id="@+id/prevButton"
+            android:layout_below="@+id/seekBar"
+            android:layout_toLeftOf="@+id/playButton"
+            android:layout_toStartOf="@+id/playButton"
+            android:layout_alignTop="@id/playButton"
+            android:background="@android:color/transparent"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+
+            />
+
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="||"-->
+            <!--android:id="@+id/pauseButton"-->
+            <!--android:layout_below="@+id/seekBar"-->
+            <!--android:layout_toRightOf="@+id/button"-->
+            <!--android:layout_toEndOf="@+id/button" />-->
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play"
+            android:id="@+id/playButton"
+            android:layout_below="@+id/seekBar"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+
+            />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/next"
+            android:id="@+id/nextButton"
+            android:layout_below="@+id/seekBar"
+            android:layout_alignTop="@+id/playButton"
+            android:layout_toRightOf="@+id/playButton"
+            android:layout_toEndOf="@+id/playButton"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+
+            android:background="@android:color/transparent"/>
+
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+            <!--android:text="Small Text"-->
+            <!--android:id="@+id/textView2"-->
+            <!--android:layout_above="@+id/seekBar"-->
+            <!--android:layout_toLeftOf="@+id/expandableList"-->
+            <!--android:layout_toStartOf="@+id/expandableList" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:text="Medium Text"-->
+            <!--android:id="@+id/textView4"-->
+            <!--android:layout_alignBaseline="@+id/textView2"-->
+            <!--android:layout_alignBottom="@+id/textView2"-->
+            <!--android:layout_centerHorizontal="true" />-->
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

@@ -16,6 +16,9 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
 
     <application
         android:allowBackup="true"
@@ -93,6 +96,8 @@
             android:screenOrientation="portrait"/>
 
         <service android:name=".GPSService" >
+    </service>
+        <service android:name=".services.ReflectionsAudioService" >
         </service>
 
         <meta-data

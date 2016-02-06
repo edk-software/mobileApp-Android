@@ -1,7 +1,12 @@
 package pl.org.edk;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.SeekBar;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -17,20 +24,49 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import pl.org.edk.Database.DbManager;
+import pl.org.edk.Database.Entities.Reflection;
+import pl.org.edk.Database.Entities.ReflectionList;
+import pl.org.edk.Database.Services.ReflectionService;
+import pl.org.edk.services.ReflectionsAudioService;
 import pl.org.edk.util.ExpandableListAdapter;
 
 /**
  * Created by darekpap on 2015-11-30.
  */
 public class ReflectionsFragment extends Fragment {
-
-
     private ExpandableListView expListView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
     private ExpandableListAdapter listAdapter;
     private int mCurrentStation = -1;
 
+    private View mPlayerView;
+    private ImageButton mPlayButton;
+    private ImageButton mNextButton;
+    private ImageButton mPrevButton;
+
+    private int timeElapsed = -1;
+    private int finalTime = -1;
+    private Handler mDurationHandler = new Handler();
+    private SeekBar mSeekBar;
+
+    private ReflectionsAudioService mAudioService;
+    private boolean mServiceBound = false;
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ReflectionsAudioService.MusicBinder binder = (ReflectionsAudioService.MusicBinder) service;
+            mAudioService = binder.getService();
+            mServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mServiceBound = false;
+        }
+    };
 
     public void selectStation(int stationIndex) {
         if (expListView == null) {
@@ -38,20 +74,16 @@ public class ReflectionsFragment extends Fragment {
             return;
         }
         openReflections(stationIndex);
+        preparePlayer(stationIndex);
     }
-
 
     public ReflectionsFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -76,15 +108,160 @@ public class ReflectionsFragment extends Fragment {
 
                 if (parent.isGroupExpanded(groupPosition)) {
                     parent.collapseGroup(groupPosition);
+                    hidePlayer();
                 } else {
                     openReflections(groupPosition);
+                    preparePlayer(groupPosition);
                 }
                 return true;
             }
         });
 
+        initializePlayerView(view);
+        if (mCurrentStation == -1) {
+            hidePlayer();
+        }
         return view;
     }
+
+    private void hidePlayer() {
+//        mPlayerView.setTranslationY(mPlayerView.getHeight());
+//        mPlayerView.animate().translationY(mPlayerView.getHeight()).start();
+        mPlayerView.setVisibility(View.GONE);
+    }
+
+    private void showPlayer() {
+        mPlayerView.setVisibility(View.VISIBLE);
+    }
+
+
+    //start and bind the service when the activity starts
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!mServiceBound) {
+            Intent playIntent = new Intent(getActivity(), ReflectionsAudioService.class);
+            getActivity().bindService(playIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+            getActivity().startService(playIntent);
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mDurationHandler.removeCallbacks(updateSeekBarTime);
+    }
+
+    private void preparePlayer(int stationIndex) {
+        showPlayer();
+
+        mPlayButton.setImageResource(R.drawable.play);
+        mPrevButton.setEnabled(stationIndex != 0);
+        mNextButton.setEnabled(stationIndex != 15);
+
+        resetSeekBar();
+
+        if (mServiceBound) {
+            if (mAudioService.isPlaying()) {
+                mAudioService.stop();
+            }
+            Reflection reflection = new Reflection();
+            reflection.setStationIndex(stationIndex);
+            mAudioService.setReflection(reflection);
+        }
+    }
+
+    private void resetSeekBar() {
+        mSeekBar.setProgress(0);
+        finalTime = -1;
+        timeElapsed = -1;
+    }
+
+    public void initializePlayerView(View view) {
+        mSeekBar = (SeekBar) view.findViewById(R.id.seekBar);
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    mAudioService.seekTo(progress);
+                }
+            }
+        });
+
+        mPlayerView = view.findViewById(R.id.player);
+        mPlayButton = (ImageButton) view.findViewById(R.id.playButton);
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mAudioService.isPlaying()) {
+                    mAudioService.pause();
+                    mPlayButton.setImageResource(R.drawable.play);
+
+                } else {
+                    mAudioService.play();
+                    mPlayButton.setImageResource(R.drawable.pause);
+                    updateSeekBarTime.run();
+                    mDurationHandler.postDelayed(updateSeekBarTime, 1000);
+
+                }
+            }
+        });
+
+        mNextButton = (ImageButton) view.findViewById(R.id.nextButton);
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectStation(mCurrentStation + 1);
+            }
+        });
+
+        mPrevButton = (ImageButton) view.findViewById(R.id.prevButton);
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectStation(mCurrentStation - 1);
+            }
+        });
+
+        if (mServiceBound && mAudioService.isPlaying()) {
+            showPlayer();
+            mPlayButton.setImageResource(R.drawable.pause);
+            resetSeekBar();
+            updateSeekBarTime.run();
+        }
+    }
+
+    private Runnable updateSeekBarTime = new Runnable() {
+        public void run() {
+            if (!mAudioService.isPrepared()) {
+                mDurationHandler.postDelayed(this, 1000);
+                return;
+            }
+            if (!mAudioService.isPlaying()) {
+                preparePlayer(mCurrentStation);
+                return;
+            }
+
+            if (finalTime < 0) {
+                finalTime = mAudioService.getDuration();
+                mSeekBar.setMax(finalTime);
+            }
+
+            timeElapsed = mAudioService.getCurrentPosition();
+            mSeekBar.setProgress(timeElapsed);
+            mDurationHandler.postDelayed(this, 1000);
+        }
+    };
 
     private void openReflections(final int stationId) {
         if (mCurrentStation != -1 && stationId != mCurrentStation) {
@@ -101,7 +278,7 @@ public class ReflectionsFragment extends Fragment {
     }
 
 
-//workaround from https://stackoverflow.com/questions/14479078/smoothscrolltopositionfromtop-is-not-always-working-like-it-should/20997828#20997828
+    //workaround from https://stackoverflow.com/questions/14479078/smoothscrolltopositionfromtop-is-not-always-working-like-it-should/20997828#20997828
     public static void smoothScrollToPositionFromTop(final AbsListView view, final int position) {
         View child = getChildAtPosition(view, position);
         // There's no need to scroll if child is already at top or view is already scrolled to its end
@@ -150,16 +327,24 @@ public class ReflectionsFragment extends Fragment {
     }
 
     private void prepareListData() {
-        listDataHeader = Arrays.asList(getResources().getStringArray(R.array.stations));
-        listDataChild = new HashMap<>();
 
-        for (int i = 0; i < listDataHeader.size(); i++) {
-            String title = listDataHeader.get(i);
-            List<String> children = new ArrayList<>();
-            children.add(getResources().getString(getReflection(i)));
-            listDataChild.put(title, children);
+        ReflectionService reflectionService = DbManager.getInstance(getActivity()).getReflectionService();
+        ReflectionList reflectionList = reflectionService.GetReflectionList("pl", true);
+        if (reflectionList == null || reflectionList.getReflections().isEmpty()) {
+
+
+            listDataHeader = Arrays.asList(getResources().getStringArray(R.array.stations));
+            listDataChild = new HashMap<>();
+
+            for (int i = 0; i < listDataHeader.size(); i++) {
+                String title = listDataHeader.get(i);
+                List<String> children = new ArrayList<>();
+                children.add(getResources().getString(getReflection(i)));
+                listDataChild.put(title, children);
+            }
+        } else {
+            throw new UnsupportedOperationException("Implementation missing");
         }
-
     }
 
     //TODO change to service call
