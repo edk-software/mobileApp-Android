@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Admin on 2016-01-31.
+ * Created by pwawrzynek on 2016-01-31.
  */
 public class HttpManager {
     // ---------------------------------------

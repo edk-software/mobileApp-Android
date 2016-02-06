@@ -1,7 +1,7 @@
 package pl.org.edk.managers;
 
 /**
- * Created by Admin on 2016-02-01.
+ * Created by pwawrzynek on 2016-02-01.
  */
 public class LogManager {
     public static void LogInfo(String infoMessage){

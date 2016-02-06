@@ -31,6 +31,13 @@ public class ReflectionList extends DbEntityBase {
     private ArrayList<Reflection> reflections;
 
     // ---------------------------------------
+    // Constructors
+    // ---------------------------------------
+    public ReflectionList(){
+        reflections = new ArrayList<>();
+    }
+
+    // ---------------------------------------
     // Static methods
     // ---------------------------------------
     public static String getCreateEntries() {
@@ -60,7 +67,6 @@ public class ReflectionList extends DbEntityBase {
     // ---------------------------------------
     // Base class methods
     // ---------------------------------------
-
     @Override
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
@@ -109,5 +115,12 @@ public class ReflectionList extends DbEntityBase {
     }
     public void setReleaseDate(Date date){
         this.releaseDate = NumConverter.dateToString(date);
+    }
+
+    public ArrayList<Reflection> getReflections() {
+        return reflections;
+    }
+    public void setReflections(ArrayList<Reflection> reflections) {
+        this.reflections = reflections;
     }
 }

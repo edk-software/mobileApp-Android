@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.concurrent.*;
 
 /**
- * Created by Admin on 2016-01-31.
+ * Created by pwawrzynek on 2016-01-31.
  */
 public class WebServiceManager {
     // ---------------------------------------
@@ -38,7 +38,6 @@ public class WebServiceManager {
     // ---------------------------------------
     // Singleton
     // ---------------------------------------
-
     private WebServiceManager(Context context){
         this.mContext = context;
         mHttpManager = new HttpManager("http://panel.edk.org.pl");

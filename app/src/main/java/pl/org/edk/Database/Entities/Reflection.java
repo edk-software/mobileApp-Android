@@ -12,6 +12,7 @@ public class Reflection extends DbEntityBase {
     // ---------------------------------------
     public static final String TABLE_NAME = "Reflection";
     public static final String COLUMN_NAME_LANGUAGE = "Language";
+    public static final String COLUMN_NAME_LIST_ID = "ListId";
     public static final String COLUMN_NAME_STATION_INDEX = "StationIndex";
     public static final String COLUMN_NAME_DISPLAY_NAME = "DisplayName";
     public static final String COLUMN_NAME_CONTENT = "Content";
@@ -20,6 +21,7 @@ public class Reflection extends DbEntityBase {
     // Class variables
     // ---------------------------------------
     private String language;
+    private long listId;
     private int stationIndex;
     private String displayName;
     private String content;
@@ -31,13 +33,13 @@ public class Reflection extends DbEntityBase {
     // ---------------------------------------
     public static String getCreateEntries() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + " INTEGER PRIMARY KEY" + COMMA +
+                _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
                 COLUMN_NAME_SERVER_ID + INTEGER_TYPE + COMMA +
-                COLUMN_NAME_LANGUAGE + TEXT_TYPE +
-                COLUMN_NAME_STATION_INDEX + INTEGER_TYPE +
-                COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE +
-                COLUMN_NAME_CONTENT + TEXT_TYPE +
-                ");";
+                COLUMN_NAME_LANGUAGE + TEXT_TYPE + COMMA +
+                COLUMN_NAME_LIST_ID + INTEGER_TYPE + COMMA +
+                COLUMN_NAME_STATION_INDEX + INTEGER_TYPE + COMMA +
+                COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + COMMA +
+                COLUMN_NAME_CONTENT + TEXT_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
@@ -49,6 +51,7 @@ public class Reflection extends DbEntityBase {
                 _ID,
                 COLUMN_NAME_SERVER_ID,
                 COLUMN_NAME_LANGUAGE,
+                COLUMN_NAME_LIST_ID,
                 COLUMN_NAME_STATION_INDEX,
                 COLUMN_NAME_DISPLAY_NAME,
                 COLUMN_NAME_CONTENT
@@ -66,6 +69,7 @@ public class Reflection extends DbEntityBase {
 
         values.put(COLUMN_NAME_SERVER_ID, serverID);
         values.put(COLUMN_NAME_LANGUAGE, language);
+        values.put(COLUMN_NAME_LIST_ID, listId);
         values.put(COLUMN_NAME_STATION_INDEX, stationIndex);
         values.put(COLUMN_NAME_DISPLAY_NAME, displayName);
         values.put(COLUMN_NAME_CONTENT, content);
@@ -79,6 +83,7 @@ public class Reflection extends DbEntityBase {
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
             this.serverID = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_SERVER_ID));
             this.language = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_LANGUAGE));
+            this.listId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_LIST_ID));
             this.stationIndex = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_LANGUAGE));
             this.displayName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_NAME));
             this.content= cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_CONTENT));
@@ -96,6 +101,13 @@ public class Reflection extends DbEntityBase {
     }
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public long getListId() {
+        return listId;
+    }
+    public void setListId(long listId) {
+        this.listId = listId;
     }
 
     public int getStationIndex() {
@@ -117,5 +129,13 @@ public class Reflection extends DbEntityBase {
     }
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public ReflectionList getReflectionList() {
+        return reflectionList;
+    }
+    public void setReflectionList(ReflectionList reflectionList) {
+        this.reflectionList = reflectionList;
+        this.listId = reflectionList.getId();
     }
 }
