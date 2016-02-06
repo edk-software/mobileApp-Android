@@ -2,10 +2,10 @@ package pl.org.edk.managers;
 
 import android.content.Context;
 import com.google.gson.reflect.TypeToken;
-import pl.org.edk.database.Entities.Area;
-import pl.org.edk.database.Entities.Reflection;
-import pl.org.edk.database.Entities.Route;
-import pl.org.edk.database.Entities.Territory;
+import pl.org.edk.Database.Entities.Area;
+import pl.org.edk.Database.Entities.Reflection;
+import pl.org.edk.Database.Entities.Route;
+import pl.org.edk.Database.Entities.Territory;
 import pl.org.edk.util.JsonHelper;
 import pl.org.edk.util.NumConverter;
 

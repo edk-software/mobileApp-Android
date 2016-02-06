@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import pl.org.edk.database.DbManager;
-import pl.org.edk.database.Entities.Area;
-import pl.org.edk.database.Services.TerritoryService;
+import pl.org.edk.Database.DbManager;
+import pl.org.edk.Database.Entities.Area;
+import pl.org.edk.Database.Services.TerritoryService;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.util.DialogUtil;

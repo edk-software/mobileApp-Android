@@ -1,9 +1,8 @@
-package pl.org.edk.database.Entities;
+package pl.org.edk.Database.Entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
-import com.google.gson.Gson;
 
 /**
  * Created by pwawrzynek on 2015-12-15.

@@ -2,9 +2,9 @@ package pl.org.edk.kml;
 
 import java.io.InputStream;
 
-import pl.org.edk.database.DbManager;
-import pl.org.edk.database.Entities.Route;
-import pl.org.edk.database.Services.RouteService;
+import pl.org.edk.Database.DbManager;
+import pl.org.edk.Database.Entities.Route;
+import pl.org.edk.Database.Services.RouteService;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.menu.TrackInfo;

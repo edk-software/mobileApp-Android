@@ -1,9 +1,9 @@
-package pl.org.edk.database;
+package pl.org.edk.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import pl.org.edk.database.Entities.*;
+import pl.org.edk.Database.Entities.*;
 
 /**
  * Created by pwawrzynek on 2015-12-15.

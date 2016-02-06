@@ -1,8 +1,8 @@
-package pl.org.edk.database.Services;
+package pl.org.edk.Database.Services;
 
 import android.database.Cursor;
-import pl.org.edk.database.Entities.Reflection;
-import pl.org.edk.database.Entities.ReflectionList;
+import pl.org.edk.Database.Entities.Reflection;
+import pl.org.edk.Database.Entities.ReflectionList;
 
 import java.util.ArrayList;
 import java.util.Calendar;

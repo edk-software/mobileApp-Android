@@ -1,4 +1,4 @@
-package pl.org.edk.database.Entities;
+package pl.org.edk.Database.Entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -6,8 +6,6 @@ import pl.org.edk.util.NumConverter;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 
 /**
  * Created by Admin on 2015-12-15.

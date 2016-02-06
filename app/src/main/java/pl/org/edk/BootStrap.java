@@ -1,7 +1,7 @@
 package pl.org.edk;
 
 import android.content.Context;
-import pl.org.edk.database.DbManager;
+import pl.org.edk.Database.DbManager;
 import pl.org.edk.managers.HardcodedDataManager;
 
 /**
