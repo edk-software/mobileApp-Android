@@ -18,8 +18,6 @@ public abstract class DbEntityBase implements BaseColumns {
     protected static String PRIMARY_KEY = " PRIMARY KEY";
     protected static String COMMA = ", ";
 
-    protected static String DATE_FORMAT = "YYYY-MM-DD HH:MM:SS.SSS";
-
     protected static String COLUMN_NAME_SERVER_ID = "ServerID";
 
     // ---------------------------------------

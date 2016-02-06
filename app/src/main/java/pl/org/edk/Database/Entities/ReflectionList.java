@@ -2,6 +2,7 @@ package pl.org.edk.database.Entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import pl.org.edk.util.NumConverter;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -104,11 +105,9 @@ public class ReflectionList extends DbEntityBase {
     }
 
     public Date getReleaseDate(){
-        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-        return format.parse(this.releaseDate, new ParsePosition(0));
+        return NumConverter.stringToDate(this.releaseDate);
     }
     public void setReleaseDate(Date date){
-        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-        releaseDate = format.format(date);
+        this.releaseDate = NumConverter.dateToString(date);
     }
 }

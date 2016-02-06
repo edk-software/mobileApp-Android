@@ -1,11 +1,17 @@
 package pl.org.edk.util;
 
+import pl.org.edk.managers.LogManager;
+
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class NumConverter {
 	private NumConverter(){}
-	
+
+	// Arabic -> roman =====================================================
 	private static Map<Integer, String> arabic2roman = new HashMap<Integer, String>();
 	private static Map<String, Integer> roman2arabic = new HashMap<String, Integer>();
 	
@@ -53,4 +59,25 @@ public class NumConverter {
 		return result == null ? "" : result;
 	}
 
+	// Date -> String ======================================================
+	private static String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	private static SimpleDateFormat DATE_CONVERTER = new SimpleDateFormat(DATE_FORMAT);
+
+	public static Date stringToDate(String string){
+		try {
+			return DATE_CONVERTER.parse(string, new ParsePosition(0));
+		}catch (Exception e){
+			LogManager.LogError("Date conversion error: " + e.getMessage());
+			return null;
+		}
+	}
+
+	public static String dateToString(Date date){
+		try {
+			return DATE_CONVERTER.format(date);
+		}catch (Exception e){
+			LogManager.LogError("Date conversion error: " + e.getMessage());
+			return null;
+		}
+	}
 }

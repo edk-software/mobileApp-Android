@@ -3,11 +3,14 @@ package pl.org.edk.managers;
 import android.content.Context;
 import com.google.gson.reflect.TypeToken;
 import pl.org.edk.database.Entities.Area;
+import pl.org.edk.database.Entities.Reflection;
 import pl.org.edk.database.Entities.Route;
 import pl.org.edk.database.Entities.Territory;
 import pl.org.edk.util.JsonHelper;
+import pl.org.edk.util.NumConverter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.*;
 
@@ -22,6 +25,7 @@ public class WebServiceManager {
     private static final String METHOD_GET_AREAS = "get-areas.php";
     private static final String METHOD_GET_ROUTES = "get-routes.php";
     private static final String METHOD_GET_REFLECTIONS = "get-reflections.php";
+    private static final String METHOD_CHECK_REFLECTIONS = "check-reflections.php";
 
     // ---------------------------------------
     // Class members
@@ -134,6 +138,31 @@ public class WebServiceManager {
 
         LogManager.LogInfo("WebServiceManager.getRoutesByArea success - " + routes.size() + " items downloaded");
         return routes;
+    }
+
+    public ArrayList<Reflection> getReflections(String lang){
+        String response = callMethod(METHOD_GET_REFLECTIONS, "language", lang);
+
+        if(response == null)
+            return new ArrayList<>();
+
+        // Deserialize
+        ArrayList<Reflection> reflections = JsonHelper.deserializeFromJson(response, new TypeToken<ArrayList<Reflection>>(){}.getType());
+        for(Reflection reflection : reflections){
+            reflection.setLanguage(lang);
+        }
+
+        LogManager.LogInfo("WebServiceManager.getReflections success - " + reflections.size() + " items downloaded");
+        return reflections;
+    }
+
+    public Date checkReflectionsReleaseDate(String lang){
+        String response = callMethod(METHOD_CHECK_REFLECTIONS, "language", lang);
+
+        if(response == null)
+            return null;
+
+        return NumConverter.stringToDate(response);
     }
 
     // ---------------------------------------
