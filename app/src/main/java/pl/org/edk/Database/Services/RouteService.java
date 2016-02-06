@@ -1,11 +1,10 @@
-package pl.org.edk.Database.Services;
+package pl.org.edk.database.Services;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.widget.ArrayAdapter;
-import pl.org.edk.Database.Entities.Route;
-import pl.org.edk.Database.Entities.RouteDesc;
-import pl.org.edk.Database.Entities.Station;
+import pl.org.edk.database.Entities.Route;
+import pl.org.edk.database.Entities.RouteDesc;
+import pl.org.edk.database.Entities.Station;
 
 import java.util.ArrayList;
 

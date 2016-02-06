@@ -1,4 +1,4 @@
-package pl.org.edk.Database.Entities;
+package pl.org.edk.database.Entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -53,6 +53,7 @@ public class Route extends DbEntityBase {
     public static String getCreateEntries() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
+                COLUMN_NAME_SERVER_ID + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_AREA_ID + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_RELEASE_DATE + TEXT_TYPE + COMMA +
                 COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + COMMA +
@@ -66,6 +67,7 @@ public class Route extends DbEntityBase {
     public static String[] getFullProjection(){
         String[] projection = {
                 _ID,
+                COLUMN_NAME_SERVER_ID,
                 COLUMN_NAME_AREA_ID,
                 COLUMN_NAME_RELEASE_DATE,
                 COLUMN_NAME_DISPLAY_NAME,
@@ -82,6 +84,7 @@ public class Route extends DbEntityBase {
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
 
+        values.put(COLUMN_NAME_SERVER_ID, serverID);
         values.put(COLUMN_NAME_AREA_ID, areaId);
         values.put(COLUMN_NAME_RELEASE_DATE, releaseDate);
         values.put(COLUMN_NAME_DISPLAY_NAME, name);
@@ -94,6 +97,7 @@ public class Route extends DbEntityBase {
     public boolean readFromCursor(Cursor cursor) {
         try {
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
+            this.serverID = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_SERVER_ID));
             this.areaId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_AREA_ID));
             this.releaseDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_RELEASE_DATE));
             this.name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_NAME));

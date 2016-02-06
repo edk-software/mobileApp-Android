@@ -1,8 +1,9 @@
-package pl.org.edk.Database.Entities;
+package pl.org.edk.database.Entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
+import com.google.gson.Gson;
 
 /**
  * Created by pwawrzynek on 2015-12-15.
@@ -19,10 +20,13 @@ public abstract class DbEntityBase implements BaseColumns {
 
     protected static String DATE_FORMAT = "YYYY-MM-DD HH:MM:SS.SSS";
 
+    protected static String COLUMN_NAME_SERVER_ID = "ServerID";
+
     // ---------------------------------------
     // Variables
     // ---------------------------------------
     protected long id;
+    protected long serverID;
 
     // ---------------------------------------
     // Methods
@@ -35,5 +39,12 @@ public abstract class DbEntityBase implements BaseColumns {
     }
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getServerID() {
+        return serverID;
+    }
+    public void setServerID(long serverID) {
+        this.serverID = serverID;
     }
 }

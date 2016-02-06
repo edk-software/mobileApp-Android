@@ -1,4 +1,4 @@
-package pl.org.edk.Database.Entities;
+package pl.org.edk.database.Entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;

@@ -1,7 +1,7 @@
-package pl.org.edk.Database.Services;
+package pl.org.edk.database.Services;
 
-import pl.org.edk.Database.Entities.Reflection;
-import pl.org.edk.Database.Entities.ReflectionList;
+import pl.org.edk.database.Entities.Reflection;
+import pl.org.edk.database.Entities.ReflectionList;
 
 import java.util.ArrayList;
 

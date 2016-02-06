@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.List;
 
 import pl.org.edk.*;
-import pl.org.edk.Database.DbManager;
-import pl.org.edk.Database.Entities.Route;
-import pl.org.edk.Database.Services.RouteService;
+import pl.org.edk.database.DbManager;
+import pl.org.edk.database.Entities.Route;
+import pl.org.edk.database.Services.RouteService;
 import pl.org.edk.util.DialogUtil;
 import pl.org.edk.util.ResourcesUtil;
 import android.content.Intent;
