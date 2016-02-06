@@ -60,7 +60,7 @@ public class TrackerProvider {
 
 	private String getTrackId() {
 
-        RouteService routeService = DbManager.getInstance().getRouteService();
+        RouteService routeService = DbManager.getInstance(mContext).getRouteService();
         Route route = routeService.GetRoute(Settings.get(mContext).getLong(Settings.TRACK_NAME, -1));
         //TODO get path to kml from route
 

@@ -1,7 +1,6 @@
 package pl.org.edk.util;
 
 import com.google.gson.Gson;
-
 import java.lang.reflect.Type;
 
 /**

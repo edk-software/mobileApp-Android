@@ -15,9 +15,8 @@ public class TerritoryChooserActivity extends ChooserActivity {
 
 	private List<Territory> mTerritories;
 
-
 	protected List<String> getItems() {
-        TerritoryService territoryService = DbManager.getInstance().getTerritoryService();
+        TerritoryService territoryService = DbManager.getInstance(this).getTerritoryService();
         mTerritories = territoryService.GetTerritories();
         List<String> items = new ArrayList<>();
         for (Territory territory:mTerritories) {
@@ -27,7 +26,6 @@ public class TerritoryChooserActivity extends ChooserActivity {
         return items;
 	}
 
-
 	protected void onItemClick(int pos) {
 		Settings.get(this).set(Settings.COUNTY_NAME, mTerritories.get(pos).getId());
 		Intent myIntent = new Intent(this, AreaChooserActivity.class);
@@ -35,10 +33,8 @@ public class TerritoryChooserActivity extends ChooserActivity {
 		startActivity(myIntent);
 	}
 
-
 	@Override
 	protected String getChooserTitle() {
 		return getResources().getString(R.string.county_chooser_title);
 	}
-
 }

@@ -22,18 +22,17 @@ public final class BootStrap {
         if(isInitialized)
             return;
 
-        DbManager.getInstance().Init(context);
+        DbManager.getInstance(context).Init();
 
         // TEMP: Add fake data to DB
-        DbManager.getInstance().Reset(context);
-        HardcodedDataManager.CreateTerritoriesAndAreas();
-        HardcodedDataManager.CreateRoutes();
+        DbManager.getInstance(context).Reset();
+        HardcodedDataManager.CreateTerritoriesAndAreas(context);
+        HardcodedDataManager.CreateRoutes(context);
 
-        //ArrayList<Territory> territories = WebServiceManager.getInstance().getTerritories();
-        //ArrayList<Area> areas = WebServiceManager.getInstance().getAreas();
-        //ArrayList<Route> routes = WebServiceManager.getInstance().getRoutesByTerritory(1);
-        ArrayList<Route> routes = WebServiceManager.getInstance().getRoutesByArea(1);
-        Route route = WebServiceManager.getInstance().getRoute(1);
+        ArrayList<Territory> territories = WebServiceManager.getInstance(context).getTerritories();
+        ArrayList<Area> areas = WebServiceManager.getInstance(context).getAreas();
+        ArrayList<Route> routes = WebServiceManager.getInstance(context).getRoutesByTerritory(1);
+        Route route = WebServiceManager.getInstance(context).getRoute(1);
 
         isInitialized = true;
     }

@@ -1,5 +1,6 @@
 package pl.org.edk.managers;
 
+import android.content.Context;
 import com.google.gson.reflect.TypeToken;
 import pl.org.edk.database.Entities.Area;
 import pl.org.edk.database.Entities.Route;
@@ -23,23 +24,31 @@ public class WebServiceManager {
     private static final String METHOD_GET_REFLECTIONS = "get-reflections.php";
 
     // ---------------------------------------
+    // Class members
+    // ---------------------------------------
+    private Context mContext;
+    private static WebServiceManager instance;
+
+    private final HttpManager mHttpManager;
+
+    // ---------------------------------------
     // Singleton
     // ---------------------------------------
-    private static WebServiceManager instance;
-    public static WebServiceManager getInstance(){
+
+    private WebServiceManager(Context context){
+        this.mContext = context;
+        mHttpManager = new HttpManager("http://panel.edk.org.pl");
+    }
+
+    private static synchronized WebServiceManager get(Context applicationContext){
         if(instance == null)
-            instance = new WebServiceManager();
+            instance = new WebServiceManager(applicationContext);
         return instance;
     }
 
-    private WebServiceManager(){
-        httpManager = new HttpManager("http://panel.edk.org.pl");
+    public static synchronized WebServiceManager getInstance(Context context){
+        return get(context.getApplicationContext());
     }
-
-    // ---------------------------------------
-    // Class members
-    // ---------------------------------------
-    private final HttpManager httpManager;
 
     // ---------------------------------------
     // Public methods
@@ -137,7 +146,7 @@ public class WebServiceManager {
             response = executor.submit(new Callable<String>() {
                 @Override
                 public String call() {
-                    return httpManager.SendRequest(methodName, parameters);
+                    return mHttpManager.sendRequest(methodName, parameters);
                 }
             }).get();
             return response;

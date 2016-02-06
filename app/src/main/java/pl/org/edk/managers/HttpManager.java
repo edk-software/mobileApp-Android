@@ -11,10 +11,6 @@ import java.util.Map;
  * Created by Admin on 2016-01-31.
  */
 public class HttpManager {
-    public HttpManager(String serverPath){
-        this.serverPath = serverPath;
-    }
-
     // ---------------------------------------
     // Class members
     // ---------------------------------------
@@ -22,9 +18,16 @@ public class HttpManager {
     private HttpURLConnection connection;
 
     // ---------------------------------------
+    // Constructors
+    // ---------------------------------------
+    public HttpManager(String serverPath){
+        this.serverPath = serverPath;
+    }
+
+    // ---------------------------------------
     // Public methods
     // ---------------------------------------
-    public String SendRequest(String methodName, HashMap<String, String> parameters){
+    public String sendRequest(String methodName, HashMap<String, String> parameters){
         String targetPath = methodName;
         if(parameters != null && parameters.size() > 0){
             targetPath += "?";

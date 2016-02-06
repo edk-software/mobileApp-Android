@@ -20,7 +20,7 @@ public class RouteChooserActivity extends ChooserActivity {
 	@Override
 	protected List<String> getItems() {
 
-		RouteService routeService = DbManager.getInstance().getRouteService();
+		RouteService routeService = DbManager.getInstance(this).getRouteService();
 		mRoutes = routeService.GetRoutesForArea(Settings.get(this).getLong(Settings.CITY_NAME, -1), false);
 		if (mRoutes.isEmpty()){
         	DialogUtil.showWarningDialog(getString(R.string.no_info_about_tracks_in_region), this);

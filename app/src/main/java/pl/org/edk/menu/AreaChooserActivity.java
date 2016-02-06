@@ -14,11 +14,10 @@ import pl.org.edk.util.DialogUtil;
 import android.content.Intent;
 
 public class AreaChooserActivity extends ChooserActivity {
-
-
 	private List<Area> mCities;
+
 	protected List<String> getItems() {
-		TerritoryService territoryService = DbManager.getInstance().getTerritoryService();
+		TerritoryService territoryService = DbManager.getInstance(this).getTerritoryService();
         mCities = territoryService.GetAreasForTerritory(Settings.get(this).getLong(Settings.COUNTY_NAME, -1));
         if (mCities.isEmpty()){
             DialogUtil.showWarningDialog(getString(R.string.no_info_about_tracks_in_region), this);
@@ -30,7 +29,6 @@ public class AreaChooserActivity extends ChooserActivity {
         }
         return items;
 	}
-
 	
 	protected void onItemClick(int pos) {
 		Settings.get(this).set(Settings.CITY_NAME, mCities.get(pos).getId());
@@ -38,7 +36,6 @@ public class AreaChooserActivity extends ChooserActivity {
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(myIntent);
 	}
-
 
 	@Override
 	protected String getChooserTitle() {
