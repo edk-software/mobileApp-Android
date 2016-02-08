@@ -33,6 +33,8 @@ public class SyncManager {
     // Public methods
     // ---------------------------------------
     public void SyncReflections(){
-        
+        // TODO: Check which lists require update
+
+        // TODO: Update what needs updating
     }
 }

@@ -10,7 +10,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
-import pl.org.edk.Database.Entities.Reflection;
+import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.R;
 
 public class ReflectionsAudioService extends Service implements

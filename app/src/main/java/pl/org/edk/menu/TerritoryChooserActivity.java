@@ -3,9 +3,9 @@ package pl.org.edk.menu;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.org.edk.Database.DbManager;
-import pl.org.edk.Database.Entities.Territory;
-import pl.org.edk.Database.Services.TerritoryService;
+import pl.org.edk.database.DbManager;
+import pl.org.edk.database.entities.Territory;
+import pl.org.edk.database.services.TerritoryService;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 

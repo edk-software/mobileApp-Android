@@ -24,10 +24,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import pl.org.edk.Database.DbManager;
-import pl.org.edk.Database.Entities.Reflection;
-import pl.org.edk.Database.Entities.ReflectionList;
-import pl.org.edk.Database.Services.ReflectionService;
+import pl.org.edk.database.DbManager;
+import pl.org.edk.database.entities.Reflection;
+import pl.org.edk.database.entities.ReflectionList;
+import pl.org.edk.database.services.ReflectionService;
 import pl.org.edk.services.ReflectionsAudioService;
 import pl.org.edk.util.ExpandableListAdapter;
 

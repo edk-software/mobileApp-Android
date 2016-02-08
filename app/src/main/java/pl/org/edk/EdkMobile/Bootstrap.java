@@ -30,7 +30,7 @@ public final class Bootstrap {
             e.printStackTrace();
         }
 
-        // Initialize GPS manager
+        // initialize GPS manager
         AppConfiguration.getInstance().setGpsManager(new GpsManager(context));
 
         isInitialized = true;

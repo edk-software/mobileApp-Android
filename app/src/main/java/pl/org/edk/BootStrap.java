@@ -1,7 +1,7 @@
 package pl.org.edk;
 
 import android.content.Context;
-import pl.org.edk.Database.DbManager;
+import pl.org.edk.database.*;
 import pl.org.edk.managers.HardcodedDataManager;
 
 /**
@@ -10,10 +10,10 @@ import pl.org.edk.managers.HardcodedDataManager;
 public final class BootStrap {
     private BootStrap(){}
 
-    private static boolean isInitialized = false;
+    private static boolean mIsInitialized = false;
 
-    public static void Initialize(Context context){
-        if(isInitialized)
+    public static void initialize(Context context){
+        if(mIsInitialized)
             return;
 
         DbManager.getInstance(context).Init();
@@ -23,6 +23,6 @@ public final class BootStrap {
         HardcodedDataManager.CreateTerritoriesAndAreas(context);
         HardcodedDataManager.CreateRoutes(context);
 
-        isInitialized = true;
+        mIsInitialized = true;
     }
 }

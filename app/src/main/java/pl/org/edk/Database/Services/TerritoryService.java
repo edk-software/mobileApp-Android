@@ -1,9 +1,9 @@
-package pl.org.edk.Database.Services;
+package pl.org.edk.database.services;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import pl.org.edk.Database.Entities.Area;
-import pl.org.edk.Database.Entities.Territory;
+import pl.org.edk.database.entities.Area;
+import pl.org.edk.database.entities.Territory;
 
 import java.util.ArrayList;
 

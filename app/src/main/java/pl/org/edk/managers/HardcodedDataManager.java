@@ -1,10 +1,8 @@
 package pl.org.edk.managers;
 
 import android.content.Context;
-import pl.org.edk.Database.DbManager;
-import pl.org.edk.Database.Entities.Area;
-import pl.org.edk.Database.Entities.Route;
-import pl.org.edk.Database.Entities.Territory;
+import pl.org.edk.database.DbManager;
+import pl.org.edk.database.entities.*;
 
 /**
  * Created by Admin on 2016-01-28.

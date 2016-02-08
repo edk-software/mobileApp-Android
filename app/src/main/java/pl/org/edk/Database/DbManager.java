@@ -1,10 +1,7 @@
-package pl.org.edk.Database;
+package pl.org.edk.database;
 
 import android.content.Context;
-import pl.org.edk.Database.Services.DbServiceBase;
-import pl.org.edk.Database.Services.ReflectionService;
-import pl.org.edk.Database.Services.RouteService;
-import pl.org.edk.Database.Services.TerritoryService;
+import pl.org.edk.database.services.*;
 
 /**
  * Created by pwawrzynek on 2015-12-15.
@@ -64,11 +61,11 @@ public class DbManager {
         if(initialized)
             return;
 
-        // Initialize the main client and pass it to all future db services
+        // initialize the main client and pass it to all future db services
         this.dbClient = new DbHelper(mContext);
         DbServiceBase.Init(this.dbClient);
 
-        /* NOTE: Initialize all services here */
+        /* NOTE: initialize all services here */
         reflectionService = new ReflectionService();
         routeService = new RouteService();
         territoryService = new TerritoryService();

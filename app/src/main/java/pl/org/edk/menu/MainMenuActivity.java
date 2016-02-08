@@ -44,8 +44,8 @@ public class MainMenuActivity extends ActivityWithGPSMenu {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
 
-		// Initialize application global stuff (singletons etc.)
-		BootStrap.Initialize(getApplicationContext());
+		// initialize application global stuff (singletons etc.)
+		BootStrap.initialize(getApplicationContext());
 
 		Settings settings = Settings.get(this);
 		if (settings.getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
