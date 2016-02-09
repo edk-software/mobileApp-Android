@@ -66,9 +66,9 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             if (mAudioService.isPlaying()) {
                 openReflections(mAudioService.getReflection().getStationIndex());
                 loadPlayer();
-            } else if(mCurrentStation != -1){
+            } else if (mCurrentStation != -1) {
                 loadPlayer();
-            }else {
+            } else {
                 if (mCurrentStation == -1) {
                     hidePlayer();
                 } else {
@@ -165,7 +165,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         super.onStart();
         if (!mServiceBound) {
             Intent playIntent = new Intent(getActivity(), ReflectionsAudioService.class);
-            mServiceBound = getActivity().bindService(playIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+            getActivity().bindService(playIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
             getActivity().startService(playIntent);
         }
     }
@@ -188,7 +188,6 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
     }
 
-
     private void loadPlayer() {
         showPlayer();
 
@@ -200,6 +199,8 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         if (mAudioService.isPlaying()) {
             mPlayButton.setImageResource(R.drawable.pause);
             updateSeekBarTime.run();
+        } else {
+            mPlayButton.setImageResource(R.drawable.play);
         }
     }
 
@@ -274,7 +275,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                     mAudioService.pause();
                     mPlayButton.setImageResource(R.drawable.play);
                 } else {
-                    if (mAudioService.getReflection() == null){
+                    if (mAudioService.getReflection() == null) {
                         Log.i("EDK", "Audio service reflection was null when clicked play");
                         mAudioService.setReflection(getReflection(mCurrentStation));
                     }

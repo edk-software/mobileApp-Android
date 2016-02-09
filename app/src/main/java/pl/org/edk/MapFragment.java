@@ -43,8 +43,7 @@ import pl.org.edk.util.NumConverter;
 public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraChangeListener,
         OnMapReadyCallback, KMLTracker.TrackListener {
 
-
-    public interface OnStationSelectListener{
+    public interface OnStationSelectListener {
         void onStationSelect(int stationIndex);
     }
 
@@ -70,10 +69,10 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        
-        try{
+
+        try {
             mListener = (OnStationSelectListener) context;
-        } catch (ClassCastException cce){
+        } catch (ClassCastException cce) {
             throw new ClassCastException(context.toString() + " must implement OnStationSelectListener");
         }
     }
@@ -95,9 +94,12 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
             return;
         }
         loadCameraZoom();
+        if (isVisible() && isMenuVisible()){
+            verifyWhetherServicesAvailable();
+            verifyWhetherGPSIsEnabled();
+        }
 //        setNavigationButtonVisibility();
-        verifyWhetherServicesAvailable();
-        verifyWhetherGPSIsEnabled();
+
 //        setUpMapIfNeeded();
         addTrackListener();
         processTrackerState();
@@ -132,7 +134,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
                     break;
             }
         } else {
-            Log.d(getClass().getSimpleName(),getString(R.string.track_overview));
+            Log.d(getClass().getSimpleName(), getString(R.string.track_overview));
         }
     }
 
@@ -264,7 +266,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
         markerOptions.add(new MarkerOptions().position(checkpoints.get(0)).title(getString(R.string.considerations_start_title)));
 
         //stations 1-14
-        for (int i = 1; i < checkpoints.size()-1; i++) {
+        for (int i = 1; i < checkpoints.size() - 1; i++) {
             MarkerOptions marker = new MarkerOptions();
             marker.position(checkpoints.get(i));
             marker.title(getString(R.string.station) + NumConverter.toRoman(i));
@@ -287,10 +289,10 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
 
     private int getStationId(Marker marker) {
         String title = marker.getTitle();
-        if (title.equals(getString(R.string.considerations_start_title))){
+        if (title.equals(getString(R.string.considerations_start_title))) {
             return 0;
         }
-        if (title.equals(getString(R.string.considerations_end_title))){
+        if (title.equals(getString(R.string.considerations_end_title))) {
             return 15;
         }
 
@@ -319,12 +321,12 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
 
     private void setNearCheckpointTitle(int checkpointId) {
         String title = getString(R.string.near_checkpoint_message) + NumConverter.toRoman(checkpointId + 1);
-        Log.d(getClass().getSimpleName(),title);
+        Log.d(getClass().getSimpleName(), title);
     }
 
     @Override
     public void onOutOfTrack() {
-        Log.d(getClass().getSimpleName(),"Out of track");
+        Log.d(getClass().getSimpleName(), "Out of track");
     }
 
     @Override
@@ -345,7 +347,9 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
         mMap = map;
         Log.i(TAG, "Map initialization");
         // if (Settings.get().getBoolean(Settings.CHALLENGE_ACCEPTED)) {
-        mMap.setMyLocationEnabled(true);
+        Log.i(TAG, "isVisible() " + isVisible() + " isMenuVisible()" + isMenuVisible());
+
+        mMap.setMyLocationEnabled(isVisible() && isMenuVisible());
         // }
         UiSettings settings = mMap.getUiSettings();
         settings.setCompassEnabled(true);
@@ -360,24 +364,21 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
 
     }
 
-    private GoogleMap googleMap;
-    private SupportMapFragment mMapFragment;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_map, container, false);
 
 
-        mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_container);
-        if (mMapFragment == null) {
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_container);
+        if (mapFragment == null) {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            mMapFragment = SupportMapFragment.newInstance();
-            fragmentTransaction.replace(R.id.map_container, mMapFragment).commit();
+            mapFragment = SupportMapFragment.newInstance();
+            fragmentTransaction.replace(R.id.map_container, mapFragment).commit();
         }
 
-        if (mMapFragment !=null){
-            mMapFragment.getMapAsync(this);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
         }
 
         return view;
@@ -385,53 +386,17 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (mMap == null){
+    public void setMenuVisibility(final boolean visible) {
+        Log.d("EDK", "setMenuVisibility called with " + visible);
+        super.setMenuVisibility(visible);
+        if (mMap == null) {
             return;
         }
-        if (this.isVisible()) {
-            mMap.setMyLocationEnabled(isVisibleToUser);
+        if (visible) {
+            verifyWhetherServicesAvailable();
+            verifyWhetherGPSIsEnabled();
         }
+        mMap.setMyLocationEnabled(visible);
+
     }
-
-//    @Override
-//    public void setMenuVisibility(final boolean visible) {
-//        super.setMenuVisibility(visible);
-//        if (visible && mMapFragment == null){
-//            InitializeMap();
-//        }
-//    }
-
-//    @Override
-//    public void onResume(){
-//        super.onResume();
-//        RefreshMap(true);
-//    }
-//
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        this.googleMap = googleMap;
-//        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//        RefreshMap(true);
-//    }
-//
-//    private void InitializeMap(){
-//        mMapFragment = SupportMapFragment.newInstance();
-//        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-//        transaction.add(R.id.map_container, mMapFragment).commit();
-//
-//        mMapFragment.getMapAsync(this);
-//    }
-//
-//    public void RefreshMap(boolean routeCenter){
-//        if(googleMap == null)
-//            return;
-//
-//        // Remove previous markers
-//        googleMap.clear();
-//
-//    }
-
-
 }
