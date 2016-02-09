@@ -6,4 +6,5 @@ public interface Extra {
 	String DESCRIPTION_ID = "description";
 	String CANCEL_BACKGROUND_TRACKING = "Cancel tracking";
 
+	String STOP_REFLECTION_AUDIO = "Stop audio";
 }

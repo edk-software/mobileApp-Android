@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,12 +30,13 @@ import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;
 import pl.org.edk.database.services.ReflectionService;
 import pl.org.edk.services.ReflectionsAudioService;
+import pl.org.edk.services.ReflectionsAudioService.OnPlayerStopListener;
 import pl.org.edk.util.ExpandableListAdapter;
 
 /**
  * Created by darekpap on 2015-11-30.
  */
-public class ReflectionsFragment extends Fragment {
+public class ReflectionsFragment extends Fragment implements OnPlayerStopListener {
     private ExpandableListView expListView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
@@ -46,8 +48,8 @@ public class ReflectionsFragment extends Fragment {
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
 
-    private int timeElapsed = -1;
-    private int finalTime = -1;
+    private int timeElapsed = 0;
+    private int finalTime = 100;
     private Handler mDurationHandler = new Handler();
     private SeekBar mSeekBar;
 
@@ -60,6 +62,20 @@ public class ReflectionsFragment extends Fragment {
             ReflectionsAudioService.MusicBinder binder = (ReflectionsAudioService.MusicBinder) service;
             mAudioService = binder.getService();
             mServiceBound = true;
+            mAudioService.add(ReflectionsFragment.this);
+            if (mAudioService.isPlaying()) {
+                openReflections(mAudioService.getReflection().getStationIndex());
+                loadPlayer();
+            } else if(mCurrentStation != -1){
+                loadPlayer();
+            }else {
+                if (mCurrentStation == -1) {
+                    hidePlayer();
+                } else {
+                    showPlayer();
+                    resetSeekBar();
+                }
+            }
         }
 
         @Override
@@ -109,9 +125,17 @@ public class ReflectionsFragment extends Fragment {
                 if (parent.isGroupExpanded(groupPosition)) {
                     parent.collapseGroup(groupPosition);
                     hidePlayer();
+                    mCurrentStation = -1;
+                    if (mAudioService.isPlaying()) {
+                        mAudioService.continueInForeground();
+                    }
                 } else {
                     openReflections(groupPosition);
-                    preparePlayer(groupPosition);
+                    if (mAudioService.isPlaying() && mAudioService.getReflection().getStationIndex() == groupPosition) {
+                        loadPlayer();
+                    } else {
+                        preparePlayer(groupPosition);
+                    }
                 }
                 return true;
             }
@@ -141,16 +165,42 @@ public class ReflectionsFragment extends Fragment {
         super.onStart();
         if (!mServiceBound) {
             Intent playIntent = new Intent(getActivity(), ReflectionsAudioService.class);
-            getActivity().bindService(playIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+            mServiceBound = getActivity().bindService(playIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
             getActivity().startService(playIntent);
         }
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
         mDurationHandler.removeCallbacks(updateSeekBarTime);
+        if (mServiceBound) {
+            boolean playing = mAudioService.isPlaying();
+            if (playing) {
+                mAudioService.continueInForeground();
+            }
+            mAudioService.remove(this);
+            getActivity().unbindService(mServiceConnection);
+            mServiceBound = false;
+            if (!playing) {
+                getActivity().stopService(new Intent(getActivity(), ReflectionsAudioService.class));
+            }
+        }
+    }
+
+
+    private void loadPlayer() {
+        showPlayer();
+
+        finalTime = mAudioService.getDuration();
+        mSeekBar.setMax(finalTime);
+        timeElapsed = mAudioService.getCurrentPosition();
+        mSeekBar.setProgress(timeElapsed);
+
+        if (mAudioService.isPlaying()) {
+            mPlayButton.setImageResource(R.drawable.pause);
+            updateSeekBarTime.run();
+        }
     }
 
     private void preparePlayer(int stationIndex) {
@@ -166,16 +216,33 @@ public class ReflectionsFragment extends Fragment {
             if (mAudioService.isPlaying()) {
                 mAudioService.stop();
             }
-            Reflection reflection = new Reflection();
-            reflection.setStationIndex(stationIndex);
+            Reflection reflection = getReflection(stationIndex);
             mAudioService.setReflection(reflection);
         }
     }
 
+    @NonNull
+    private Reflection getReflection(int stationIndex) {
+        Reflection reflection = new Reflection();
+        reflection.setStationIndex(stationIndex);
+        reflection.setDisplayName(listDataHeader.get(stationIndex));
+        return reflection;
+    }
+
+
+    @Override
+    public void onPlayerStop() {
+        mDurationHandler.removeCallbacks(updateSeekBarTime);
+        resetSeekBar();
+        mPlayButton.setImageResource(R.drawable.play);
+
+    }
+
     private void resetSeekBar() {
         mSeekBar.setProgress(0);
-        finalTime = -1;
-        timeElapsed = -1;
+        mSeekBar.setMax(100);
+        finalTime = 100;
+        timeElapsed = 0;
     }
 
     public void initializePlayerView(View view) {
@@ -206,13 +273,14 @@ public class ReflectionsFragment extends Fragment {
                 if (mAudioService.isPlaying()) {
                     mAudioService.pause();
                     mPlayButton.setImageResource(R.drawable.play);
-
                 } else {
+                    if (mAudioService.getReflection() == null){
+                        Log.i("EDK", "Audio service reflection was null when clicked play");
+                        mAudioService.setReflection(getReflection(mCurrentStation));
+                    }
                     mAudioService.play();
                     mPlayButton.setImageResource(R.drawable.pause);
                     updateSeekBarTime.run();
-                    mDurationHandler.postDelayed(updateSeekBarTime, 1000);
-
                 }
             }
         });
@@ -233,12 +301,6 @@ public class ReflectionsFragment extends Fragment {
             }
         });
 
-        if (mServiceBound && mAudioService.isPlaying()) {
-            showPlayer();
-            mPlayButton.setImageResource(R.drawable.pause);
-            resetSeekBar();
-            updateSeekBarTime.run();
-        }
     }
 
     private Runnable updateSeekBarTime = new Runnable() {
@@ -247,19 +309,21 @@ public class ReflectionsFragment extends Fragment {
                 mDurationHandler.postDelayed(this, 1000);
                 return;
             }
-            if (!mAudioService.isPlaying()) {
-                preparePlayer(mCurrentStation);
-                return;
-            }
+//            if (!mAudioService.isPlaying()) {
+//                preparePlayer(mCurrentStation);
+//                return;
+//            }
 
-            if (finalTime < 0) {
+            if (finalTime == 100) {
                 finalTime = mAudioService.getDuration();
                 mSeekBar.setMax(finalTime);
             }
 
             timeElapsed = mAudioService.getCurrentPosition();
             mSeekBar.setProgress(timeElapsed);
-            mDurationHandler.postDelayed(this, 1000);
+            if (mAudioService.isPlaying()) {
+                mDurationHandler.postDelayed(this, 1000);
+            }
         }
     };
 
@@ -339,7 +403,7 @@ public class ReflectionsFragment extends Fragment {
             for (int i = 0; i < listDataHeader.size(); i++) {
                 String title = listDataHeader.get(i);
                 List<String> children = new ArrayList<>();
-                children.add(getResources().getString(getReflection(i)));
+                children.add(getResources().getString(getReflectionStringId(i)));
                 listDataChild.put(title, children);
             }
         } else {
@@ -348,7 +412,7 @@ public class ReflectionsFragment extends Fragment {
     }
 
     //TODO change to service call
-    private int getReflection(int station) {
+    private int getReflectionStringId(int station) {
         try {
             Field field = R.string.class.getField(String.format("EDK2015S%02d", station));
             return field.getInt(null);
