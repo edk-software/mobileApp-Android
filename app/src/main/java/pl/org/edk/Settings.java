@@ -6,13 +6,17 @@ import android.content.SharedPreferences.Editor;
 
 public final class Settings {
 
+	private static final String PREF_KEY = "EDK_preferences";
+
 	public static final String CAMERA_ZOOM = "cameraZoom";
 	public static final String YEAR_ID = "year";
-	private static final String PREF_KEY = "EDK_preferences";
 	public static final String IS_BACKGROUND_TRACKING_ON = "trackingTurnedOn";
 	public static final String COUNTY_NAME = "countyName";
 	public static final String CITY_NAME = "cityName";
 	public static final String TRACK_NAME = "trackName";
+
+	public static final String APP_DIRECTORY_KML = "KmlDirectory";
+	public static final String APP_DIRECTORY_AUDIO = "AudioDirectory";
 
 	private static Settings INSTANCE = null;
 	private Context mContext = null;
@@ -101,6 +105,7 @@ public final class Settings {
 	public void set(String key, int value) {
 		set(key, String.valueOf(value));
 	}
+
 	public void set(String key, long value) {
 		set(key, String.valueOf(value));
 	}
@@ -112,5 +117,4 @@ public final class Settings {
 	public void set(String key, boolean value) {
 		set(key, String.valueOf(value));
 	}
-
 }

@@ -28,22 +28,22 @@ public class WebServiceManager {
     // Class members
     // ---------------------------------------
     private Context mContext;
-    private static WebServiceManager instance;
+    private static WebServiceManager mInstance;
 
-    private final HttpManager mHttpManager;
+    private final HttpManager mRestManager;
 
     // ---------------------------------------
     // Singleton
     // ---------------------------------------
     private WebServiceManager(Context context){
         this.mContext = context;
-        mHttpManager = new HttpManager("http://panel.edk.org.pl");
+        mRestManager = new HttpManager("http://panel.edk.org.pl");
     }
 
     private static synchronized WebServiceManager get(Context applicationContext){
-        if(instance == null)
-            instance = new WebServiceManager(applicationContext);
-        return instance;
+        if(mInstance == null)
+            mInstance = new WebServiceManager(applicationContext);
+        return mInstance;
     }
 
     public static synchronized WebServiceManager getInstance(Context context){
@@ -170,8 +170,8 @@ public class WebServiceManager {
         try {
             response = executor.submit(new Callable<String>() {
                 @Override
-                public String call() {
-                    return mHttpManager.sendRequest(methodName, parameters);
+                public String call(){
+                    return mRestManager.callMethod(methodName, parameters);
                 }
             }).get();
             return response;
