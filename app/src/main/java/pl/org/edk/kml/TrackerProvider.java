@@ -61,7 +61,7 @@ public class TrackerProvider {
 	private String getTrackId() {
 
         RouteService routeService = DbManager.getInstance(mContext).getRouteService();
-        Route route = routeService.GetRoute(Settings.get(mContext).getLong(Settings.TRACK_NAME, -1));
+        Route route = routeService.getRoute(Settings.get(mContext).getLong(Settings.TRACK_NAME, -1));
         //TODO get path to kml from route
 
         return "edk-gps-trasa-12";

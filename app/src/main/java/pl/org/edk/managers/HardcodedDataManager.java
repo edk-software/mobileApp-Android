@@ -88,30 +88,30 @@ public final class HardcodedDataManager {
         Route route1 = new Route(1, "2016-01-29 00:02", "Wrocław Główny");
         // TODO: insert stations for the Route here
         //route1.getStations().add()
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route1);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route1);
 
         // kujawsko-pomorskie
         Route route2 = new Route(3, "2016-01-29 00:02", "Toruń Główny");
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route2);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route2);
 
         // mazowieckie
         Route route3 = new Route(9, "2016-01-29 00:02", "Warszawa Centralna");
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route3);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route3);
         Route route4 = new Route(9, "2016-01-29 00:02", "Warszawa Wschodnia");
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route4);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route4);
         Route route5 = new Route(9, "2016-01-29 00:02", "Warszawa Zachodnia");
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route5);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route5);
 
         // śląskie
         Route route6 = new Route(15, "2016-01-29 00:02", "Gliwice");
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route6);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route6);
         Route route7 = new Route(15, "2016-01-29 00:02", "Gliwice Labedy");
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route7);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route7);
         Route route8 = new Route(15, "2016-01-29 00:02", "Gliwice Sikornik");
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route8);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route8);
         Route route9 = new Route(18, "2016-01-29 00:02", "Halemba");
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route9);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route9);
         Route route10 = new Route(14, "2016-01-29 00:02", "Katowice - Spodek");
-        DbManager.getInstance(context).getRouteService().InsertRouteWithStations(route10);
+        DbManager.getInstance(context).getRouteService().insertRouteWithStations(route10);
     }
 }

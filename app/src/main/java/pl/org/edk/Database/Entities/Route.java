@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by Admin on 2015-12-15.
+ * Created by pwawrzynek on 2015-12-15.
  */
 public class Route extends DbEntityBase {
     // ---------------------------------------

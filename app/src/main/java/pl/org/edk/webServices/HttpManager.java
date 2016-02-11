@@ -1,4 +1,4 @@
-package pl.org.edk.managers;
+package pl.org.edk.webServices;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -90,24 +90,6 @@ public class HttpManager {
             }
             rd.close();
             return response.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private static byte[] readStreamToBytes(InputStream stream) {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-        int nRead;
-        byte[] data = new byte[16384];
-
-        try {
-            while ((nRead = stream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-            buffer.flush();
-            return buffer.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
             return null;

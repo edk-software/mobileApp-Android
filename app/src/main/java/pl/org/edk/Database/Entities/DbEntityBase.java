@@ -17,7 +17,7 @@ public abstract class DbEntityBase implements BaseColumns {
     protected static String PRIMARY_KEY = " PRIMARY KEY";
     protected static String COMMA = ", ";
 
-    protected static String COLUMN_NAME_SERVER_ID = "ServerID";
+    public static String COLUMN_NAME_SERVER_ID = "ServerID";
 
     // ---------------------------------------
     // Variables

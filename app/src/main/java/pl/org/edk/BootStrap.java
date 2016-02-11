@@ -3,8 +3,9 @@ package pl.org.edk;
 import android.content.Context;
 import android.os.Environment;
 import pl.org.edk.database.*;
-import pl.org.edk.managers.FileDownloadManager;
+import pl.org.edk.database.entities.Route;
 import pl.org.edk.managers.HardcodedDataManager;
+import pl.org.edk.managers.WebServiceManager;
 
 import java.io.File;
 

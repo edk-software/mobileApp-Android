@@ -1,7 +1,7 @@
 package pl.org.edk.database.services;
 
-import android.content.ContentValues;
 import android.database.Cursor;
+import pl.org.edk.database.entities.DbEntityBase;
 import pl.org.edk.database.entities.Route;
 import pl.org.edk.database.entities.RouteDesc;
 import pl.org.edk.database.entities.Station;
@@ -9,15 +9,14 @@ import pl.org.edk.database.entities.Station;
 import java.util.ArrayList;
 
 /**
- * Created by Admin on 2015-12-16.
+ * Created by pwawrzynek on 2015-12-16.
  */
 public class RouteService extends DbServiceBase {
     // ---------------------------------------
     // Insert
     // ---------------------------------------
-    public boolean InsertRoute(Route route){
-        ContentValues routeValues = route.getContentValues();
-        long newId = dbWrite().insert(Route.TABLE_NAME, null, routeValues);
+    public boolean insertRoute(Route route){
+        long newId = executeQueryInsert(Route.TABLE_NAME, route);
         if(newId <= 0)
             return false;
 
@@ -25,11 +24,10 @@ public class RouteService extends DbServiceBase {
         return true;
     }
 
-    public boolean InsertStation(Station station, long routeId){
+    public boolean insertStation(Station station, long routeId){
         station.setRouteID(routeId);
 
-        ContentValues stationValues = station.getContentValues();
-        long newId = dbWrite().insert(Station.TABLE_NAME, null, stationValues);
+        long newId = executeQueryInsert(Station.TABLE_NAME, station);
         if(newId <= 0)
             return false;
 
@@ -37,21 +35,33 @@ public class RouteService extends DbServiceBase {
         return true;
     }
 
-    public boolean InsertRouteWithStations(Route route){
-        boolean result = InsertRoute(route);
+    public boolean insertRouteWithStations(Route route){
+        boolean result = insertRoute(route);
         if(!result)
             return false;
 
         for(Station station : route.getStations()){
-            result &= InsertStation(station, route.getId());
+            result &= insertStation(station, route.getId());
         }
         return result;
     }
 
     // ---------------------------------------
+    // Update
+    // ---------------------------------------
+    public boolean updateRoute(Route route){
+        // Try to update the route
+        int count = executeQueryUpdate(Route.TABLE_NAME, route);
+        if(count > 0)
+            return true;
+
+        return insertRoute(route);
+    }
+
+    // ---------------------------------------
     // Get
     // ---------------------------------------
-    public Route GetRoute(long routeId){
+    public Route getRoute(long routeId){
         Cursor cursor = executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(), Route._ID, String.valueOf(routeId));
 
         // No Routes with this id found
@@ -64,16 +74,30 @@ public class RouteService extends DbServiceBase {
         return route.readFromCursor(cursor) ? route : null;
     }
 
-    public Route GetRouteWithStations(long routeId){
-        Route route = GetRoute(routeId);
+    public Route getRouteByServerID(long routeServerID){
+        Cursor cursor = executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(),
+                DbEntityBase.COLUMN_NAME_SERVER_ID, String.valueOf(routeServerID));
+
+        // No Routes with this id found
+        if(cursor.getCount() == 0)
+            return null;
+
+        // Get this Route info
+        cursor.moveToFirst();
+        Route route = new Route();
+        return route.readFromCursor(cursor) ? route : null;
+    }
+
+    public Route getRouteWithStations(long routeId){
+        Route route = getRoute(routeId);
         if(route == null)
             return null;
 
-        GetStationsForRoute(route);
+        getStationsForRoute(route);
         return route;
     }
 
-    public void GetStationsForRoute(Route route){
+    public void getStationsForRoute(Route route){
         Cursor cursor = executeQueryWhere(Station.TABLE_NAME, Station.getFullProjection(),
                 Station.COLUMN_NAME_ROUTE_ID, String.valueOf(route.getId()));
 
@@ -87,7 +111,7 @@ public class RouteService extends DbServiceBase {
         route.setStations(stations);
     }
 
-    public RouteDesc GetDescForRoute(long routeId, String language){
+    public RouteDesc getDescForRoute(long routeId, String language){
         ArrayList<String> whereColumns = new ArrayList<>();
         whereColumns.add(RouteDesc.COLUMN_NAME_ROUTE_ID);
         whereColumns.add(RouteDesc.COLUMN_NAME_LANGUAGE);
@@ -105,7 +129,7 @@ public class RouteService extends DbServiceBase {
         return routeDesc.readFromCursor(cursor) ? routeDesc : null;
     }
 
-    public ArrayList<Route> GetRoutesForArea(long areaId, boolean includeStations){
+    public ArrayList<Route> getRoutesForArea(long areaId, boolean includeStations){
         Cursor cursor = executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(),
                 Route.COLUMN_NAME_AREA_ID, String.valueOf(areaId));
 
@@ -120,7 +144,7 @@ public class RouteService extends DbServiceBase {
         // Fetch Stations
         if(includeStations){
             for (Route route : routes)
-                GetStationsForRoute(route);
+                getStationsForRoute(route);
         }
 
         return routes;

@@ -1,43 +1,30 @@
 package pl.org.edk.managers;
 
 import android.content.Context;
-import com.google.gson.reflect.TypeToken;
-import pl.org.edk.database.entities.*;
-import pl.org.edk.util.JsonHelper;
-import pl.org.edk.util.NumConverter;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.concurrent.*;
+import pl.org.edk.Settings;
+import pl.org.edk.database.DbManager;
+import pl.org.edk.database.entities.Route;
+import pl.org.edk.webServices.FileDownloader;
+import pl.org.edk.webServices.WebServiceAccess;
 
 /**
- * Created by pwawrzynek on 2016-01-31.
+ * Created by pwawrzynek on 2016-02-11.
  */
 public class WebServiceManager {
     // ---------------------------------------
-    // Constants
-    // ---------------------------------------
-    private static final String METHOD_GET_TERRITORIES = "get-territories.php";
-    private static final String METHOD_GET_AREAS = "get-areas.php";
-    private static final String METHOD_GET_ROUTES = "get-routes.php";
-    private static final String METHOD_GET_REFLECTIONS = "get-reflections.php";
-    private static final String METHOD_CHECK_REFLECTIONS = "check-reflections.php";
-
-    // ---------------------------------------
     // Class members
     // ---------------------------------------
-    private Context mContext;
     private static WebServiceManager mInstance;
 
-    private final HttpManager mRestManager;
+    private Context mContext;
+    private WebServiceAccess mWsClient;
 
     // ---------------------------------------
-    // Singleton
+    // Constructors
     // ---------------------------------------
     private WebServiceManager(Context context){
         this.mContext = context;
-        mRestManager = new HttpManager("http://panel.edk.org.pl");
+        mWsClient = new WebServiceAccess(context);
     }
 
     private static synchronized WebServiceManager get(Context applicationContext){
@@ -53,143 +40,75 @@ public class WebServiceManager {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
-    public ArrayList<Territory> getTerritories(){
-        String response = callMethod(METHOD_GET_TERRITORIES);
-
-        if(response == null)
-            return new ArrayList<>();
-
-        // Deserialize and rewrite the serverIDs
-        ArrayList<Territory> territories = JsonHelper.deserializeFromJson(response, new TypeToken<ArrayList<Territory>>(){}.getType());
-        for(Territory territory : territories) {
-            territory.setServerID(territory.getId());
-            territory.setId(0);
-        }
-
-        LogManager.LogInfo("WebServiceManager.getTerritories success - " + territories.size() + " items downloaded");
-        return territories;
-    }
-
-    public ArrayList<Area> getAreas(){
-        String response = callMethod(METHOD_GET_AREAS);
-
-        if(response == null)
-            return new ArrayList<>();
-
-        // Deserialize and rewrite the serverIDs
-        ArrayList<Area> areas = JsonHelper.deserializeFromJson(response, new TypeToken<ArrayList<Area>>(){}.getType());
-        for(Area area : areas){
-            area.setServerID(area.getId());
-            area.setId(0);
-        }
-
-        LogManager.LogInfo("WebServiceManager.getAreas success - " + areas.size() + " items downloaded");
-        return areas;
-    }
-
-    public Route getRoute(long routeServerId){
-        String response = callMethod(METHOD_GET_ROUTES, "route", String.valueOf(routeServerId));
-
-        if(response == null)
+    public Route getRoute(long serverID){
+        // Get the route data
+        Route rawRoute = mWsClient.getRoute(serverID);
+        if(rawRoute == null)
             return null;
 
-        // Deserialize and rewrite the serverIDs
-        Route route = JsonHelper.deserializeFromJson(response, Route.class);
-        route.setServerID(route.getServerID());
-        route.setId(0);
+        // If KML file is available, download it
+        String kmlServerPath = rawRoute.getKmlData();
+        if(kmlServerPath != null && kmlServerPath.length() > 0) {
+            String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) + "/route_" + String.valueOf(serverID) + ".kml";
+            FileDownloader manager = new FileDownloader(mContext);
+            FileDownloader.DownloadResult result = manager.downloadFile(kmlServerPath, kmlLocalPath);
 
-        LogManager.LogInfo("WebServiceManager.getRoute success.");
-        return route;
-    }
-
-    public ArrayList<Route> getRoutesByTerritory(long territoryServerId){
-        String response = callMethod(METHOD_GET_ROUTES, "territory", String.valueOf(territoryServerId));
-
-        if(response == null)
-            return new ArrayList<>();
-
-        // Deserialize and rewrite the serverIDs
-        ArrayList<Route> routes = JsonHelper.deserializeFromJson(response, new TypeToken<ArrayList<Route>>(){}.getType());
-        for(Route route : routes){
-            route.setServerID(route.getId());
-            route.setId(0);
+            // Download succeeded
+            if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
+                rawRoute.setKmlData(kmlLocalPath);
+            }
+            else {
+                rawRoute.setKmlData("");
+            }
         }
 
-        LogManager.LogInfo("WebServiceManager.getRoutesByTerritory success - " + routes.size() + " items downloaded");
-        return routes;
-    }
-
-    public ArrayList<Route> getRoutesByArea(long areaId){
-        String response = callMethod(METHOD_GET_ROUTES, "area", String.valueOf(areaId));
-
-        if(response == null)
-            return new ArrayList<>();
-
-        // Deserialize and rewrite the serverIDs
-        ArrayList<Route> routes = JsonHelper.deserializeFromJson(response, new TypeToken<ArrayList<Route>>(){}.getType());
-        for(Route route : routes){
-            route.setServerID(route.getId());
-            route.setId(0);
+        // Save the data to DB
+        Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(serverID);
+        if(previous != null){
+            rawRoute.setId(previous.getId());
+            DbManager.getInstance(mContext).getRouteService().updateRoute(rawRoute);
+        }
+        else {
+            DbManager.getInstance(mContext).getRouteService().insertRoute(rawRoute);
         }
 
-        LogManager.LogInfo("WebServiceManager.getRoutesByArea success - " + routes.size() + " items downloaded");
-        return routes;
+        return rawRoute;
     }
 
-    public ArrayList<Reflection> getReflections(String lang){
-        String response = callMethod(METHOD_GET_REFLECTIONS, "language", lang);
+    public void getRouteAsync(final long serverID){
+        // Get the route data
+        final Route rawRoute = mWsClient.getRoute(serverID);
+        if(rawRoute == null)
+            return;
 
-        if(response == null)
-            return new ArrayList<>();
-
-        // Deserialize
-        ArrayList<Reflection> reflections = JsonHelper.deserializeFromJson(response, new TypeToken<ArrayList<Reflection>>(){}.getType());
-        for(Reflection reflection : reflections){
-            reflection.setLanguage(lang);
-        }
-
-        LogManager.LogInfo("WebServiceManager.getReflections success - " + reflections.size() + " items downloaded");
-        return reflections;
-    }
-
-    public Date checkReflectionsReleaseDate(String lang){
-        String response = callMethod(METHOD_CHECK_REFLECTIONS, "language", lang);
-
-        if(response == null)
-            return null;
-
-        return NumConverter.stringToDate(response);
-    }
-
-    // ---------------------------------------
-    // Private methods
-    // ---------------------------------------
-    private String callMethod(final String methodName, final HashMap<String, String> parameters){
-        String response;
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        try {
-            response = executor.submit(new Callable<String>() {
+        // If KML file is available, download it
+        String kmlServerPath = rawRoute.getKmlData();
+        if(kmlServerPath != null && kmlServerPath.length() > 0) {
+            final String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) + "/route_" + String.valueOf(serverID) + ".kml";
+            FileDownloader manager = new FileDownloader(mContext);
+            manager.setListener(new FileDownloader.OnDownloadEventListener() {
                 @Override
-                public String call(){
-                    return mRestManager.callMethod(methodName, parameters);
+                public void onDownloadFinished(FileDownloader.DownloadResult result) {
+                    // Download succeeded
+                    if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
+                        rawRoute.setKmlData(kmlLocalPath);
+                    }
+                    else {
+                        rawRoute.setKmlData("");
+                    }
+
+                    // Save the data to DB
+                    Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(serverID);
+                    if(previous != null){
+                        rawRoute.setId(previous.getId());
+                        DbManager.getInstance(mContext).getRouteService().updateRoute(rawRoute);
+                    }
+                    else {
+                        DbManager.getInstance(mContext).getRouteService().insertRoute(rawRoute);
+                    }
                 }
-            }).get();
-            return response;
-        } catch (Exception e) {
-            LogManager.LogError("WebServiceManager - calling method " + methodName + " failed: " + e.getMessage());
-            return null;
-        } finally {
-            executor.shutdown();
+            });
+            manager.downloadFileAsync(kmlServerPath, kmlLocalPath);
         }
-    }
-
-    private String callMethod(String methodName){
-        return callMethod(methodName, null);
-    }
-
-    private String callMethod(String methodName, String paramKey, String paramValue){
-        final HashMap<String, String> params = new HashMap<>(1);
-        params.put(paramKey, paramValue);
-        return callMethod(methodName, params);
     }
 }

@@ -1,4 +1,4 @@
-package pl.org.edk.managers;
+package pl.org.edk.webServices;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -6,21 +6,20 @@ import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
  * Created by pwawrzynek on 2016-02-10.
  */
-public class FileDownloadManager {
+public class FileDownloader {
     // ---------------------------------------
     // Class members
     // ---------------------------------------
     private Context mContext;
+    private OnDownloadEventListener mListener;
 
     private boolean mDisplayNotification = false;
     private String mFinishedText;
@@ -31,7 +30,7 @@ public class FileDownloadManager {
     // ---------------------------------------
     // Constructors
     // ---------------------------------------
-    public FileDownloadManager(Context context){
+    public FileDownloader(Context context){
         this.mContext = context;
     }
 
@@ -49,15 +48,36 @@ public class FileDownloadManager {
         mFinishedText = finishedText;
     }
 
-    public void downloadFile(String serverPath, String localFilePath){
+    public void setListener(OnDownloadEventListener listener){
+        this.mListener = listener;
+    }
+
+    public AsyncTask<String, Integer, DownloadResult> downloadFileAsync(String serverPath, String localFilePath){
         final DownloadTask downloadTask = new DownloadTask(mContext.getApplicationContext());
-        downloadTask.execute(serverPath, localFilePath);
+        return downloadTask.execute(serverPath, localFilePath);
+    }
+
+    public DownloadResult downloadFile(String serverPath, String localFilePath) {
+        final DownloadTask downloadTask = new DownloadTask(mContext.getApplicationContext());
+        try {
+            return downloadTask.execute(serverPath, localFilePath).get();
+        } catch (Exception e) {
+            return DownloadResult.DownloadInterrupted;
+        }
     }
 
     // ---------------------------------------
     // Subclasses
     // ---------------------------------------
-    private class DownloadTask extends AsyncTask<String, Integer, String> {
+    public enum DownloadResult {
+        IncorrectURL,
+        ResponseError,
+        IncorrectLocalPath,
+        DownloadInterrupted,
+        NoErrorsOccurred
+    }
+
+    private class DownloadTask extends AsyncTask<String, Integer, DownloadResult> {
 
         private Context mContext;
 
@@ -66,7 +86,7 @@ public class FileDownloadManager {
         }
 
         @Override
-        protected String doInBackground(String... sUrl) {
+        protected DownloadResult doInBackground(String... sUrl) {
             InputStream input = null;
             OutputStream output = null;
             HttpURLConnection connection = null;
@@ -76,10 +96,9 @@ public class FileDownloadManager {
                 connection = (HttpURLConnection) serverUrl.openConnection();
                 connection.connect();
 
-                // expect HTTP 200 OK, so we don't mistakenly save error report
-                // instead of the file
+                // Expect HTTP 200 OK
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    return "Server returned HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
+                    return DownloadResult.ResponseError;
                 }
 
                 // Download the file
@@ -96,10 +115,6 @@ public class FileDownloadManager {
                         return null;
                     }
 
-                    // TEMP
-                    publishProgress((int) (total * 100 / 80000));
-                    Thread.sleep(500);
-
                     // Download next piece of data
                     total += count;
                     output.write(data, 0, count);
@@ -109,8 +124,12 @@ public class FileDownloadManager {
                     if (fileLength > 0) // only if total length is known
                         publishProgress((int) (total * 100 / fileLength));
                 }
-            } catch (Exception e) {
-                return e.toString();
+            } catch (MalformedURLException e) {
+                return DownloadResult.IncorrectURL;
+            } catch (FileNotFoundException e) {
+                return DownloadResult.IncorrectLocalPath;
+            } catch (IOException e) {
+                return DownloadResult.IncorrectURL;
             } finally {
                 try {
                     if (output != null)
@@ -123,7 +142,7 @@ public class FileDownloadManager {
                 if (connection != null)
                     connection.disconnect();
             }
-            return null;
+            return DownloadResult.NoErrorsOccurred;
         }
 
         @Override
@@ -150,7 +169,7 @@ public class FileDownloadManager {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(DownloadResult result) {
             super.onPostExecute(result);
 
             // Remove the progress bar
@@ -159,6 +178,13 @@ public class FileDownloadManager {
                 mBuilder.setProgress(0, 0, false);
                 mNotifyManager.notify(1, mBuilder.build());
             }
+
+            if(mListener != null)
+                mListener.onDownloadFinished(result);
         }
+    }
+
+    public interface OnDownloadEventListener{
+        void onDownloadFinished(DownloadResult result);
     }
 }

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import pl.org.edk.database.DbHelper;
+import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.DbEntityBase;
 
 import java.util.ArrayList;
@@ -31,6 +32,14 @@ public class DbServiceBase {
     protected long executeQueryInsert(String tableName, DbEntityBase entity){
         ContentValues values = entity.getContentValues();
         return dbWrite().insert(tableName, null, values);
+    }
+
+    protected int executeQueryUpdate(String tableName, DbEntityBase entity){
+        if(entity.getId() <= 0)
+            return 0;
+
+        ContentValues values = entity.getContentValues();
+        return dbWrite().update(tableName, values, DbEntityBase._ID, new String[]{String.valueOf(entity.getId())});
     }
 
     protected Cursor executeQueryGetAll(String tableName, String[] columns){
