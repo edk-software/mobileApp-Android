@@ -1,5 +1,6 @@
 package pl.org.edk.services;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -108,12 +109,13 @@ public class ReflectionsAudioService extends Service implements
         }
     }
 
-    public void continueInForeground() {
-        startForeground(ONGOING_NOTIFICATION_ID, getNotificationBuilder().build());
+    public void continueInForeground(Class<? extends Activity> activityClass) {
+        startForeground(ONGOING_NOTIFICATION_ID, getNotificationBuilder(activityClass).build());
     }
 
-    private NotificationCompat.Builder getNotificationBuilder() {
-        Intent intent = new Intent(this, MainActivity.class);
+    private NotificationCompat.Builder getNotificationBuilder(Class<? extends Activity> activityClass) {
+        Intent intent = new Intent(this, activityClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         if (mReflection == null) {
             throw new IllegalStateException("Reflection was not set");

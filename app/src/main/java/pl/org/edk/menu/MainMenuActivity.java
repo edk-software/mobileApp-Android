@@ -18,9 +18,9 @@ public class MainMenuActivity extends ActivityWithGPSMenu {
 		}
 	}
 
-	private final class ConsiderationsButtonListener implements OnClickListener {
+	private final class ReflectionsButtonListener implements OnClickListener {
 		public void onClick(View v) {
-			Intent i = new Intent(MainMenuActivity.this, ConsiderationsYearChooserActivity.class);
+			Intent i = new Intent(MainMenuActivity.this, ReflectionsActivity.class);
 			MainMenuActivity.this.startActivity(i);
 		}
 	}
@@ -68,8 +68,8 @@ public class MainMenuActivity extends ActivityWithGPSMenu {
 		tracksButton.setOnClickListener(new TrackButtonListener());
 		tracksImageButton.setOnClickListener(new TrackButtonListener());
 
-		considerationsButton.setOnClickListener(new ConsiderationsButtonListener());
-		considerationsImageButton.setOnClickListener(new ConsiderationsButtonListener());
+		considerationsButton.setOnClickListener(new ReflectionsButtonListener());
+		considerationsImageButton.setOnClickListener(new ReflectionsButtonListener());
 
 		infoButton.setOnClickListener(new InfoButtonListener());
 		infoImageButton.setOnClickListener(new InfoButtonListener());

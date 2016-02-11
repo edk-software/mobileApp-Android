@@ -127,7 +127,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                     hidePlayer();
                     mCurrentStation = -1;
                     if (mAudioService.isPlaying()) {
-                        mAudioService.continueInForeground();
+                        mAudioService.continueInForeground(getActivity().getClass());
                     }
                 } else {
                     openReflections(groupPosition);
@@ -177,7 +177,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         if (mServiceBound) {
             boolean playing = mAudioService.isPlaying();
             if (playing) {
-                mAudioService.continueInForeground();
+                mAudioService.continueInForeground(getActivity().getClass());
             }
             mAudioService.remove(this);
             getActivity().unbindService(mServiceConnection);

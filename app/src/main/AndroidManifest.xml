@@ -61,6 +61,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".menu.ReflectionsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppBaseThemeNoTitle">
+        </activity>
+        <activity
             android:name=".menu.EDKInfoActivity"
             android:label="O EDK"
             android:screenOrientation="portrait" >

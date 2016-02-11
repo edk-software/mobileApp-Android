@@ -31,6 +31,8 @@
 
     <style name="AppBaseThemeNoTitle" parent="AppBaseTheme">
         <item name="android:windowNoTitle">true</item>
+        <item name="android:seekBarStyle">@style/MySeekBarStyle</item>
+
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -51,6 +53,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:alertDialogTheme">@style/AppBaseTheme.AlertDialogTheme</item>
+    </style>
+
+    <style name="MySeekBarStyle" parent="Widget.AppCompat.SeekBar">
     </style>
 
 </resources>
