@@ -11,7 +11,7 @@ public final class Settings {
 	public static final String CAMERA_ZOOM = "cameraZoom";
 	public static final String YEAR_ID = "year";
 	public static final String IS_BACKGROUND_TRACKING_ON = "trackingTurnedOn";
-	public static final String COUNTY_NAME = "countyName";
+	public static final String TERRITORY_NAME = "countyName";
 	public static final String CITY_NAME = "cityName";
 	public static final String TRACK_NAME = "trackName";
 

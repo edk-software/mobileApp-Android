@@ -3,9 +3,13 @@ package pl.org.edk.managers;
 import android.content.Context;
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
+import pl.org.edk.database.entities.Area;
 import pl.org.edk.database.entities.Route;
+import pl.org.edk.database.entities.Territory;
 import pl.org.edk.webServices.FileDownloader;
 import pl.org.edk.webServices.WebServiceAccess;
+
+import java.util.ArrayList;
 
 /**
  * Created by pwawrzynek on 2016-02-11.
@@ -40,6 +44,81 @@ public class WebServiceManager {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
+    public ArrayList<Territory> getTerritories(){
+        ArrayList<Territory> rawTerritories = mWsClient.getTerritories();
+        if(rawTerritories == null)
+            return null;
+
+        for(Territory territory : rawTerritories){
+            Territory previous = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(territory.getServerID());
+            if(previous == null){
+                DbManager.getInstance(mContext).getTerritoryService().insertTerritoryWithAreas(territory);
+            }
+        }
+        return rawTerritories;
+    }
+
+    public void getTerritoriesAsync(){
+        // TODO: this method
+    }
+
+    public ArrayList<Area> getAreas(){
+        ArrayList<Area> rawAreas = mWsClient.getAreas();
+        if(rawAreas == null)
+            return null;
+
+        for(Area area : rawAreas) {
+            Area previous = DbManager.getInstance(mContext).getTerritoryService().getAreaByServerId(area.getServerID());
+            // The area doesn't exist in DB - add it
+            if(previous == null){
+                Territory territory = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(area.getTerritoryId());
+                if(territory != null) {
+                    DbManager.getInstance(mContext).getTerritoryService().insertAreaForTerritory(area, territory.getId());
+                }
+            }
+            // There's no territory to add it ofr
+            else {
+                // TODO: Add some error handling
+            }
+        }
+        return rawAreas;
+    }
+
+    public ArrayList<Area> getAreas(long territoryServerId){
+        // TODO: Request a WS method returning areas only for a single territory
+
+        ArrayList<Area> rawAreas = mWsClient.getAreas();
+        if(rawAreas == null)
+            return null;
+
+        ArrayList<Area> areas = new ArrayList<>();
+        for(Area area : rawAreas) {
+            // Ignore areas for different territory
+            if(area.getTerritoryId() != territoryServerId) {
+                continue;
+            }
+
+            Area previous = DbManager.getInstance(mContext).getTerritoryService().getAreaByServerId(area.getServerID());
+            // The area doesn't exist in DB - add it
+            if(previous == null) {
+                Territory territory = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(area.getTerritoryId());
+                if (territory != null) {
+                    DbManager.getInstance(mContext).getTerritoryService().insertAreaForTerritory(area, territory.getId());
+                }
+                // There's no territory to add it ofr
+                else {
+                    // TODO: Add some error handling
+                }
+            }
+            areas.add(area);
+        }
+        return areas;
+    }
+
+    public void getAreasAsync(long territoryServerID){
+
+    }
+
     public Route getRoute(long serverID){
         // Get the route data
         Route rawRoute = mWsClient.getRoute(serverID);

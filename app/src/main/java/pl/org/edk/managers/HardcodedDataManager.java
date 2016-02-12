@@ -11,49 +11,49 @@ public final class HardcodedDataManager {
     public static void CreateTerritoriesAndAreas(Context context){
         Territory territory1 = new Territory("dolnośląskie");
         territory1.getAreas().add(new Area("Wrocław"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory1);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory1);
 
         Territory territory2 = new Territory("kujawsko-pomorskie");
         territory2.getAreas().add(new Area("Bydgoszcz"));
         territory2.getAreas().add(new Area("Toruń"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory2);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory2);
 
         Territory territory3 = new Territory("lubelskie");
         territory3.getAreas().add(new Area("Lublin"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory3);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory3);
 
         Territory territory4 = new Territory("lubuskie");
         territory4.getAreas().add(new Area("Gorzów Wielkopolski"));
         territory4.getAreas().add(new Area("Zielona Góra"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory4);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory4);
 
         Territory territory5 = new Territory("łódzkie");
         territory5.getAreas().add(new Area("Lódź"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory5);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory5);
 
         Territory territory6 = new Territory("małopolskie");
         territory6.getAreas().add(new Area("Kraków"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory6);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory6);
 
         Territory territory7 = new Territory("mazowieckie");
         territory7.getAreas().add(new Area("Warszwawa"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory7);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory7);
 
         Territory territory8 = new Territory("opolskie");
         territory8.getAreas().add(new Area("Opole"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory8);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory8);
 
         Territory territory9 = new Territory("podkarpackie");
         territory9.getAreas().add(new Area("Rzeszów"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory9);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory9);
 
         Territory territory10 = new Territory("podlaskie");
         territory10.getAreas().add(new Area("Białystok"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory10);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory10);
 
         Territory territory11 = new Territory("Gdańsk");
         territory11.getAreas().add(new Area("Wrocław"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory11);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory11);
 
         Territory territory12 = new Territory("śląskie");
         territory12.getAreas().add(new Area("Katowice"));
@@ -64,23 +64,23 @@ public final class HardcodedDataManager {
         territory12.getAreas().add(new Area("Chorzów"));
         territory12.getAreas().add(new Area("Knurów"));
         territory12.getAreas().add(new Area("Wodzisław Slaski"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory12);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory12);
 
         Territory territory13 = new Territory("świętokrzyskie");
         territory13.getAreas().add(new Area("Kielce"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory13);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory13);
 
         Territory territory14 = new Territory("warmińsko-mazurskie");
         territory14.getAreas().add(new Area("Olsztyn"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory14);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory14);
 
         Territory territory15 = new Territory("wielkopolskie");
         territory15.getAreas().add(new Area("Poznań"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory15);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory15);
 
         Territory territory16 = new Territory("zachodniopomorskie");
         territory16.getAreas().add(new Area("Szczecin"));
-        DbManager.getInstance(context).getTerritoryService().InsertTerritoryWithAreas(territory16);
+        DbManager.getInstance(context).getTerritoryService().insertTerritoryWithAreas(territory16);
     }
 
     public static void CreateRoutes(Context context) {

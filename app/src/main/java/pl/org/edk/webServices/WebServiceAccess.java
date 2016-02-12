@@ -47,7 +47,7 @@ public class WebServiceAccess {
     public ArrayList<Territory> getTerritories(){
         String response = callMethod(METHOD_GET_TERRITORIES);
 
-        if(response == null)
+        if(response == null || response.length() == 0)
             return new ArrayList<>();
 
         // Deserialize and rewrite the serverIDs
