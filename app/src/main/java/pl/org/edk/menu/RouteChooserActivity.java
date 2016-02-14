@@ -24,7 +24,7 @@ public class RouteChooserActivity extends ChooserActivity {
 		RouteService routeService = DbManager.getInstance(this).getRouteService();
 		mRoutes = routeService.getRoutesForArea(Settings.get(this).getLong(Settings.CITY_NAME, -1), false);
 		if (mRoutes.isEmpty()){
-        	DialogUtil.showWarningDialog(getString(R.string.no_info_about_tracks_in_region), this);
+        	DialogUtil.showWarningDialog(getString(R.string.no_info_about_tracks_in_region), this, true);
         	return Collections.emptyList();
         }
         if (mRoutes.size() == 1) {

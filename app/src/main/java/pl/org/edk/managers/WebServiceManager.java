@@ -1,6 +1,7 @@
 package pl.org.edk.managers;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Area;
@@ -15,6 +16,13 @@ import java.util.ArrayList;
  * Created by pwawrzynek on 2016-02-11.
  */
 public class WebServiceManager {
+    // ---------------------------------------
+    // Subclasses
+    // ---------------------------------------
+    public interface OnOperationFinishedEventListener<Type>{
+        void onOperationFinished(Type result);
+    }
+
     // ---------------------------------------
     // Class members
     // ---------------------------------------
@@ -58,8 +66,23 @@ public class WebServiceManager {
         return rawTerritories;
     }
 
-    public void getTerritoriesAsync(){
-        // TODO: this method
+    public void getTerritoriesAsync(final OnOperationFinishedEventListener listener){
+        AsyncTask<Integer, Integer, ArrayList<Territory>> downloadTask = new AsyncTask<Integer, Integer, ArrayList<Territory>>() {
+            @Override
+            protected ArrayList<Territory> doInBackground(Integer... params) {
+                return getTerritories();
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<Territory> territories) {
+                super.onPostExecute(territories);
+
+                if (listener != null){
+                    listener.onOperationFinished(territories);
+                }
+            }
+        };
+        downloadTask.execute();
     }
 
     public ArrayList<Area> getAreas(){
@@ -82,6 +105,25 @@ public class WebServiceManager {
             }
         }
         return rawAreas;
+    }
+
+    public void getAreasAsync(final OnOperationFinishedEventListener listener){
+        AsyncTask<Long, Integer, ArrayList<Area>> downloadTask = new AsyncTask<Long, Integer, ArrayList<Area>>() {
+            @Override
+            protected ArrayList<Area> doInBackground(Long... params) {
+                return getAreas();
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<Area> areas) {
+                super.onPostExecute(areas);
+
+                if (listener != null){
+                    listener.onOperationFinished(areas);
+                }
+            }
+        };
+        downloadTask.execute();
     }
 
     public ArrayList<Area> getAreas(long territoryServerId){
@@ -115,8 +157,23 @@ public class WebServiceManager {
         return areas;
     }
 
-    public void getAreasAsync(long territoryServerID){
+    public void getAreasAsync(long territoryServerId, final OnOperationFinishedEventListener listener){
+        AsyncTask<Long, Integer, ArrayList<Area>> downloadTask = new AsyncTask<Long, Integer, ArrayList<Area>>() {
+            @Override
+            protected ArrayList<Area> doInBackground(Long... params) {
+                return getAreas(params[0]);
+            }
 
+            @Override
+            protected void onPostExecute(ArrayList<Area> areas) {
+                super.onPostExecute(areas);
+
+                if (listener != null){
+                    listener.onOperationFinished(areas);
+                }
+            }
+        };
+        downloadTask.execute(territoryServerId);
     }
 
     public Route getRoute(long serverID){

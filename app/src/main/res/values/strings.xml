@@ -80,6 +80,8 @@
 	<string name="show_track_on_map">Pokaż trasę na mapie</string>
 	<string name="no_info_about_track_message">Brak informacji o wybranej trasie</string>
 	<string name="warning_dialog_title">Powiadomienie</string>
+	<string name="busy_dialog_title">Proszę czekać</string>
+	<string name="download_dialog_message">Trwa pobieranie danych</string>
 	<string name="unrecognized_error_while_reading_track">Wystapił nieoczekiwany błąd przy próbie wczytania trasy</string>
 	<string name="no_territories_found">Nie można znaleźć żadnych rejonów. Połącz się z internetem i spróbuj ponownie</string>
 	<string name="no_info_about_tracks_in_region">Informacje o trasach w wybranym rejonie są niedostępne</string>
@@ -208,4 +210,5 @@
 	<string name="considerations_end_title">Podsumowanie</string>
 	<string name="considerations_start_title">Wstęp</string>
 	<string name="stop_navigation_message">Zatrzymaj</string>
+	<string name="downloading_message">Trwa pobieranie danych...</string>
 </resources>
