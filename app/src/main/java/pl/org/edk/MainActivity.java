@@ -1,5 +1,6 @@
 package pl.org.edk;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -62,7 +63,21 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
+        Intent intent = getIntent();
+        int stationId = intent.getIntExtra(Extra.STATION_ID, -1);
+        if (stationId != -1){
+            onStationSelect(stationId);
+        }
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int stationId = intent.getIntExtra(Extra.STATION_ID, -1);
+        if (stationId != -1){
+            onStationSelect(stationId);
+        }
     }
 
     private void setupTabIcons() {

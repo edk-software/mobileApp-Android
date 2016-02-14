@@ -116,6 +116,7 @@ public class ReflectionsAudioService extends Service implements
     private NotificationCompat.Builder getNotificationBuilder(Class<? extends Activity> activityClass) {
         Intent intent = new Intent(this, activityClass);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(Extra.STATION_ID, mReflection.getStationIndex());
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         if (mReflection == null) {
             throw new IllegalStateException("Reflection was not set");
