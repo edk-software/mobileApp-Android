@@ -95,16 +95,20 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
     }
 
     public void addListener(TrackListener listener) {
-        listeners.add(listener);
-        Log.i(TAG, "Listener added, current list size is " + listeners.size());
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+            Log.i(TAG, "Listener added " + listener.getClass().getSimpleName() + ", current list size is " + listeners.size());
+        }else{
+            Log.i(TAG, "Listener already registered " + listener.getClass().getSimpleName());
+        }
     }
 
     public void removeListener(TrackListener listener) {
         listeners.remove(listener);
-        if (listeners.isEmpty()&& !mStarted){
+        if (listeners.isEmpty() && !mStarted) {
             removeLocationUpdates();
         }
-        Log.i(TAG, "Listener removed, current list size is " + listeners.size());
+        Log.i(TAG, "Listener removed " + listener.getClass().getSimpleName() + ", current list size is " + listeners.size());
     }
 
     public List<LatLng> getTrack() {
@@ -161,7 +165,7 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
 
 
     public void requestLocationUpdates(LocationRequest locationRequest) {
-        if (mLocationClient == null){
+        if (mLocationClient == null) {
             initLocationClient();
             mQueuedRequest = locationRequest;
             return;

@@ -29,7 +29,6 @@ import java.util.List;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.kml.KMLTracker;
-import pl.org.edk.kml.TrackerProvider;
 import pl.org.edk.util.NumConverter;
 
 /**
@@ -209,6 +208,9 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
     @Override
     public void onLocationChanged(LatLng location) {
+        if (getActivity() == null){
+            return;
+        }
         if (mMap != null && Settings.get(getActivity()).getBoolean(Settings.FOLLOW_LOCATION_ON_MAP)) {
             mMap.animateCamera(CameraUpdateFactory.newLatLng(location), 2000, null);
         }
@@ -221,7 +223,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         Log.i(TAG, "Map initialization");
         Log.i(TAG, "isVisible() " + isVisible() + " isMenuVisible()" + isMenuVisible());
 
-        mMap.setMyLocationEnabled(isVisible() && isMenuVisible());
+        mMap.setMyLocationEnabled(isFragmentVisible());
 
         UiSettings settings = mMap.getUiSettings();
         settings.setCompassEnabled(true);
@@ -234,7 +236,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         decorateMap();
         focusCameraOnLastLocation();
 
-        changeLocationUpdates(isVisible() && isMenuVisible());
+        changeLocationUpdates(isFragmentVisible());
 
     }
 

@@ -1,7 +1,6 @@
 package pl.org.edk.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import pl.org.edk.kml.KMLTracker;
  */
 public class RouteInfoFragment extends TrackerFragment {
 
-    private Handler mTimeHandler = new Handler();
     private long mStartTime;
     private TextView mTimeView;
     private TextView mDistanceTraveledView;
@@ -74,7 +72,7 @@ public class RouteInfoFragment extends TrackerFragment {
     @Override
     public void onPause() {
         super.onPause();
-        mTimeHandler.removeCallbacks(updateTime);
+        mTimeView.removeCallbacks(updateTime);
     }
 
     @Override
@@ -86,7 +84,7 @@ public class RouteInfoFragment extends TrackerFragment {
     @NonNull
     @Override
     protected LocationRequest getLocationRequest() {
-        return LocationRequest.create().setPriority(LocationRequest.PRIORITY_NO_POWER).setInterval(1000);
+        return LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY).setInterval(60000);
     }
 
 

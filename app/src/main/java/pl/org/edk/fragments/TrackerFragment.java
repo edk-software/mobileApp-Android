@@ -36,12 +36,16 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
         if (verifyTracker()) {
             return;
         }
-        if (isVisible() && isMenuVisible()) {
+        if (isFragmentVisible()) {
             verifyWhetherServicesAvailable();
             verifyWhetherGPSIsEnabled();
+            changeLocationUpdates(true);
+            processTrackerState();
         }
-        addTrackListener();
-        processTrackerState();
+    }
+
+    protected boolean isFragmentVisible() {
+        return isVisible() && isMenuVisible();
     }
 
     @Override
@@ -50,21 +54,14 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
         if (verifyTracker()) {
             return;
         }
-        removeTrackListener();
-    }
-
-    private void addTrackListener() {
-        KMLTracker tracker = getTracker();
-        tracker.addListener(this);
+        //isFragmentVisible returns true when we hide the app using menu button or lock the screen
+        if ((isFragmentVisible())) {
+            changeLocationUpdates(false);
+        }
     }
 
     protected KMLTracker getTracker() {
         return TrackerProvider.getTracker(getActivity());
-    }
-
-    private void removeTrackListener() {
-        KMLTracker tracker = getTracker();
-        tracker.removeListener(this);
     }
 
     private void processTrackerState() {
@@ -144,11 +141,17 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
     }
 
     protected void changeLocationUpdates(boolean visible) {
+        KMLTracker tracker = getTracker();
+        if (visible) {
+            tracker.addListener(this);
+        } else {
+            tracker.removeListener(this);
+        }
+
         if (Settings.get(getActivity()).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
             return;
         }
 
-        KMLTracker tracker = getTracker();
         if (visible) {
             LocationRequest request = getLocationRequest();
             tracker.requestLocationUpdates(request);
