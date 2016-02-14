@@ -1,4 +1,4 @@
-package pl.org.edk;
+package pl.org.edk.fragments;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import pl.org.edk.R;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;

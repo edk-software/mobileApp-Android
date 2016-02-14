@@ -1,10 +1,12 @@
-package pl.org.edk;
+package pl.org.edk.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import pl.org.edk.R;
 
 /**
  * Created by darekpap on 2016-01-19.

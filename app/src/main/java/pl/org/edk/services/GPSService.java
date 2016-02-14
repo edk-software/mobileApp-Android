@@ -1,5 +1,9 @@
-package pl.org.edk;
+package pl.org.edk.services;
 
+import pl.org.edk.ActivityWithMap;
+import pl.org.edk.Extra;
+import pl.org.edk.R;
+import pl.org.edk.Settings;
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.kml.KMLTracker.TrackListener;
 import pl.org.edk.kml.TrackerProvider;

@@ -1,4 +1,4 @@
-package pl.org.edk;
+package pl.org.edk.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +15,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
+import pl.org.edk.R;
+import pl.org.edk.Settings;
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.kml.TrackerProvider;
 

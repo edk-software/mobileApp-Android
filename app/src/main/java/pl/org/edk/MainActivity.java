@@ -15,6 +15,11 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.org.edk.fragments.MapFragment;
+import pl.org.edk.fragments.ReflectionsFragment;
+import pl.org.edk.fragments.RouteInfoFragment;
+import pl.org.edk.fragments.SettingsFragment;
+
 /**
  * Created by darekpap on 2015-11-30.
  */

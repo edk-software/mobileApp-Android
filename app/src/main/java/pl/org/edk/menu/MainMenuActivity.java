@@ -1,6 +1,8 @@
 package pl.org.edk.menu;
 
 import pl.org.edk.*;
+import pl.org.edk.services.GPSService;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;

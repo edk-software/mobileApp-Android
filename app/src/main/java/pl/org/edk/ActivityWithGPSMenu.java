@@ -3,6 +3,7 @@ package pl.org.edk;
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.kml.TrackerProvider;
 import pl.org.edk.menu.ConsiderationsViewActivity;
+import pl.org.edk.services.GPSService;
 import pl.org.edk.util.DialogUtil;
 import android.app.Activity;
 import android.app.AlertDialog;

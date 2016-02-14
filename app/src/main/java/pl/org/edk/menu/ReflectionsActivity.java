@@ -3,7 +3,7 @@ package pl.org.edk.menu;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import pl.org.edk.ReflectionsFragment;
+import pl.org.edk.fragments.ReflectionsFragment;
 
 /**
  * Created by darekpap on 2016-02-10.

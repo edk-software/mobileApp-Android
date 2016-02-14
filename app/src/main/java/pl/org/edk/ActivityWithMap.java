@@ -8,6 +8,7 @@ import pl.org.edk.kml.KMLTracker.State;
 import pl.org.edk.kml.KMLTracker.TrackListener;
 import pl.org.edk.kml.TrackerProvider;
 import pl.org.edk.menu.ConsiderationsViewActivity;
+import pl.org.edk.services.GPSService;
 import pl.org.edk.util.DialogUtil;
 import pl.org.edk.util.NumConverter;
 import android.app.AlertDialog;

@@ -1,4 +1,4 @@
-package pl.org.edk;
+package pl.org.edk.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -33,6 +33,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.org.edk.R;
+import pl.org.edk.Settings;
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.kml.TrackerProvider;
 import pl.org.edk.util.DialogUtil;

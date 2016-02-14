@@ -8,6 +8,7 @@ import pl.org.edk.*;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Route;
 import pl.org.edk.database.services.RouteService;
+import pl.org.edk.services.GPSService;
 import pl.org.edk.util.DialogUtil;
 
 import android.content.Intent;

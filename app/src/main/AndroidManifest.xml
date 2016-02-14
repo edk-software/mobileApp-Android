@@ -100,7 +100,7 @@
         <activity android:name=".EdkMobile.Activities.MainActivity"
             android:screenOrientation="portrait"/>
 
-        <service android:name=".GPSService" >
+        <service android:name=".services.GPSService" >
     </service>
         <service android:name=".services.ReflectionsAudioService" >
         </service>
