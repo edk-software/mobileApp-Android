@@ -23,7 +23,11 @@ public abstract class ChooserActivity extends Activity implements OnItemClickLis
 		setTitle(getChooserTitle());
 		mainListView = (ListView) findViewById(R.id.mainListView);
 
-		listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, getItems());
+		refresh(getItems());
+	}
+
+	protected void refresh(List<String> items){
+		listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, items);
 		mainListView.setAdapter(listAdapter);
 		mainListView.setOnItemClickListener(this);
 	}
@@ -38,5 +42,4 @@ public abstract class ChooserActivity extends Activity implements OnItemClickLis
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		onItemClick(position);
 	}
-
 }

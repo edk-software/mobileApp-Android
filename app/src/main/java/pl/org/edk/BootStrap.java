@@ -8,7 +8,7 @@ import pl.org.edk.managers.HardcodedDataManager;
 import java.io.File;
 
 /**
- * Created by Admin on 2016-01-28.
+ * Created by pwawrzynek on 2016-01-28.
  */
 public final class BootStrap {
     private BootStrap(){}

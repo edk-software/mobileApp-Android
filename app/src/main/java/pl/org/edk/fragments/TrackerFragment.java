@@ -98,7 +98,7 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
             getTracker();
             return false;
         } catch (Exception e) {
-            DialogUtil.showWarningDialog(e.getMessage(), getActivity());
+            DialogUtil.showWarningDialog(e.getMessage(), getActivity(), true);
             return true;
         }
     }

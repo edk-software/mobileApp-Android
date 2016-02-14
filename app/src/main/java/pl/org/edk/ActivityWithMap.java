@@ -116,7 +116,7 @@ public class ActivityWithMap extends ActivityWithGPSMenu implements OnInfoWindow
 			TrackerProvider.getTracker(this);
 			return false;
 		} catch (Exception e) {
-			DialogUtil.showWarningDialog(e.getMessage(), this);
+			DialogUtil.showWarningDialog(e.getMessage(), this, true);
 			return true;
 		}
 	}

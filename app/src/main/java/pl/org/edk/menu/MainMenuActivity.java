@@ -46,17 +46,16 @@ public class MainMenuActivity extends ActivityWithGPSMenu {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
 
-		// initialize application global stuff (singletons etc.)
+		// Initialize application global stuff (singletons etc.)
 		BootStrap.initialize(getApplicationContext());
 
-		Settings settings = Settings.get(this);
-		if (settings.getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
+		if (Settings.get(this).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
 			Intent serviceIntent = new Intent(this, GPSService.class);
 			startService(serviceIntent);
 			Intent intent = new Intent(this, ActivityWithMap.class);
 			startActivity(intent);
 		} else {
-			settings.clear();
+			Settings.get(this).clear();
 		}
 
 		tracksButton = (Button) findViewById(R.id.tracksButton);
@@ -84,5 +83,4 @@ public class MainMenuActivity extends ActivityWithGPSMenu {
 		menu.getItem(MAP_MENU_INDEX).setVisible(false);
 		return true;
 	}
-
 }
