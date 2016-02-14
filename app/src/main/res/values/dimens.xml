@@ -8,6 +8,8 @@
     <dimen name="fab_margin">16dp</dimen>
 	<dimen name="action_bar_height">48dp</dimen>
 	<dimen name="common_text_size">18sp</dimen>
+	<dimen name="header_text_size">24sp</dimen>
+	<dimen name="info_text_size">21sp</dimen>
 
 
     <dimen name="tab_max_width">264dp</dimen>

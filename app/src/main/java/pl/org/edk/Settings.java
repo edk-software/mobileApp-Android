@@ -14,12 +14,15 @@ public final class Settings {
 	public static final String TERRITORY_NAME = "countyName";
 	public static final String CITY_NAME = "cityName";
 	public static final String TRACK_NAME = "trackName";
+    public static String FOLLOW_LOCATION_ON_MAP = "FollowLocationOnMap";
 
 	public static final String APP_DIRECTORY_KML = "KmlDirectory";
 	public static final String APP_DIRECTORY_AUDIO = "AudioDirectory";
 
+	public static String START_TIME = "StartTime";
+
 	private static Settings INSTANCE = null;
-	private Context mContext = null;
+    private Context mContext = null;
 
 	private Settings(Context context) {
 		mContext = context;

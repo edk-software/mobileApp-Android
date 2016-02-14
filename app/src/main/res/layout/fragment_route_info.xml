@@ -7,10 +7,112 @@
     tools:context="pl.org.edk.RouteInfoFragment">
 
 
+    <!--<TextView-->
+        <!--android:id="@+id/header"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Na trasie"-->
+        <!--android:textSize="@dimen/header_text_size"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:paddingBottom="15dp"-->
+        <!--android:textColor="@color/white_on_black"-->
+        <!--android:layout_centerHorizontal="true"/>-->
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/timeTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Informacje o trasie typu nazwa, jak długo na trasie, ile do następnej stacji itp."/>
+        android:text="Idziesz od:"
+        android:textColor="@color/white_on_black"
+        android:textSize="@dimen/info_text_size"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:id="@+id/timeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0:00:00"
+        android:textColor="@color/white_on_black"
+        android:textSize="@dimen/info_text_size"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/distanceTraveledTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Masz za sobą:"
+        android:textColor="@color/white_on_black"
+        android:textSize="@dimen/info_text_size"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:layout_below="@+id/timeTitle"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:id="@+id/distanceTraveledValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 km"
+        android:textColor="@color/white_on_black"
+        android:textSize="@dimen/info_text_size"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:layout_below="@+id/timeValue"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/distanceToStationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Następna stacja za:"
+        android:textColor="@color/white_on_black"
+        android:textSize="@dimen/info_text_size"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:layout_below="@+id/distanceTraveledTitle"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:id="@+id/distanceToStationValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 km"
+        android:textColor="@color/white_on_black"
+        android:textSize="@dimen/info_text_size"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:layout_below="@+id/distanceTraveledValue"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/distanceLeftTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do końca:"
+        android:textColor="@color/white_on_black"
+        android:textSize="@dimen/info_text_size"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:layout_below="@+id/distanceToStationTitle"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:id="@+id/distanceLeftValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 km"
+        android:textColor="@color/white_on_black"
+        android:textSize="@dimen/info_text_size"
+        android:paddingBottom="15dp"
+        android:paddingRight="10dp"
+        android:layout_below="@+id/distanceToStationValue"
+        android:layout_alignParentRight="true"/>
 
 
 

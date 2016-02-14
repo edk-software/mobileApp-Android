@@ -52,6 +52,7 @@ public class RouteChooserActivity extends ChooserActivity {
 
         stopService(new Intent(this, GPSService.class));
         Settings.get(this).set(Settings.IS_BACKGROUND_TRACKING_ON, false);
+        Settings.get(this).set(Settings.START_TIME, System.currentTimeMillis());
         startActivity(myIntent);
     }
 

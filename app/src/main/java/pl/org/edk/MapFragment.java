@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -94,7 +95,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
             return;
         }
         loadCameraZoom();
-        if (isVisible() && isMenuVisible()){
+        if (isVisible() && isMenuVisible()) {
             verifyWhetherServicesAvailable();
             verifyWhetherGPSIsEnabled();
         }
@@ -336,7 +337,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
 
     @Override
     public void onLocationChanged(LatLng location) {
-        if (mMap != null) {
+        if (mMap != null && Settings.get(getActivity()).getBoolean(Settings.FOLLOW_LOCATION_ON_MAP)){
             mMap.animateCamera(CameraUpdateFactory.newLatLng(location), 2000, null);
         }
 
@@ -361,6 +362,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
         mMap.setOnCameraChangeListener(this);
         decorateMap();
         focusCameraOnLastLocation();
+
+        changeLocationUpdates(isVisible() && isMenuVisible());
 
     }
 
@@ -389,6 +392,12 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
     public void setMenuVisibility(final boolean visible) {
         Log.d("EDK", "setMenuVisibility called with " + visible);
         super.setMenuVisibility(visible);
+        if (getActivity() == null){
+            Log.d("EDK", "Activity was null in setMenuVisibility");
+            return;
+        }
+
+        changeLocationUpdates(visible);
         if (mMap == null) {
             return;
         }
@@ -396,7 +405,25 @@ public class MapFragment extends Fragment implements GoogleMap.OnInfoWindowClick
             verifyWhetherServicesAvailable();
             verifyWhetherGPSIsEnabled();
         }
+
         mMap.setMyLocationEnabled(visible);
 
+
+
+    }
+
+    private void changeLocationUpdates(boolean visible) {
+        if (Settings.get(getActivity()).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
+            return;
+        }
+
+
+        KMLTracker tracker = TrackerProvider.getTracker(getActivity());
+        if (visible) {
+            LocationRequest request = LocationRequest.create().setPriority(LocationRequest.PRIORITY_NO_POWER).setInterval(1000);
+            tracker.requestLocationUpdates(request);
+        } else {
+            tracker.removeLocationUpdates();
+        }
     }
 }
