@@ -27,6 +27,7 @@ public class RouteInfoFragment extends TrackerFragment {
     private TextView mDistanceTraveledView;
     private TextView mDistanceToNextView;
     private TextView mDistanceLeftView;
+    private final String mDistanceFormat = "%.1f km";
 
     private Runnable updateTime = new Runnable() {
         public void run() {
@@ -112,9 +113,9 @@ public class RouteInfoFragment extends TrackerFragment {
 
     private void updateDistances() {
         double[] distanceInfo = getTracker().getDistanceInfo();
-        mDistanceTraveledView.setText(String.format("%.1f", distanceInfo[KMLTracker.DISTANCE_TRAVELED_INDEX] / 1000));
-        mDistanceLeftView.setText(String.format("%.1f", distanceInfo[KMLTracker.DISTANCE_LEFT_INDEX] / 1000));
-        mDistanceToNextView.setText(String.format("%.1f", distanceInfo[KMLTracker.DISTANCE_TO_NEXT_INDEX] / 1000));
+        mDistanceTraveledView.setText(String.format(mDistanceFormat, distanceInfo[KMLTracker.DISTANCE_TRAVELED_INDEX] / 1000));
+        mDistanceLeftView.setText(String.format(mDistanceFormat, distanceInfo[KMLTracker.DISTANCE_LEFT_INDEX] / 1000));
+        mDistanceToNextView.setText(String.format(mDistanceFormat, distanceInfo[KMLTracker.DISTANCE_TO_NEXT_INDEX] / 1000));
 
 
     }
