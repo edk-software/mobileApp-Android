@@ -90,8 +90,17 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             Log.d("EDK", "List not ready");
             return;
         }
+        boolean playerResetNeeded = stationIndex != mCurrentStation;
         openReflections(stationIndex);
-        preparePlayer(stationIndex);
+        if (playerResetNeeded) {
+            preparePlayer(stationIndex);
+            return;
+        }
+        if (mServiceBound){
+            loadPlayer();
+        } else{
+            showPlayer();
+        }
     }
 
     public ReflectionsFragment() {
@@ -234,10 +243,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     @Override
     public void onPlayerStop() {
-        mDurationHandler.removeCallbacks(updateSeekBarTime);
-        resetSeekBar();
-        mPlayButton.setImageResource(R.drawable.play);
-
+        preparePlayer(mCurrentStation);
     }
 
     private void resetSeekBar() {
