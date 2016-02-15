@@ -30,8 +30,10 @@ public class DbManager {
     }
 
     private static synchronized DbManager get(Context applicationContext){
-        if(_instance == null)
+        if(_instance == null){
             _instance = new DbManager(applicationContext);
+            _instance.Init();
+        }
         return _instance;
     }
 
