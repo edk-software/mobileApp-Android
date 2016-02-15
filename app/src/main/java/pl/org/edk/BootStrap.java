@@ -3,7 +3,6 @@ package pl.org.edk;
 import android.content.Context;
 import android.os.Environment;
 import pl.org.edk.database.*;
-import pl.org.edk.managers.HardcodedDataManager;
 
 import java.io.File;
 
@@ -23,10 +22,8 @@ public final class BootStrap {
 
         initStorage(context);
 
-        // TEMP: Add fake data to DB
-        DbManager.getInstance(context).Reset();
-        //HardcodedDataManager.CreateTerritoriesAndAreas(context);
-        HardcodedDataManager.CreateRoutes(context);
+        // TEMP: Remove DB
+        //DbManager.getInstance(context).Reset();
 
         mIsInitialized = true;
     }
