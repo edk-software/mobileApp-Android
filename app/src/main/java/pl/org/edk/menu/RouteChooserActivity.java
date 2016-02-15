@@ -95,8 +95,8 @@ public class RouteChooserActivity extends ChooserActivity {
 
         myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        stopService(new Intent(this, GPSService.class));
-        Settings.get(this).set(Settings.IS_BACKGROUND_TRACKING_ON, false);
+//        stopService(new Intent(this, GPSService.class));
+//        Settings.get(this).set(Settings.IS_BACKGROUND_TRACKING_ON, false);
         Settings.get(this).set(Settings.START_TIME, System.currentTimeMillis());
         startActivity(myIntent);
     }

@@ -3,18 +3,18 @@ package pl.org.edk;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.support.v7.preference.PreferenceManager;
 
 public final class Settings {
 
-	private static final String PREF_KEY = "EDK_preferences";
-
 	public static final String CAMERA_ZOOM = "cameraZoom";
-	public static final String YEAR_ID = "year";
-	public static final String IS_BACKGROUND_TRACKING_ON = "trackingTurnedOn";
 	public static final String TERRITORY_NAME = "countyName";
 	public static final String AREA_ID = "cityName";
 	public static final String TRACK_NAME = "trackName";
-    public static String FOLLOW_LOCATION_ON_MAP = "FollowLocationOnMap";
+
+	public static final int IS_BACKGROUND_TRACKING_ON = R.string.pref_backgroundTrackingOn;
+    public static final int FOLLOW_LOCATION_ON_MAP = R.string.pref_followLocationOnMap;
+	public static final int YEAR_ID = R.string.pref_reflectionsYear;
 
 	public static final String APP_DIRECTORY_KML = "KmlDirectory";
 	public static final String APP_DIRECTORY_AUDIO = "AudioDirectory";
@@ -45,7 +45,7 @@ public final class Settings {
 	}
 
 	public void clear() {
-		SharedPreferences preferences = mContext.getSharedPreferences(PREF_KEY, 0);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 		Editor editor = preferences.edit();
 		editor.clear();
 		editor.apply();
@@ -53,10 +53,18 @@ public final class Settings {
 		INSTANCE = null;
 	}
 
+    public String get(int resId){
+        return get(mContext.getString(resId));
+    }
+
 	public String get(String key) {
-		SharedPreferences preferences = mContext.getSharedPreferences(PREF_KEY, 0);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 		return preferences.getString(key, null);
 	}
+
+    public int getInt(int resId, int defaultValue) {
+        return getInt(mContext.getString(resId), defaultValue);
+    }
 
 	public int getInt(String key, int defaultValue) {
 		String result = get(key);
@@ -86,20 +94,22 @@ public final class Settings {
 		return getFloat(key, 0f);
 	}
 
-	public boolean getBoolean(String key, boolean defaultValue) {
-		String property = get(key);
-		if (property == null) {
-			return defaultValue;
-		}
-		return Boolean.parseBoolean(property);
+	public boolean getBoolean(int resId, boolean defaultValue) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return preferences.getBoolean(mContext.getString(resId), defaultValue);
 	}
 
-	public boolean getBoolean(String key) {
-		return getBoolean(key, false);
+	public boolean getBoolean(int resId) {
+		return getBoolean(resId, false);
 	}
+
+    public <T> void set(int resId, T  value){
+        set(mContext.getString(resId), String.valueOf(value));
+    }
+
 
 	public void set(String key, String value) {
-		SharedPreferences preferences = mContext.getSharedPreferences(PREF_KEY, 0);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 		Editor editor = preferences.edit();
 		editor.putString(key, value);
 		editor.apply();
@@ -117,7 +127,10 @@ public final class Settings {
 		set(key, String.valueOf(value));
 	}
 
-	public void set(String key, boolean value) {
-		set(key, String.valueOf(value));
+	public void set(int resId, boolean value) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        Editor editor = preferences.edit();
+        editor.putBoolean(mContext.getString(resId), value);
+        editor.apply();
 	}
 }
