@@ -64,20 +64,23 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
         setupTabIcons();
 
         Intent intent = getIntent();
-        int stationId = intent.getIntExtra(Extra.STATION_ID, -1);
-        if (stationId != -1){
-            onStationSelect(stationId);
-        }
+        processIntent(intent);
 
+    }
+
+    private void processIntent(Intent intent) {
+        int stationId = intent.getIntExtra(Extra.STATION_ID, -1);
+        if (stationId != -1) {
+            onStationSelect(stationId);
+        } else if (intent.getBooleanExtra(Extra.GO_TO_MAP, false)) {
+            viewPager.setCurrentItem(MAP_INDEX);
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        int stationId = intent.getIntExtra(Extra.STATION_ID, -1);
-        if (stationId != -1){
-            onStationSelect(stationId);
-        }
+        processIntent(intent);
     }
 
     private void setupTabIcons() {
@@ -100,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
     public void onStationSelect(int stationIndex) {
         viewPager.setCurrentItem(REFLECTIONS_INDEX);
         ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
-        ReflectionsFragment fragment = (ReflectionsFragment)adapter.getRegisteredFragment(REFLECTIONS_INDEX);
-        if (fragment == null){
+        ReflectionsFragment fragment = (ReflectionsFragment) adapter.getRegisteredFragment(REFLECTIONS_INDEX);
+        if (fragment == null) {
             Log.d("EDK", "Reflections fragment not registered yet");
             return;
         }
@@ -135,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
 
         @Override
         public CharSequence getPageTitle(int position) {
-         return null;
+            return null;
 //            return mFragmentTitleList.get(position);
         }
 

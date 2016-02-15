@@ -5,7 +5,7 @@
         <item name="android:actionMenuTextColor">@color/white_on_black</item>
     </style>
 
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light"/>
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light" />
 
     <style name="AppBaseTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:height">@dimen/action_bar_height</item>
@@ -34,28 +34,49 @@
         <item name="android:seekBarStyle">@style/MySeekBarStyle</item>
 
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
-    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base"></style>
 
-    </style>
-
-    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="MyMaterialTheme.Base" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:alertDialogTheme">@style/AppBaseTheme.AlertDialogTheme</item>
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
+
     </style>
 
-    <style name="MySeekBarStyle" parent="Widget.AppCompat.SeekBar">
+    <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay">
+        <item name="android:textColorPrimary">@color/white_on_black</item>
+        <item name="android:textColorSecondary">@color/white_on_black</item>
+        <item name="android:preferenceCategoryStyle">@style/CategoryStyle</item>
+        <item name="android:background">@color/black</item>
+
     </style>
+
+    <style name="CategoryStyle" parent="Preference.Category">
+        <item name="android:layout">@layout/red_preference_category</item>
+    </style>
+
+    <style name="RedDividerStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">3px</item>
+        <item name="android:background">@color/red</item>
+    </style>
+
+    <style name="MySeekBarStyle" parent="Widget.AppCompat.SeekBar"></style>
+
 
 </resources>

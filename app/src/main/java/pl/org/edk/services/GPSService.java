@@ -1,14 +1,5 @@
 package pl.org.edk.services;
 
-import pl.org.edk.ActivityWithMap;
-import pl.org.edk.Extra;
-import pl.org.edk.R;
-import pl.org.edk.Settings;
-import pl.org.edk.kml.KMLTracker;
-import pl.org.edk.kml.KMLTracker.TrackListener;
-import pl.org.edk.kml.TrackerProvider;
-import pl.org.edk.menu.ConsiderationsViewActivity;
-import pl.org.edk.util.NumConverter;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -21,6 +12,15 @@ import android.support.v4.app.NotificationCompat.Builder;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import pl.org.edk.Extra;
+import pl.org.edk.MainActivity;
+import pl.org.edk.R;
+import pl.org.edk.Settings;
+import pl.org.edk.kml.KMLTracker;
+import pl.org.edk.kml.KMLTracker.TrackListener;
+import pl.org.edk.kml.TrackerProvider;
+import pl.org.edk.util.NumConverter;
 
 public class GPSService extends Service implements TrackListener{
 
@@ -64,7 +64,7 @@ public class GPSService extends Service implements TrackListener{
 
 	@Override
 	public void onCheckpointReached(int checkpointId) {
-		Intent intent = new Intent(this, ConsiderationsViewActivity.class);
+		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra(Extra.STATION_ID, checkpointId);
 		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		Builder builder = getNotificationBuilder();
@@ -117,7 +117,8 @@ public class GPSService extends Service implements TrackListener{
 	}
 	
 	private Builder getNotificationBuilder() {
-		Intent intent = new Intent(this, ActivityWithMap.class);
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.putExtra(Extra.GO_TO_MAP, true);
 		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		Builder builder = new NotificationCompat.Builder(this)
 				.setContentTitle(getString(R.string.navigation_on_message))

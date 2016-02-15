@@ -52,7 +52,7 @@ public class MainMenuActivity extends ActivityWithGPSMenu {
 		if (Settings.get(this).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
 			Intent serviceIntent = new Intent(this, GPSService.class);
 			startService(serviceIntent);
-			Intent intent = new Intent(this, ActivityWithMap.class);
+			Intent intent = new Intent(this, MainActivity.class);
 			startActivity(intent);
 		} else {
 			Settings.get(this).clear();

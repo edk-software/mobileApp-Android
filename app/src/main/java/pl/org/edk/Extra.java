@@ -7,4 +7,5 @@ public interface Extra {
 	String CANCEL_BACKGROUND_TRACKING = "Cancel tracking";
 
 	String STOP_REFLECTION_AUDIO = "Stop audio";
+	String GO_TO_MAP = "Go to map";
 }

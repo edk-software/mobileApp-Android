@@ -22,10 +22,12 @@ import android.widget.SeekBar;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import pl.org.edk.R;
+import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;
@@ -401,10 +403,9 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     private void prepareListData() {
 
         ReflectionService reflectionService = DbManager.getInstance(getActivity()).getReflectionService();
-        ReflectionList reflectionList = reflectionService.GetReflectionList("pl", true);
+        int year = Settings.get(getActivity()).getInt(Settings.YEAR_ID, Calendar.getInstance().get(Calendar.YEAR));
+        ReflectionList reflectionList = reflectionService.GetReflectionList("pl", year, true);
         if (reflectionList == null || reflectionList.getReflections().isEmpty()) {
-
-
             listDataHeader = Arrays.asList(getResources().getStringArray(R.array.stations));
             listDataChild = new HashMap<>();
 
