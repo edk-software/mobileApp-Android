@@ -48,7 +48,7 @@ public class ResourcesUtil {
 
 	public static List<String> getTracks(Context context) {
 		String countyName = Settings.get(context).get(Settings.TERRITORY_NAME);
-		String cityName = Settings.get(context).get(Settings.CITY_NAME);
+		String cityName = Settings.get(context).get(Settings.AREA_ID);
 		HashSet<String> tracksSet = new HashSet<String>();
 		for (TrackInfo trackInfo : getTrackInfos(context)) {
 			if (!countyName.equals(trackInfo.getCountyName())) {
@@ -68,7 +68,7 @@ public class ResourcesUtil {
 	public static int getTrackId(Context context) {
 		Settings settings = Settings.get(context);
 		String countyName = settings.get(Settings.TERRITORY_NAME);
-		String cityName = settings.get(Settings.CITY_NAME);
+		String cityName = settings.get(Settings.AREA_ID);
 		String trackName = settings.get(Settings.TRACK_NAME);
 		for (TrackInfo trackInfo : getTrackInfos(context)) {
 			if (!countyName.equals(trackInfo.getCountyName())) {
@@ -127,7 +127,7 @@ public class ResourcesUtil {
 	public static TrackInfo getTrackInfo(Context context) {
 		Settings settings = Settings.get(context);
 		String countyName = settings.get(Settings.TERRITORY_NAME);
-		String cityName = settings.get(Settings.CITY_NAME);
+		String cityName = settings.get(Settings.AREA_ID);
 		String trackName = settings.get(Settings.TRACK_NAME);
 		for (TrackInfo trackInfo : getTrackInfos(context)) {
 			if (!countyName.equals(trackInfo.getCountyName())) {

@@ -4,6 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import pl.org.edk.util.NumConverter;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -18,7 +22,7 @@ public class Route extends DbEntityBase {
     public static final String COLUMN_NAME_AREA_ID = "AreaID";
     public static final String COLUMN_NAME_RELEASE_DATE = "ReleaseDate";
     public static final String COLUMN_NAME_DISPLAY_NAME = "Name";
-    public static final String COLUMN_NAME_DISPLAY_KML_DATA = "KmlData";
+    public static final String COLUMN_NAME_DISPLAY_KML_DATA_PATH = "KmlDataPath";
 
     // ---------------------------------------
     // Constructors
@@ -41,10 +45,12 @@ public class Route extends DbEntityBase {
     private long areaId;
     private String releaseDate;
     private String name;
-    private String kmlData;
+    private String kmlDataPath;
     // External tables
     private ArrayList<RouteDesc> descriptions;
     private ArrayList<Station> stations;
+    // Additional variables
+    private String kmlData;
 
     // ---------------------------------------
     // Static methods
@@ -56,7 +62,7 @@ public class Route extends DbEntityBase {
                 COLUMN_NAME_AREA_ID + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_RELEASE_DATE + TEXT_TYPE + COMMA +
                 COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + COMMA +
-                COLUMN_NAME_DISPLAY_KML_DATA + TEXT_TYPE + ");";
+                COLUMN_NAME_DISPLAY_KML_DATA_PATH + TEXT_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
@@ -70,7 +76,7 @@ public class Route extends DbEntityBase {
                 COLUMN_NAME_AREA_ID,
                 COLUMN_NAME_RELEASE_DATE,
                 COLUMN_NAME_DISPLAY_NAME,
-                COLUMN_NAME_DISPLAY_KML_DATA
+                COLUMN_NAME_DISPLAY_KML_DATA_PATH
         };
         return projection;
     }
@@ -87,7 +93,7 @@ public class Route extends DbEntityBase {
         values.put(COLUMN_NAME_AREA_ID, areaId);
         values.put(COLUMN_NAME_RELEASE_DATE, releaseDate);
         values.put(COLUMN_NAME_DISPLAY_NAME, name);
-        values.put(COLUMN_NAME_DISPLAY_KML_DATA, kmlData);
+        values.put(COLUMN_NAME_DISPLAY_KML_DATA_PATH, kmlDataPath);
 
         return values;
     }
@@ -100,7 +106,7 @@ public class Route extends DbEntityBase {
             this.areaId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_AREA_ID));
             this.releaseDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_RELEASE_DATE));
             this.name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_NAME));
-            this.kmlData = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_KML_DATA));
+            this.kmlDataPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_KML_DATA_PATH));
             return true;
         }catch (Exception ex){
             return false;
@@ -131,11 +137,11 @@ public class Route extends DbEntityBase {
         this.name = name;
     }
 
-    public String getKmlData() {
-        return kmlData;
+    public String getKmlDataPath() {
+        return kmlDataPath;
     }
-    public void setKmlData(String kmlData) {
-        this.kmlData = kmlData;
+    public void setKmlDataPath(String kmlDataPath) {
+        this.kmlDataPath = kmlDataPath;
     }
 
     public ArrayList<Station> getStations() {
@@ -143,5 +149,45 @@ public class Route extends DbEntityBase {
     }
     public void setStations(ArrayList<Station> stations) {
         this.stations = stations;
+    }
+
+    public String getKmlData() {
+        if(kmlData == null && kmlDataPath != null){
+            kmlData = readKml(kmlDataPath);
+        }
+        return kmlData;
+    }
+    public void setKmlData(String kmlData){
+        this.kmlData = kmlData;
+    }
+
+    public boolean isDownloaded(){
+        return getKmlData() != null;
+    }
+
+    // ---------------------------------------
+    // Private methods
+    // ---------------------------------------
+    private String readKml(String path){
+        File kmlFile = new File(path);
+        if(!kmlFile.exists()){
+            return null;
+        }
+
+        try {
+            StringBuilder text = new StringBuilder();
+            BufferedReader br = new BufferedReader(new FileReader(kmlFile));
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
+
+            return text.toString();
+        } catch (IOException ex){
+            return null;
+        }
     }
 }

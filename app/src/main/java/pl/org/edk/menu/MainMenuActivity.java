@@ -46,9 +46,6 @@ public class MainMenuActivity extends ActivityWithGPSMenu {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
 
-		// Initialize application global stuff (singletons etc.)
-		BootStrap.initialize(getApplicationContext());
-
 		if (Settings.get(this).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
 			Intent serviceIntent = new Intent(this, GPSService.class);
 			startService(serviceIntent);
@@ -57,6 +54,9 @@ public class MainMenuActivity extends ActivityWithGPSMenu {
 		} else {
 			Settings.get(this).clear();
 		}
+
+		// Initialize application global stuff (singletons etc.)
+		BootStrap.initialize(getApplicationContext());
 
 		tracksButton = (Button) findViewById(R.id.tracksButton);
 		considerationsButton = (Button) findViewById(R.id.considerationsButton);

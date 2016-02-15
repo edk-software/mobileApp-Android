@@ -62,6 +62,9 @@ public class WebServiceManager {
             if(previous == null){
                 DbManager.getInstance(mContext).getTerritoryService().insertTerritoryWithAreas(territory);
             }
+            else {
+                // TODO: Update the territory
+            }
         }
         return rawTerritories;
     }
@@ -176,6 +179,43 @@ public class WebServiceManager {
         downloadTask.execute(territoryServerId);
     }
 
+    public ArrayList<Route> getRoutesByArea(long areaServerId){
+        ArrayList<Route> rawRoutes = mWsClient.getRoutesByArea(areaServerId);
+        if(rawRoutes == null)
+            return null;
+
+        for(Route route : rawRoutes){
+            Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(route.getServerID());
+            if (previous == null){
+                DbManager.getInstance(mContext).getRouteService().insertRouteWithStations(route);
+            }
+            else {
+                // TODO: Update the route data
+            }
+        }
+
+        return rawRoutes;
+    }
+
+    public void getRoutesByAreaAsync(long areaServerId, final OnOperationFinishedEventListener listener){
+        AsyncTask<Long, Integer, ArrayList<Route>> downloadTask = new AsyncTask<Long, Integer, ArrayList<Route>>() {
+            @Override
+            protected ArrayList<Route> doInBackground(Long... params) {
+                return getRoutesByArea(params[0]);
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<Route> routes) {
+                super.onPostExecute(routes);
+
+                if (listener != null){
+                    listener.onOperationFinished(routes);
+                }
+            }
+        };
+        downloadTask.execute(areaServerId);
+    }
+
     public Route getRoute(long serverID){
         // Get the route data
         Route rawRoute = mWsClient.getRoute(serverID);
@@ -183,7 +223,7 @@ public class WebServiceManager {
             return null;
 
         // If KML file is available, download it
-        String kmlServerPath = rawRoute.getKmlData();
+        String kmlServerPath = rawRoute.getKmlDataPath();
         if(kmlServerPath != null && kmlServerPath.length() > 0) {
             String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) + "/route_" + String.valueOf(serverID) + ".kml";
             FileDownloader manager = new FileDownloader(mContext);
@@ -191,10 +231,10 @@ public class WebServiceManager {
 
             // Download succeeded
             if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
-                rawRoute.setKmlData(kmlLocalPath);
+                rawRoute.setKmlDataPath(kmlLocalPath);
             }
             else {
-                rawRoute.setKmlData("");
+                rawRoute.setKmlDataPath("");
             }
         }
 
@@ -211,14 +251,18 @@ public class WebServiceManager {
         return rawRoute;
     }
 
-    public void getRouteAsync(final long serverID){
+    public void getRouteAsync(final long serverID, final OnOperationFinishedEventListener listener){
         // Get the route data
         final Route rawRoute = mWsClient.getRoute(serverID);
-        if(rawRoute == null)
+        if(rawRoute == null){
+            if (listener != null){
+                listener.onOperationFinished(null);
+            }
             return;
+        }
 
         // If KML file is available, download it
-        String kmlServerPath = rawRoute.getKmlData();
+        String kmlServerPath = rawRoute.getKmlDataPath();
         if(kmlServerPath != null && kmlServerPath.length() > 0) {
             final String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) + "/route_" + String.valueOf(serverID) + ".kml";
             FileDownloader manager = new FileDownloader(mContext);
@@ -227,10 +271,10 @@ public class WebServiceManager {
                 public void onDownloadFinished(FileDownloader.DownloadResult result) {
                     // Download succeeded
                     if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
-                        rawRoute.setKmlData(kmlLocalPath);
+                        rawRoute.setKmlDataPath(kmlLocalPath);
                     }
                     else {
-                        rawRoute.setKmlData("");
+                        rawRoute.setKmlDataPath("");
                     }
 
                     // Save the data to DB
@@ -241,6 +285,11 @@ public class WebServiceManager {
                     }
                     else {
                         DbManager.getInstance(mContext).getRouteService().insertRoute(rawRoute);
+                    }
+
+                    // Inform interested parties
+                    if (listener != null){
+                        listener.onOperationFinished(rawRoute);
                     }
                 }
             });

@@ -47,7 +47,7 @@ public class WebServiceAccess {
     public ArrayList<Territory> getTerritories(){
         String response = callMethod(METHOD_GET_TERRITORIES);
 
-        if(response == null || response.length() == 0)
+        if(!validateResponse(response))
             return new ArrayList<>();
 
         // Deserialize and rewrite the serverIDs
@@ -64,7 +64,7 @@ public class WebServiceAccess {
     public ArrayList<Area> getAreas(){
         String response = callMethod(METHOD_GET_AREAS);
 
-        if(response == null)
+        if(!validateResponse(response))
             return new ArrayList<>();
 
         // Deserialize and rewrite the serverIDs
@@ -79,13 +79,17 @@ public class WebServiceAccess {
     }
 
     public Route getRoute(long routeServerId){
-        String response = callMethod(METHOD_GET_ROUTES, "route", String.valueOf(routeServerId));
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("route", String.valueOf(routeServerId));
+        parameters.put("details", "full");
 
-        if(response == null)
+        String response = callMethod(METHOD_GET_ROUTES, parameters);
+        if(!validateResponse(response))
             return null;
 
         // Deserialize and rewrite the serverIDs
         Route route = JsonHelper.deserializeFromJson(response, Route.class);
+        route.setKmlData(null);
         route.setServerID(route.getId());
         route.setId(0);
 
@@ -96,7 +100,7 @@ public class WebServiceAccess {
     public ArrayList<Route> getRoutesByTerritory(long territoryServerId){
         String response = callMethod(METHOD_GET_ROUTES, "territory", String.valueOf(territoryServerId));
 
-        if(response == null)
+        if(!validateResponse(response))
             return new ArrayList<>();
 
         // Deserialize and rewrite the serverIDs
@@ -113,7 +117,7 @@ public class WebServiceAccess {
     public ArrayList<Route> getRoutesByArea(long areaId){
         String response = callMethod(METHOD_GET_ROUTES, "area", String.valueOf(areaId));
 
-        if(response == null)
+        if(!validateResponse(response))
             return new ArrayList<>();
 
         // Deserialize and rewrite the serverIDs
@@ -130,7 +134,7 @@ public class WebServiceAccess {
     public ArrayList<Reflection> getReflections(String lang){
         String response = callMethod(METHOD_GET_REFLECTIONS, "language", lang);
 
-        if(response == null)
+        if(!validateResponse(response))
             return new ArrayList<>();
 
         // Deserialize
@@ -146,7 +150,7 @@ public class WebServiceAccess {
     public Date checkReflectionsReleaseDate(String lang){
         String response = callMethod(METHOD_CHECK_REFLECTIONS, "language", lang);
 
-        if(response == null)
+        if(!validateResponse(response))
             return null;
 
         return NumConverter.stringToDate(response);
@@ -182,5 +186,16 @@ public class WebServiceAccess {
         final HashMap<String, String> params = new HashMap<>(1);
         params.put(paramKey, paramValue);
         return callMethod(methodName, params);
+    }
+
+    private boolean validateResponse(String response){
+        if(response == null){
+            return false;
+        }
+        if(response.length() < 5){
+            return false;
+        }
+
+        return true;
     }
 }

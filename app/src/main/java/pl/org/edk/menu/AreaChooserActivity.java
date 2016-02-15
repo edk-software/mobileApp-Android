@@ -46,7 +46,7 @@ public class AreaChooserActivity extends ChooserActivity {
 
 	@Override
 	protected void onItemClick(int pos) {
-		Settings.get(this).set(Settings.CITY_NAME, mAreas.get(pos).getId());
+		Settings.get(this).set(Settings.AREA_ID, mAreas.get(pos).getId());
 		Intent myIntent = new Intent(this, RouteChooserActivity.class);
 		myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(myIntent);

@@ -52,10 +52,12 @@ public class RouteService extends DbServiceBase {
     public boolean updateRoute(Route route){
         // Try to update the route
         int count = executeQueryUpdate(Route.TABLE_NAME, route);
-        if(count > 0)
+        if(count > 0) {
             return true;
-
-        return insertRoute(route);
+        }
+        else {
+            return insertRoute(route);
+        }
     }
 
     // ---------------------------------------

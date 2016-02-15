@@ -39,7 +39,8 @@ public class DbServiceBase {
             return 0;
 
         ContentValues values = entity.getContentValues();
-        return dbWrite().update(tableName, values, DbEntityBase._ID, new String[]{String.valueOf(entity.getId())});
+        String whereClause = DbEntityBase._ID + " = ? ";
+        return dbWrite().update(tableName, values, whereClause, new String[]{String.valueOf(entity.getId())});
     }
 
     protected Cursor executeQueryGetAll(String tableName, String[] columns){
