@@ -8,6 +8,7 @@ import pl.org.edk.util.JsonHelper;
 import pl.org.edk.util.NumConverter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.*;
@@ -131,20 +132,22 @@ public class WebServiceAccess {
         return routes;
     }
 
-    public ArrayList<Reflection> getReflections(String lang){
+    public ReflectionList getReflectionList(String lang){
         String response = callMethod(METHOD_GET_REFLECTIONS, "language", lang);
 
         if(!validateResponse(response))
-            return new ArrayList<>();
+            return null;
 
         // Deserialize
+        ReflectionList list = new ReflectionList();
         ArrayList<Reflection> reflections = JsonHelper.deserializeFromJson(response, new TypeToken<ArrayList<Reflection>>(){}.getType());
-        for(Reflection reflection : reflections){
-            reflection.setLanguage(lang);
-        }
+        list.setReflections(reflections);
+        list.setLanguage(lang);
+
+        // TODO: Request that WS return releaseDate and version
 
         LogManager.LogInfo("WebServiceAccess.getReflections success - " + reflections.size() + " items downloaded");
-        return reflections;
+        return list;
     }
 
     public Date checkReflectionsReleaseDate(String lang){

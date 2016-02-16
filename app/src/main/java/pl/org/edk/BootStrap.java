@@ -3,6 +3,8 @@ package pl.org.edk;
 import android.content.Context;
 import android.os.Environment;
 import pl.org.edk.database.*;
+import pl.org.edk.database.entities.ReflectionList;
+import pl.org.edk.managers.WebServiceManager;
 
 import java.io.File;
 
@@ -19,6 +21,7 @@ public final class BootStrap {
             return;
 
         DbManager.getInstance(context).Init();
+        WebServiceManager.getInstance(context).Init(R.drawable.edk_icon);
 
         initStorage(context);
 

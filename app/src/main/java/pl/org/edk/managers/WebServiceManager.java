@@ -4,18 +4,19 @@ import android.content.Context;
 import android.os.AsyncTask;
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
-import pl.org.edk.database.entities.Area;
-import pl.org.edk.database.entities.Route;
-import pl.org.edk.database.entities.Territory;
+import pl.org.edk.database.entities.*;
 import pl.org.edk.webServices.FileDownloader;
 import pl.org.edk.webServices.WebServiceAccess;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by pwawrzynek on 2016-02-11.
  */
 public class WebServiceManager {
+
     // ---------------------------------------
     // Subclasses
     // ---------------------------------------
@@ -30,6 +31,10 @@ public class WebServiceManager {
 
     private Context mContext;
     private WebServiceAccess mWsClient;
+
+    private int mNotificationIcon;
+    private ArrayList<Reflection> mReflectionsToDownload = new ArrayList<>();
+
 
     // ---------------------------------------
     // Constructors
@@ -52,6 +57,12 @@ public class WebServiceManager {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
+    public void Init(int notificationIcon){
+        this.mNotificationIcon = notificationIcon;
+    }
+
+    // Territories
+
     public ArrayList<Territory> getTerritories(){
         ArrayList<Territory> rawTerritories = mWsClient.getTerritories();
         if(rawTerritories == null)
@@ -87,6 +98,8 @@ public class WebServiceManager {
         };
         downloadTask.execute();
     }
+
+    // Areas
 
     public ArrayList<Area> getAreas(){
         ArrayList<Area> rawAreas = mWsClient.getAreas();
@@ -178,6 +191,8 @@ public class WebServiceManager {
         };
         downloadTask.execute(territoryServerId);
     }
+
+    // Routes
 
     public ArrayList<Route> getRoutesByArea(long areaServerId){
         ArrayList<Route> rawRoutes = mWsClient.getRoutesByArea(areaServerId);
@@ -295,5 +310,73 @@ public class WebServiceManager {
             });
             manager.downloadFileAsync(kmlServerPath, kmlLocalPath);
         }
+    }
+
+    // Reflections
+
+    public void getReflectionListAsync(String language, final OnOperationFinishedEventListener listener){
+        ReflectionList rawList = mWsClient.getReflectionList(language);
+        if(rawList == null){
+            listener.onOperationFinished(null);
+            return;
+        }
+
+        // Insert missing data (not returned by WS)
+        rawList.setReleaseDate(Calendar.getInstance().getTime());
+        rawList.setEdition(Calendar.getInstance().get(Calendar.YEAR));
+
+        // Prepare a list of Reflections that need to be downloaded
+        mReflectionsToDownload = new ArrayList<>();
+        for(Reflection reflection : rawList.getReflections()) {
+            if(reflection.getAudioPath() != null && reflection.getAudioPath().length() > 0) {
+                mReflectionsToDownload.add(reflection);
+            }
+        }
+
+        // Start the download if necessary
+        downloadNext(rawList, listener);
+    }
+
+    // ---------------------------------------
+    // Public methods
+    // ---------------------------------------
+    private void downloadNext(final ReflectionList list, final OnOperationFinishedEventListener listener){
+        // Downloading finished
+        if(mReflectionsToDownload.size() == 0){
+            // Save the results
+            DbManager.getInstance(mContext).getReflectionService().insertReflectionList(list);
+
+            listener.onOperationFinished(list);
+            return;
+        }
+
+        String localPathBase = Settings.get(mContext).get(Settings.APP_DIRECTORY_AUDIO) + "/reflection_" +
+                list.getEdition() + "_";
+
+        final Reflection nextReflection = mReflectionsToDownload.get(0);
+        String serverPath = nextReflection.getAudioPath();
+        final String localPath = localPathBase + nextReflection.getStationIndex() + ".mp3";
+
+        // Start the download and trigger the next one, when finished
+        FileDownloader manager = new FileDownloader(mContext);
+        manager.setNotificationDetails(mNotificationIcon, "Pobieranie rozważań",
+                14 - mReflectionsToDownload.size() + "/14", "Rozważania pobrane");
+        manager.setListener(new FileDownloader.OnDownloadEventListener() {
+            @Override
+            public void onDownloadFinished(FileDownloader.DownloadResult result) {
+                mReflectionsToDownload.remove(nextReflection);
+
+                // Download succeeded
+                if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
+                    nextReflection.setAudioPath(localPath);
+                }
+                else {
+                    nextReflection.setAudioPath("");
+                }
+
+                downloadNext(list, listener);
+            }
+        });
+        manager.downloadFileAsync(serverPath, localPath);
     }
 }

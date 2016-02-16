@@ -22,6 +22,7 @@ public class FileDownloader {
     private OnDownloadEventListener mListener;
 
     private boolean mDisplayNotification = false;
+    private String mProgressText;
     private String mFinishedText;
 
     private NotificationManager mNotifyManager;
@@ -37,7 +38,7 @@ public class FileDownloader {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
-    public void setNotificationDetails(int icon, String title, String finishedText){
+    public void setNotificationDetails(int icon, String title, String progressText, String finishedText){
         mDisplayNotification = true;
 
         mNotifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -45,6 +46,7 @@ public class FileDownloader {
         mBuilder.setContentTitle(title)
                 .setSmallIcon(icon);
 
+        mProgressText = progressText;
         mFinishedText = finishedText;
     }
 
@@ -163,7 +165,7 @@ public class FileDownloader {
             // Update the progress value
             if(mDisplayNotification) {
                 mBuilder.setProgress(100, values[0], false)
-                        .setContentText(String.valueOf(values[0]) + "%");
+                        .setContentText(mProgressText + " (" + String.valueOf(values[0]) + "%)");
                 mNotifyManager.notify(1, mBuilder.build());
             }
         }

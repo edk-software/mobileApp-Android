@@ -14,7 +14,7 @@ public class ReflectionService extends DbServiceBase {
     // ---------------------------------------
     // Insert
     // ---------------------------------------
-    public boolean InsertReflectionList(ReflectionList reflectionList){
+    public boolean insertReflectionList(ReflectionList reflectionList){
         // Insert the list
         long listId = executeQueryInsert(ReflectionList.TABLE_NAME, reflectionList);
         if(listId <= 0)
@@ -25,13 +25,13 @@ public class ReflectionService extends DbServiceBase {
         boolean success = true;
         for(Reflection reflection : reflectionList.getReflections()){
             reflection.setReflectionList(reflectionList);
-            success &= InsertReflection(reflection);
+            success &= insertReflection(reflection);
         }
 
         return success;
     }
 
-    public boolean InsertReflection(Reflection reflection){
+    public boolean insertReflection(Reflection reflection){
         long reflectionId = executeQueryInsert(Reflection.TABLE_NAME, reflection);
         if(reflectionId <= 0)
             return false;
@@ -48,7 +48,21 @@ public class ReflectionService extends DbServiceBase {
     // ---------------------------------------
     // Get
     // ---------------------------------------
-    public ReflectionList GetReflectionList(String language, int edition, boolean includeItems){
+    public ArrayList<ReflectionList> getReflectionLists(){
+        Cursor cursor = executeQueryGetAll(ReflectionList.TABLE_NAME, ReflectionList.getFullProjection());
+
+        ArrayList<ReflectionList> lists = new ArrayList<>();
+        for(int i = 0; i < cursor.getCount(); i++){
+            cursor.moveToPosition(i);
+            ReflectionList nextList = new ReflectionList();
+            if(nextList.readFromCursor(cursor)){
+                lists.add(nextList);
+            }
+        }
+        return lists;
+    }
+
+    public ReflectionList getReflectionList(String language, int edition, boolean includeItems){
         ArrayList<String> whereColumns = new ArrayList<>(2);
         whereColumns.add(ReflectionList.COLUMN_NAME_LANGUAGE);
         whereColumns.add(ReflectionList.COLUMN_NAME_EDITION);
@@ -67,16 +81,16 @@ public class ReflectionService extends DbServiceBase {
 
         // Fetch the items
         if(includeItems)
-            list.setReflections(GetReflections(list.getId()));
+            list.setReflections(getReflections(list.getId()));
 
         return list;
     }
 
-    public ReflectionList GetReflectionList(String language, boolean includeItems){
-        return GetReflectionList(language, Calendar.getInstance().get(Calendar.YEAR), includeItems);
+    public ReflectionList getReflectionList(String language, boolean includeItems){
+        return getReflectionList(language, Calendar.getInstance().get(Calendar.YEAR), includeItems);
     }
 
-    public ArrayList<Reflection> GetReflections(long reflectionListId){
+    public ArrayList<Reflection> getReflections(long reflectionListId){
         Cursor cursor = executeQueryWhere(Reflection.TABLE_NAME, Reflection.getFullProjection(), Reflection.COLUMN_NAME_LIST_ID, String.valueOf(reflectionListId));
 
         ArrayList<Reflection> reflections = new ArrayList<>();

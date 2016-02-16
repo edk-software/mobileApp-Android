@@ -19,21 +19,16 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import pl.org.edk.R;
-import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;
-import pl.org.edk.database.services.ReflectionService;
+import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.services.ReflectionsAudioService;
 import pl.org.edk.services.ReflectionsAudioService.OnPlayerStopListener;
+import pl.org.edk.util.DialogUtil;
 import pl.org.edk.util.ExpandableListAdapter;
 
 /**
@@ -87,6 +82,43 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
     };
 
+    private Runnable updateSeekBarTime = new Runnable() {
+
+        @Override
+        public void run() {
+            if (!mAudioService.isPrepared()) {
+                mDurationHandler.postDelayed(this, 1000);
+                return;
+            }
+//            if (!mAudioService.isPlaying()) {
+//                preparePlayer(mCurrentStation);
+//                return;
+//            }
+
+            if (finalTime == 100) {
+                finalTime = mAudioService.getDuration();
+                mSeekBar.setMax(finalTime);
+            }
+
+            timeElapsed = mAudioService.getCurrentPosition();
+            mSeekBar.setProgress(timeElapsed);
+            if (mAudioService.isPlaying()) {
+                mDurationHandler.postDelayed(this, 1000);
+            }
+        }
+    };
+    private ReflectionList mReflectionList;
+
+    // ---------------------------------------
+    // Constructors
+    // ---------------------------------------
+    public ReflectionsFragment() {
+        // Required empty public constructor
+    }
+
+    // ---------------------------------------
+    // Public methods
+    // ---------------------------------------
     public void selectStation(int stationIndex) {
         if (expListView == null) {
             Log.d("EDK", "List not ready");
@@ -105,53 +137,17 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
     }
 
-    public ReflectionsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reflections, container, false);
-
         expListView = (ExpandableListView) view.findViewById(R.id.expandableList);
 
         prepareListData();
-
-        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
-        expListView.setGroupIndicator(null);
-
-        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
-            @Override
-            public boolean onGroupClick(final ExpandableListView parent, final View v, final int groupPosition, long id) {
-
-                if (parent.isGroupExpanded(groupPosition)) {
-                    parent.collapseGroup(groupPosition);
-                    hidePlayer();
-                    mCurrentStation = -1;
-                    if (mAudioService.isPlaying()) {
-                        mAudioService.continueInForeground(getActivity().getClass());
-                    }
-                } else {
-                    openReflections(groupPosition);
-                    if (mAudioService.isPlaying() && mAudioService.getReflection().getStationIndex() == groupPosition) {
-                        loadPlayer();
-                    } else {
-                        preparePlayer(groupPosition);
-                    }
-                }
-                return true;
-            }
-        });
 
         initializePlayerView(view);
         if (mCurrentStation == -1) {
@@ -159,17 +155,6 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
         return view;
     }
-
-    private void hidePlayer() {
-//        mPlayerView.setTranslationY(mPlayerView.getHeight());
-//        mPlayerView.animate().translationY(mPlayerView.getHeight()).start();
-        mPlayerView.setVisibility(View.GONE);
-    }
-
-    private void showPlayer() {
-        mPlayerView.setVisibility(View.VISIBLE);
-    }
-
 
     //start and bind the service when the activity starts
     @Override
@@ -200,59 +185,9 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
     }
 
-    private void loadPlayer() {
-        showPlayer();
-
-        finalTime = mAudioService.getDuration();
-        mSeekBar.setMax(finalTime);
-        timeElapsed = mAudioService.getCurrentPosition();
-        mSeekBar.setProgress(timeElapsed);
-
-        if (mAudioService.isPlaying()) {
-            mPlayButton.setImageResource(R.drawable.pause);
-            updateSeekBarTime.run();
-        } else {
-            mPlayButton.setImageResource(R.drawable.play);
-        }
-    }
-
-    private void preparePlayer(int stationIndex) {
-        showPlayer();
-
-        mPlayButton.setImageResource(R.drawable.play);
-        mPrevButton.setEnabled(stationIndex != 0);
-        mNextButton.setEnabled(stationIndex != 15);
-
-        resetSeekBar();
-
-        if (mServiceBound) {
-            if (mAudioService.isPlaying()) {
-                mAudioService.stop();
-            }
-            Reflection reflection = getReflection(stationIndex);
-            mAudioService.setReflection(reflection);
-        }
-    }
-
-    @NonNull
-    private Reflection getReflection(int stationIndex) {
-        Reflection reflection = new Reflection();
-        reflection.setStationIndex(stationIndex);
-        reflection.setDisplayName(listDataHeader.get(stationIndex));
-        return reflection;
-    }
-
-
     @Override
     public void onPlayerStop() {
         preparePlayer(mCurrentStation);
-    }
-
-    private void resetSeekBar() {
-        mSeekBar.setProgress(0);
-        mSeekBar.setMax(100);
-        finalTime = 100;
-        timeElapsed = 0;
     }
 
     public void initializePlayerView(View view) {
@@ -286,7 +221,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                 } else {
                     if (mAudioService.getReflection() == null) {
                         Log.i("EDK", "Audio service reflection was null when clicked play");
-                        mAudioService.setReflection(getReflection(mCurrentStation));
+                        mAudioService.setReflection(mReflectionList.getReflections().get(mCurrentStation));
                     }
                     mAudioService.play();
                     mPlayButton.setImageResource(R.drawable.pause);
@@ -312,45 +247,6 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         });
 
     }
-
-    private Runnable updateSeekBarTime = new Runnable() {
-        public void run() {
-            if (!mAudioService.isPrepared()) {
-                mDurationHandler.postDelayed(this, 1000);
-                return;
-            }
-//            if (!mAudioService.isPlaying()) {
-//                preparePlayer(mCurrentStation);
-//                return;
-//            }
-
-            if (finalTime == 100) {
-                finalTime = mAudioService.getDuration();
-                mSeekBar.setMax(finalTime);
-            }
-
-            timeElapsed = mAudioService.getCurrentPosition();
-            mSeekBar.setProgress(timeElapsed);
-            if (mAudioService.isPlaying()) {
-                mDurationHandler.postDelayed(this, 1000);
-            }
-        }
-    };
-
-    private void openReflections(final int stationId) {
-        if (mCurrentStation != -1 && stationId != mCurrentStation) {
-            expListView.collapseGroup(mCurrentStation);
-        }
-        expListView.expandGroup(stationId);
-        expListView.post(new Runnable() {
-            @Override
-            public void run() {
-                smoothScrollToPositionFromTop(expListView, stationId);
-            }
-        });
-        mCurrentStation = stationId;
-    }
-
 
     //workaround from https://stackoverflow.com/questions/14479078/smoothscrolltopositionfromtop-is-not-always-working-like-it-should/20997828#20997828
     public static void smoothScrollToPositionFromTop(final AbsListView view, final int position) {
@@ -400,35 +296,138 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
     }
 
-    private void prepareListData() {
+    // ---------------------------------------
+    // Private methods
+    // ---------------------------------------
+    private void hidePlayer() {
+//        mPlayerView.setTranslationY(mPlayerView.getHeight());
+//        mPlayerView.animate().translationY(mPlayerView.getHeight()).start();
+        mPlayerView.setVisibility(View.GONE);
+    }
 
-        ReflectionService reflectionService = DbManager.getInstance(getActivity()).getReflectionService();
-        int year = Settings.get(getActivity()).getInt(Settings.YEAR_ID, Calendar.getInstance().get(Calendar.YEAR));
-        ReflectionList reflectionList = reflectionService.GetReflectionList("pl", year, true);
-        if (reflectionList == null || reflectionList.getReflections().isEmpty()) {
-            listDataHeader = Arrays.asList(getResources().getStringArray(R.array.stations));
-            listDataChild = new HashMap<>();
+    private void showPlayer() {
+        mPlayerView.setVisibility(View.VISIBLE);
+    }
 
-            for (int i = 0; i < listDataHeader.size(); i++) {
-                String title = listDataHeader.get(i);
-                List<String> children = new ArrayList<>();
-                children.add(getResources().getString(getReflectionStringId(i)));
-                listDataChild.put(title, children);
-            }
+    private void loadPlayer() {
+        showPlayer();
+
+        finalTime = mAudioService.getDuration();
+        mSeekBar.setMax(finalTime);
+        timeElapsed = mAudioService.getCurrentPosition();
+        mSeekBar.setProgress(timeElapsed);
+
+        if (mAudioService.isPlaying()) {
+            mPlayButton.setImageResource(R.drawable.pause);
+            updateSeekBarTime.run();
         } else {
-            throw new UnsupportedOperationException("Implementation missing");
+            mPlayButton.setImageResource(R.drawable.play);
         }
     }
 
-    //TODO change to service call
-    private int getReflectionStringId(int station) {
-        try {
-            Field field = R.string.class.getField(String.format("EDK2015S%02d", station));
-            return field.getInt(null);
-        } catch (Exception e) {
-            Log.e("EDK", "Cannot find audio for given station " + station, e);
+    private void preparePlayer(int stationIndex) {
+        showPlayer();
+
+        mPlayButton.setImageResource(R.drawable.play);
+        mPrevButton.setEnabled(stationIndex != 0);
+        mNextButton.setEnabled(stationIndex != 15);
+
+        resetSeekBar();
+
+        if (mServiceBound) {
+            if (mAudioService.isPlaying()) {
+                mAudioService.stop();
+            }
+            mAudioService.setReflection(mReflectionList.getReflections().get(stationIndex));
         }
-        return R.string.EDK2015S00;
     }
 
+    private void resetSeekBar() {
+        mSeekBar.setProgress(0);
+        mSeekBar.setMax(100);
+        finalTime = 100;
+        timeElapsed = 0;
+    }
+
+    private void openReflections(final int stationId) {
+        if (mCurrentStation != -1 && stationId != mCurrentStation) {
+            expListView.collapseGroup(mCurrentStation);
+        }
+        expListView.expandGroup(stationId);
+        expListView.post(new Runnable() {
+            @Override
+            public void run() {
+                smoothScrollToPositionFromTop(expListView, stationId);
+            }
+        });
+        mCurrentStation = stationId;
+    }
+
+    private void prepareListData() {
+        mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList("pl", true);
+        // No reflections found
+        if (mReflectionList == null || mReflectionList.getReflections().isEmpty()) {
+            DialogUtil.showBusyDialog(getString(R.string.downloading_message), getActivity());
+            WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
+                @Override
+                public void onOperationFinished(Object result) {
+                    DialogUtil.closeBusyDialog();
+                    mReflectionList = (ReflectionList)result;
+                    refreshViewItems();
+                }
+            };
+            WebServiceManager.getInstance(getActivity()).getReflectionListAsync("pl", listener);
+        }
+        else {
+            refreshViewItems();
+        }
+    }
+
+    private void refreshViewItems(){
+        // Make sure that the list is sorted by stationIndex
+        Collections.sort(mReflectionList.getReflections(), new Comparator<Reflection>() {
+            @Override
+            public int compare(Reflection lhs, Reflection rhs) {
+                return lhs.getStationIndex() - rhs.getStationIndex();
+            }
+        });
+
+        // Create the lists
+        listDataHeader = new ArrayList<>(mReflectionList.getReflections().size());
+        listDataChild = new HashMap<>(mReflectionList.getReflections().size());
+
+        for(final Reflection reflection : mReflectionList.getReflections()){
+            String title = reflection.getDisplayName();
+            listDataHeader.add(reflection.getStationIndex(), title);
+            listDataChild.put(title, new ArrayList<String>(){{add(reflection.getContent());}});
+        }
+
+        // Prepare the view
+        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+        expListView.setAdapter(listAdapter);
+        expListView.setGroupIndicator(null);
+        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+            @Override
+            public boolean onGroupClick(final ExpandableListView parent, final View v, final int groupPosition, long id) {
+
+                if (parent.isGroupExpanded(groupPosition)) {
+                    parent.collapseGroup(groupPosition);
+                    hidePlayer();
+                    mCurrentStation = -1;
+                    if (mAudioService.isPlaying()) {
+                        mAudioService.continueInForeground(getActivity().getClass());
+                    }
+                } else {
+                    openReflections(groupPosition);
+                    if (mAudioService.isPlaying() && mAudioService.getReflection().getStationIndex() == groupPosition) {
+                        loadPlayer();
+                    } else {
+                        preparePlayer(groupPosition);
+                    }
+                }
+                return true;
+            }
+        });
+    }
 }
