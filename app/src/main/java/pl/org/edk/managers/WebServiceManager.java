@@ -33,6 +33,7 @@ public class WebServiceManager {
     private WebServiceAccess mWsClient;
 
     private int mNotificationIcon;
+    private boolean mDownloadInProgress = false;
     private ArrayList<Reflection> mReflectionsToDownload = new ArrayList<>();
 
 
@@ -57,7 +58,7 @@ public class WebServiceManager {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
-    public void Init(int notificationIcon){
+    public void init(int notificationIcon){
         this.mNotificationIcon = notificationIcon;
     }
 
@@ -315,6 +316,10 @@ public class WebServiceManager {
     // Reflections
 
     public void getReflectionListAsync(String language, final OnOperationFinishedEventListener listener){
+        if(mDownloadInProgress){
+            return;
+        }
+
         ReflectionList rawList = mWsClient.getReflectionList(language);
         if(rawList == null){
             listener.onOperationFinished(null);
@@ -333,7 +338,7 @@ public class WebServiceManager {
             }
         }
 
-        // Start the download if necessary
+        // Start the download if
         downloadNext(rawList, listener);
     }
 
@@ -347,9 +352,11 @@ public class WebServiceManager {
             DbManager.getInstance(mContext).getReflectionService().insertReflectionList(list);
 
             listener.onOperationFinished(list);
+            mDownloadInProgress = false;
             return;
         }
 
+        mDownloadInProgress = true;
         String localPathBase = Settings.get(mContext).get(Settings.APP_DIRECTORY_AUDIO) + "/reflection_" +
                 list.getEdition() + "_";
 
