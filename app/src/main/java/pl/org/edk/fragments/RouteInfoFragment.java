@@ -1,5 +1,8 @@
 package pl.org.edk.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -13,9 +16,12 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.concurrent.TimeUnit;
 
+import pl.org.edk.EndActivity;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.kml.KMLTracker;
+import pl.org.edk.services.GPSService;
+import pl.org.edk.util.DialogUtil;
 
 /**
  * Created by darekpap on 2016-01-19.
@@ -67,7 +73,40 @@ public class RouteInfoFragment extends TrackerFragment {
         updateDistances();
         mStartTime = Settings.get(getActivity()).getLong(Settings.START_TIME, System.currentTimeMillis());
 
+        configureFinishButton(view);
+
         return view;
+    }
+
+    private void configureFinishButton(View view) {
+        view.findViewById(R.id.finishButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.warning_dialog_title);
+                builder.setMessage(R.string.end_dialog_message);
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        getActivity().stopService(new Intent(getActivity(), GPSService.class));
+                        Intent intent = new Intent(getActivity(), EndActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                });
+                AlertDialog dialog = builder.show();
+                DialogUtil.addRedTitleDivider(getActivity(), dialog);
+            }
+        });
     }
 
     @Override
