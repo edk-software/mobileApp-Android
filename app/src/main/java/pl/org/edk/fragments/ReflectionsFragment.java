@@ -366,16 +366,42 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList("pl", true);
         // No reflections found
         if (mReflectionList == null || mReflectionList.getReflections().isEmpty()) {
-            DialogUtil.showBusyDialog(getString(R.string.downloading_message), getActivity());
-            WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
+            mReflectionList = WebServiceManager.getInstance(getActivity()).getReflectionList("pl");
+            // Download failed
+            if(mReflectionList == null){
+                // TODO: Display "Unable to download" pop-up
+            }
+        }
+
+        // Check the audios
+        ArrayList<Reflection> reflectionsToDownload = new ArrayList<>();
+        for(Reflection reflection : mReflectionList.getReflections()){
+            if(reflection.getAudioLocalPath() == null || reflection.getAudioLocalPath().length() == 0){
+                reflectionsToDownload.add(reflection);
+            }
+        }
+
+        // There are audio files to be downloaded
+        if(reflectionsToDownload.size() > 0){
+            DialogUtil.showYesNoDialog("Pobieranie rozważań", "Dostępne są rozważania w formie audio. Czy mają zostać teraz pobrane (ok. 50MB)?",
+                    getActivity(), new DialogUtil.OnSelectedEventListener() {
                 @Override
-                public void onOperationFinished(Object result) {
-                    DialogUtil.closeBusyDialog();
-                    mReflectionList = (ReflectionList)result;
+                public void onAccepted() {
+                    WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, new WebServiceManager.OnOperationFinishedEventListener() {
+                        @Override
+                        public void onOperationFinished(Object result) {
+                            // TODO: Inform that the download is finished
+                        }
+                    });
                     refreshViewItems();
                 }
-            };
-            WebServiceManager.getInstance(getActivity()).getReflectionListAsync("pl", listener);
+
+                @Override
+                public void onRejected() {
+                    // Display the data
+                    refreshViewItems();
+                }
+            });
         }
         else {
             refreshViewItems();

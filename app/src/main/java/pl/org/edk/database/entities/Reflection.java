@@ -2,6 +2,7 @@ package pl.org.edk.database.entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by pwawrzynek on 2015-12-16.
@@ -15,7 +16,8 @@ public class Reflection extends DbEntityBase {
     public static final String COLUMN_NAME_STATION_INDEX = "StationIndex";
     public static final String COLUMN_NAME_DISPLAY_NAME = "DisplayName";
     public static final String COLUMN_NAME_CONTENT = "Content";
-    public static final String COLUMN_NAME_AUDIO_PATH = "AudioPath";
+    public static final String COLUMN_NAME_AUDIO_SERVER_PATH = "AudioServerPath";
+    public static final String COLUMN_NAME_AUDIO_LOCAL_PATH = "AudioLocalPath";
 
     // ---------------------------------------
     // Class variables
@@ -24,9 +26,12 @@ public class Reflection extends DbEntityBase {
     private int stationIndex;
     private String displayName;
     private String content;
-    private String audioPath;
+    @SerializedName("audioPath")
+    private String audioServerPath;
+    private String audioLocalPath;
     // External tables
     private ReflectionList reflectionList;
+    // Additional variables
 
     // ---------------------------------------
     // Static methods
@@ -39,8 +44,8 @@ public class Reflection extends DbEntityBase {
                 COLUMN_NAME_STATION_INDEX + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + COMMA +
                 COLUMN_NAME_CONTENT + TEXT_TYPE + COMMA +
-                COLUMN_NAME_AUDIO_PATH + TEXT_TYPE +
-                ");";
+                COLUMN_NAME_AUDIO_SERVER_PATH + TEXT_TYPE + COMMA +
+                COLUMN_NAME_AUDIO_LOCAL_PATH + TEXT_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
@@ -55,7 +60,8 @@ public class Reflection extends DbEntityBase {
                 COLUMN_NAME_STATION_INDEX,
                 COLUMN_NAME_DISPLAY_NAME,
                 COLUMN_NAME_CONTENT,
-                COLUMN_NAME_AUDIO_PATH
+                COLUMN_NAME_AUDIO_SERVER_PATH,
+                COLUMN_NAME_AUDIO_LOCAL_PATH,
         };
         return projection;
     }
@@ -73,7 +79,8 @@ public class Reflection extends DbEntityBase {
         values.put(COLUMN_NAME_STATION_INDEX, stationIndex);
         values.put(COLUMN_NAME_DISPLAY_NAME, displayName);
         values.put(COLUMN_NAME_CONTENT, content);
-        values.put(COLUMN_NAME_AUDIO_PATH, audioPath);
+        values.put(COLUMN_NAME_AUDIO_SERVER_PATH, audioServerPath);
+        values.put(COLUMN_NAME_AUDIO_LOCAL_PATH, audioLocalPath);
 
         return values;
     }
@@ -87,7 +94,8 @@ public class Reflection extends DbEntityBase {
             this.stationIndex = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_STATION_INDEX));
             this.displayName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_NAME));
             this.content= cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_CONTENT));
-            this.audioPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_AUDIO_PATH));
+            this.audioServerPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_AUDIO_SERVER_PATH));
+            this.audioLocalPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_AUDIO_LOCAL_PATH));
             return true;
         }catch (Exception ex){
             return false;
@@ -118,11 +126,18 @@ public class Reflection extends DbEntityBase {
         this.content = content;
     }
 
-    public String getAudioPath() {
-        return audioPath;
+    public String getAudioServerPath() {
+        return audioServerPath;
     }
-    public void setAudioPath(String audioPath) {
-        this.audioPath = audioPath;
+    public void setAudioServerPath(String audioServerPath) {
+        this.audioServerPath = audioServerPath;
+    }
+
+    public String getAudioLocalPath() {
+        return audioLocalPath;
+    }
+    public void setAudioLocalPath(String audioLocalPath) {
+        this.audioLocalPath = audioLocalPath;
     }
 
     public ReflectionList getReflectionList() {

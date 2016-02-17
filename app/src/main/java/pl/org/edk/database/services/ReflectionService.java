@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * Created by Admin on 2015-12-16.
+ * Created by pwawrzynek on 2015-12-16.
  */
 public class ReflectionService extends DbServiceBase {
     // ---------------------------------------
@@ -44,6 +44,16 @@ public class ReflectionService extends DbServiceBase {
     // ---------------------------------------
     // Update
     // ---------------------------------------
+    public boolean updateReflection(Reflection reflection){
+        // Try to update the route
+        int count = executeQueryUpdate(Reflection.TABLE_NAME, reflection);
+        if(count > 0) {
+            return true;
+        }
+        else {
+            return insertReflection(reflection);
+        }
+    }
 
     // ---------------------------------------
     // Get

@@ -276,69 +276,82 @@ public class WebServiceManager {
             return;
         }
 
-        // If KML file is available, download it
+        // If KML file is unavailable, leave it be
         String kmlServerPath = rawRoute.getKmlDataPath();
-        if(kmlServerPath != null && kmlServerPath.length() > 0) {
-            final String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) + "/route_" + String.valueOf(serverID) + ".kml";
-            FileDownloader manager = new FileDownloader(mContext);
-            manager.setListener(new FileDownloader.OnDownloadEventListener() {
-                @Override
-                public void onDownloadFinished(FileDownloader.DownloadResult result) {
-                    // Download succeeded
-                    if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
-                        rawRoute.setKmlDataPath(kmlLocalPath);
-                    }
-                    else {
-                        rawRoute.setKmlDataPath("");
-                    }
-
-                    // Save the data to DB
-                    Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(serverID);
-                    if(previous != null){
-                        rawRoute.setId(previous.getId());
-                        DbManager.getInstance(mContext).getRouteService().updateRoute(rawRoute);
-                    }
-                    else {
-                        DbManager.getInstance(mContext).getRouteService().insertRoute(rawRoute);
-                    }
-
-                    // Inform interested parties
-                    if (listener != null){
-                        listener.onOperationFinished(rawRoute);
-                    }
-                }
-            });
-            manager.downloadFileAsync(kmlServerPath, kmlLocalPath);
+        if(kmlServerPath == null || kmlServerPath.length() == 0) {
+            rawRoute.setKmlDataPath("");
+            if(listener != null){
+                listener.onOperationFinished(rawRoute);
+            }
+            return;
         }
+
+        // Download KML, if available
+        final String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) + "/route_" + String.valueOf(serverID) + ".kml";
+        FileDownloader manager = new FileDownloader(mContext);
+        manager.setListener(new FileDownloader.OnDownloadEventListener() {
+            @Override
+            public void onDownloadFinished(FileDownloader.DownloadResult result) {
+                // Download succeeded
+                if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
+                    rawRoute.setKmlDataPath(kmlLocalPath);
+                }
+                else {
+                    rawRoute.setKmlDataPath("");
+                }
+
+                // Save the data to DB
+                Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(serverID);
+                if(previous != null){
+                    rawRoute.setId(previous.getId());
+                    DbManager.getInstance(mContext).getRouteService().updateRoute(rawRoute);
+                }
+                else {
+                    DbManager.getInstance(mContext).getRouteService().insertRoute(rawRoute);
+                }
+
+                // Inform interested parties
+                if (listener != null){
+                    listener.onOperationFinished(rawRoute);
+                }
+            }
+        });
+        manager.downloadFileAsync(kmlServerPath, kmlLocalPath);
     }
 
     // Reflections
 
-    public void getReflectionListAsync(String language, final OnOperationFinishedEventListener listener){
-        if(mDownloadInProgress){
-            return;
-        }
-
+    public ReflectionList getReflectionList(String language){
         ReflectionList rawList = mWsClient.getReflectionList(language);
         if(rawList == null){
-            listener.onOperationFinished(null);
-            return;
+            return null;
         }
 
         // Insert missing data (not returned by WS)
         rawList.setReleaseDate(Calendar.getInstance().getTime());
         rawList.setEdition(Calendar.getInstance().get(Calendar.YEAR));
 
+        // Insert it to the DB
+        DbManager.getInstance(mContext).getReflectionService().insertReflectionList(rawList);
+
+        return rawList;
+    }
+
+    public void getReflectionsAudioAsync(ReflectionList list, final OnOperationFinishedEventListener listener){
+        if(mDownloadInProgress){
+            return;
+        }
+
         // Prepare a list of Reflections that need to be downloaded
         mReflectionsToDownload = new ArrayList<>();
-        for(Reflection reflection : rawList.getReflections()) {
-            if(reflection.getAudioPath() != null && reflection.getAudioPath().length() > 0) {
+        for(Reflection reflection : list.getReflections()) {
+            if(reflection.getAudioServerPath() != null && reflection.getAudioServerPath().length() > 0) {
                 mReflectionsToDownload.add(reflection);
             }
         }
 
         // Start the download if
-        downloadNext(rawList, listener);
+        downloadNext(list, listener);
     }
 
     // ---------------------------------------
@@ -360,7 +373,7 @@ public class WebServiceManager {
                 list.getEdition() + "_";
 
         final Reflection nextReflection = mReflectionsToDownload.get(0);
-        String serverPath = nextReflection.getAudioPath();
+        String serverPath = nextReflection.getAudioServerPath();
         final String localPath = localPathBase + nextReflection.getStationIndex() + ".mp3";
 
         // Start the download and trigger the next one, when finished
@@ -374,12 +387,8 @@ public class WebServiceManager {
 
                 // Download succeeded
                 if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
-                    nextReflection.setAudioPath(localPath);
+                    nextReflection.setAudioLocalPath(localPath);
                 }
-                else {
-                    nextReflection.setAudioPath("");
-                }
-
                 downloadNext(list, listener);
             }
         });

@@ -16,6 +16,11 @@ public class DialogUtil {
 		void onClose();
 	}
 
+	public interface OnSelectedEventListener{
+		void onAccepted();
+		void onRejected();
+	}
+
 	// ---------------------------------------
 	// Members
 	// ---------------------------------------
@@ -89,6 +94,32 @@ public class DialogUtil {
 			mDialog.hide();
 			mDialog = null;
 		}
+	}
+
+	public static void showYesNoDialog(String title, String message, final Activity activity, final OnSelectedEventListener listener){
+		AlertDialog.Builder builder = new Builder(activity);
+		builder.setTitle(title);
+		builder.setCancelable(false);
+		builder.setMessage(message);
+		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (listener != null) {
+					listener.onAccepted();
+				}
+			}
+		});
+		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (listener != null) {
+					listener.onRejected();
+				}
+			}
+		});
+
+		mDialog = builder.show();
+		addRedTitleDivider(activity, mDialog);
 	}
 
 	public static void addRedTitleDivider(final Context context, AlertDialog dialog) {
