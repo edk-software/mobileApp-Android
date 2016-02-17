@@ -1,8 +1,8 @@
-package pl.org.edk.databaseTEMP.servicesTEMP;
+package pl.org.edk.database.services;
 
 import android.database.Cursor;
-import pl.org.edk.databaseTEMP.entitiesTEMP.Reflection;
-import pl.org.edk.databaseTEMP.entitiesTEMP.ReflectionList;
+import pl.org.edk.database.entities.Reflection;
+import pl.org.edk.database.entities.ReflectionList;
 
 import java.util.ArrayList;
 import java.util.Calendar;

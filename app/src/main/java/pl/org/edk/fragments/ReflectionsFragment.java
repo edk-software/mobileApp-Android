@@ -21,9 +21,9 @@ import android.widget.SeekBar;
 import java.util.*;
 
 import pl.org.edk.R;
-import pl.org.edk.databaseTEMP.DbManager;
-import pl.org.edk.databaseTEMP.entitiesTEMP.Reflection;
-import pl.org.edk.databaseTEMP.entitiesTEMP.ReflectionList;
+import pl.org.edk.database.DbManager;
+import pl.org.edk.database.entities.Reflection;
+import pl.org.edk.database.entities.ReflectionList;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.services.ReflectionsAudioService;
 import pl.org.edk.services.ReflectionsAudioService.OnPlayerStopListener;

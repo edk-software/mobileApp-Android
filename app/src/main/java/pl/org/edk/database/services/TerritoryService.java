@@ -1,10 +1,10 @@
-package pl.org.edk.databaseTEMP.servicesTEMP;
+package pl.org.edk.database.services;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import pl.org.edk.databaseTEMP.entitiesTEMP.Area;
-import pl.org.edk.databaseTEMP.entitiesTEMP.DbEntityBase;
-import pl.org.edk.databaseTEMP.entitiesTEMP.Territory;
+import pl.org.edk.database.entities.Area;
+import pl.org.edk.database.entities.DbEntityBase;
+import pl.org.edk.database.entities.Territory;
 
 import java.util.ArrayList;
 

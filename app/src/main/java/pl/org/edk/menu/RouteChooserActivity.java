@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import pl.org.edk.*;
-import pl.org.edk.databaseTEMP.DbManager;
-import pl.org.edk.databaseTEMP.entitiesTEMP.Route;
+import pl.org.edk.database.DbManager;
+import pl.org.edk.database.entities.Route;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.util.DialogUtil;
 

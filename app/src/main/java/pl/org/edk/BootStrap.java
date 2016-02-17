@@ -2,7 +2,7 @@ package pl.org.edk;
 
 import android.content.Context;
 import android.os.Environment;
-import pl.org.edk.databaseTEMP.*;
+import pl.org.edk.database.*;
 import pl.org.edk.managers.WebServiceManager;
 
 import java.io.File;
