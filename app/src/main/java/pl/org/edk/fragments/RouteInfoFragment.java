@@ -70,7 +70,6 @@ public class RouteInfoFragment extends TrackerFragment {
         mDistanceToNextView = (TextView) view.findViewById(R.id.distanceToStationValue);
         mDistanceLeftView = (TextView) view.findViewById(R.id.distanceLeftValue);
 
-        updateDistances();
         mStartTime = Settings.get(getActivity()).getLong(Settings.START_TIME, System.currentTimeMillis());
 
         configureFinishButton(view);
@@ -150,7 +149,18 @@ public class RouteInfoFragment extends TrackerFragment {
 
     }
 
+    @Override
+    public void setMenuVisibility(boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible) {
+            updateDistances();
+        }
+    }
+
     private void updateDistances() {
+        if (verifyTracker()) {
+            return;
+        }
         double[] distanceInfo = getTracker().getDistanceInfo();
         mDistanceTraveledView.setText(String.format(mDistanceFormat, distanceInfo[KMLTracker.DISTANCE_TRAVELED_INDEX] / 1000));
         mDistanceLeftView.setText(String.format(mDistanceFormat, distanceInfo[KMLTracker.DISTANCE_LEFT_INDEX] / 1000));

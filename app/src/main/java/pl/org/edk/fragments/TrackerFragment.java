@@ -29,19 +29,22 @@ import pl.org.edk.util.NumConverter;
  */
 public abstract class TrackerFragment extends Fragment implements KMLTracker.TrackListener {
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 0;
+    private boolean mTrackerAvailable = true;
+
 
     @Override
     public void onResume() {
         super.onResume();
+        if (!isFragmentVisible()) {
+            return;
+        }
         if (verifyTracker()) {
             return;
         }
-        if (isFragmentVisible()) {
-            verifyWhetherServicesAvailable();
-            verifyWhetherGPSIsEnabled();
-            changeLocationUpdates(true);
-            processTrackerState();
-        }
+        verifyWhetherServicesAvailable();
+        verifyWhetherGPSIsEnabled();
+        changeLocationUpdates(true);
+        processTrackerState();
     }
 
     protected boolean isFragmentVisible() {
@@ -51,13 +54,14 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
     @Override
     public void onPause() {
         super.onPause();
+        //isFragmentVisible returns true when we hide the app using menu button or lock the screen
+        if (!isFragmentVisible()) {
+            return;
+        }
         if (verifyTracker()) {
             return;
         }
-        //isFragmentVisible returns true when we hide the app using menu button or lock the screen
-        if ((isFragmentVisible())) {
-            changeLocationUpdates(false);
-        }
+        changeLocationUpdates(false);
     }
 
     protected KMLTracker getTracker() {
@@ -93,12 +97,18 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
 
     public abstract void onLocationChanged(LatLng location);
 
-    private boolean verifyTracker() {
+    protected boolean verifyTracker() {
+        if (!mTrackerAvailable) {
+            return true;
+        }
+
         try {
             getTracker();
             return false;
         } catch (Exception e) {
-            DialogUtil.showWarningDialog(e.getMessage(), getActivity(), true);
+            mTrackerAvailable = false;
+            Log.e("EDK", "Invalid track", e);
+            DialogUtil.showWarningDialog(e.getMessage(), getActivity(), false);
             return true;
         }
     }
@@ -169,6 +179,9 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
         super.setMenuVisibility(visible);
         if (getActivity() == null) {
             Log.d("EDK", "Activity was null in setMenuVisibility");
+            return;
+        }
+        if (verifyTracker()) {
             return;
         }
 

@@ -229,6 +229,11 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         setMapPadding();
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnCameraChangeListener(this);
+
+        if (verifyTracker()){
+            return;
+        }
+
         decorateMap();
         focusCameraOnLastLocation();
 
