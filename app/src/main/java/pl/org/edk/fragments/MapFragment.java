@@ -99,21 +99,17 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
     private void focusCameraOnLastLocation() {
         KMLTracker tracker = getTracker();
         LatLng center = null;
-        float defaultCameraZoom = OVERVIEW_CAMERA_ZOOM;
-        if (Settings.get(getActivity()).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
             LatLng lastLoc = tracker.getLastLoc();
             if (lastLoc != null) {
                 center = lastLoc;
             } else if (lastCameraPos != null) {
                 center = lastCameraPos;
             }
-            defaultCameraZoom = NAVIGATION_DEFAULT_CAMERA_ZOOM;
-        }
         if (center == null) {
             List<LatLng> track = tracker.getTrack();
             center = track.get(track.size() / 2);
         }
-        float zoomToApply = defaultCameraZoom;
+        float zoomToApply = OVERVIEW_CAMERA_ZOOM;
         if (lastCameraZoom != null) {
             zoomToApply = lastCameraZoom;
         }
