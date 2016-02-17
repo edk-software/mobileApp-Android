@@ -176,7 +176,7 @@ public class ReflectionsAudioService extends Service implements
         }
 
         mPlayer.reset();
-        Uri trackUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.stacja_1);
+        Uri trackUri = Uri.parse(mReflection.getAudioPath());
         //set the data source
         try {
             mPlayer.setDataSource(getApplicationContext(), trackUri);
