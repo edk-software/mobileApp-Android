@@ -1,10 +1,10 @@
-package pl.org.edk.database.services;
+package pl.org.edk.databaseTEMP.servicesTEMP;
 
 import android.database.Cursor;
-import pl.org.edk.database.entities.DbEntityBase;
-import pl.org.edk.database.entities.Route;
-import pl.org.edk.database.entities.RouteDesc;
-import pl.org.edk.database.entities.Station;
+import pl.org.edk.databaseTEMP.entitiesTEMP.DbEntityBase;
+import pl.org.edk.databaseTEMP.entitiesTEMP.Route;
+import pl.org.edk.databaseTEMP.entitiesTEMP.RouteDesc;
+import pl.org.edk.databaseTEMP.entitiesTEMP.Station;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,7 @@
-package pl.org.edk.database;
+package pl.org.edk.databaseTEMP;
 
 import android.content.Context;
-import pl.org.edk.database.services.*;
+import pl.org.edk.databaseTEMP.servicesTEMP.*;
 
 /**
  * Created by pwawrzynek on 2015-12-15.

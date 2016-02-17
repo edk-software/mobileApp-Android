@@ -3,14 +3,13 @@ package pl.org.edk.managers;
 import android.content.Context;
 import android.os.AsyncTask;
 import pl.org.edk.Settings;
-import pl.org.edk.database.DbManager;
-import pl.org.edk.database.entities.*;
+import pl.org.edk.databaseTEMP.DbManager;
+import pl.org.edk.databaseTEMP.entitiesTEMP.*;
 import pl.org.edk.webServices.FileDownloader;
 import pl.org.edk.webServices.WebServiceAccess;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by pwawrzynek on 2016-02-11.

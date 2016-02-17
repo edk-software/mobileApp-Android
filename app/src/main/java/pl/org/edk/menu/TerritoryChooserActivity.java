@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import pl.org.edk.database.DbManager;
-import pl.org.edk.database.entities.Territory;
+import pl.org.edk.databaseTEMP.DbManager;
+import pl.org.edk.databaseTEMP.entitiesTEMP.Territory;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 

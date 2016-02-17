@@ -1,35 +1,33 @@
-package pl.org.edk.database.entities;
+package pl.org.edk.databaseTEMP.entitiesTEMP;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.util.ArrayList;
-
 /**
  * Created by pwawrzynek on 2016-01-13.
  */
-public class RouteDesc extends DbEntityBase {
+public class StationDesc extends DbEntityBase {
     // ---------------------------------------
     // Constant variables
     // ---------------------------------------
-    public static final String TABLE_NAME = "RouteDesc";
-    public static final String COLUMN_NAME_ROUTE_ID = "RouteID";
+    public static final String TABLE_NAME = "StationDesc";
+    public static final String COLUMN_NAME_STATION_ID = "StationID";
     public static final String COLUMN_NAME_LANGUAGE = "Language";
-    public static final String COLUMN_NAME_RELEASE_DATE = "ReleaseDate";
     public static final String COLUMN_NAME_DISPLAY_NAME = "DisplayName";
+    public static final String COLUMN_NAME_TITLE = "Title";
     public static final String COLUMN_NAME_DESCRIPTION = "Description";
 
     // ---------------------------------------
     // Class variables
     // ---------------------------------------
-    private long routeID;
+    private long stationID;
     private String language;
-    private String releaseDate;
     private String displayName;
+    private String title;
     private String description;
     // External tables
-    private Route route;
-    private ArrayList<StationDesc> stationDescs;
+    private Station stationData;
+    private RouteDesc routeDesc;
 
     // ---------------------------------------
     // Static methods
@@ -37,10 +35,10 @@ public class RouteDesc extends DbEntityBase {
     public static String getCreateEntries() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
-                COLUMN_NAME_ROUTE_ID + INTEGER_TYPE + COMMA +
+                COLUMN_NAME_STATION_ID + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_LANGUAGE + TEXT_TYPE + COMMA +
-                COLUMN_NAME_RELEASE_DATE + TEXT_TYPE + COMMA +
                 COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + COMMA +
+                COLUMN_NAME_TITLE + TEXT_TYPE + COMMA +
                 COLUMN_NAME_DESCRIPTION + TEXT_TYPE + ");";
     }
 
@@ -51,10 +49,10 @@ public class RouteDesc extends DbEntityBase {
     public static String[] getFullProjection(){
         String[] projection = {
                 _ID,
-                COLUMN_NAME_ROUTE_ID,
+                COLUMN_NAME_STATION_ID,
                 COLUMN_NAME_LANGUAGE,
-                COLUMN_NAME_RELEASE_DATE,
                 COLUMN_NAME_DISPLAY_NAME,
+                COLUMN_NAME_TITLE,
                 COLUMN_NAME_DESCRIPTION
         };
         return projection;
@@ -68,10 +66,10 @@ public class RouteDesc extends DbEntityBase {
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
 
-        values.put(COLUMN_NAME_ROUTE_ID, routeID);
+        values.put(COLUMN_NAME_STATION_ID, stationID);
         values.put(COLUMN_NAME_LANGUAGE, language);
-        values.put(COLUMN_NAME_RELEASE_DATE, releaseDate);
         values.put(COLUMN_NAME_DISPLAY_NAME, displayName);
+        values.put(COLUMN_NAME_TITLE, title);
         values.put(COLUMN_NAME_DESCRIPTION, description);
 
         return values;
@@ -81,10 +79,10 @@ public class RouteDesc extends DbEntityBase {
     public boolean readFromCursor(Cursor cursor) {
         try {
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            this.routeID = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_ROUTE_ID));
+            this.stationID = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_STATION_ID));
             this.language = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_LANGUAGE));
-            this.releaseDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_RELEASE_DATE));
             this.displayName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_NAME));
+            this.title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TITLE));
             this.description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DESCRIPTION));
             return true;
         }catch (Exception ex){
@@ -95,12 +93,11 @@ public class RouteDesc extends DbEntityBase {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
-
-    public long getRouteID() {
-        return routeID;
+    public long getStationID() {
+        return stationID;
     }
-    public void setRouteID(long routeID) {
-        this.routeID = routeID;
+    public void setStationID(long stationID) {
+        this.stationID = stationID;
     }
 
     public String getLanguage() {
@@ -110,18 +107,18 @@ public class RouteDesc extends DbEntityBase {
         this.language = language;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
     public String getDisplayName() {
         return displayName;
     }
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {

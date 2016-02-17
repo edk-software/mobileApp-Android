@@ -1,11 +1,10 @@
-package pl.org.edk.database.services;
+package pl.org.edk.databaseTEMP.servicesTEMP;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import pl.org.edk.database.DbHelper;
-import pl.org.edk.database.DbManager;
-import pl.org.edk.database.entities.DbEntityBase;
+import pl.org.edk.databaseTEMP.DbHelper;
+import pl.org.edk.databaseTEMP.entitiesTEMP.DbEntityBase;
 
 import java.util.ArrayList;
 

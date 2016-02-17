@@ -2,13 +2,12 @@ package pl.org.edk.webServices;
 
 import android.content.Context;
 import com.google.gson.reflect.TypeToken;
-import pl.org.edk.database.entities.*;
+import pl.org.edk.databaseTEMP.entitiesTEMP.*;
 import pl.org.edk.managers.LogManager;
 import pl.org.edk.util.JsonHelper;
 import pl.org.edk.util.NumConverter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.*;

@@ -16,9 +16,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.org.edk.database.entities.Reflection;
+import pl.org.edk.databaseTEMP.entitiesTEMP.Reflection;
 import pl.org.edk.Extra;
-import pl.org.edk.MainActivity;
 import pl.org.edk.R;
 
 public class ReflectionsAudioService extends Service implements
