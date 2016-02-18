@@ -6,6 +6,7 @@ import java.util.List;
 
 import pl.org.edk.*;
 import pl.org.edk.database.DbManager;
+import pl.org.edk.database.entities.Area;
 import pl.org.edk.database.entities.Route;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.util.DialogUtil;
@@ -20,8 +21,9 @@ public class RouteChooserActivity extends ChooserActivity {
     @Override
     protected List<String> getItems() {
         // Get routes from DB
-        long areaId = Settings.get(this).getLong(Settings.AREA_ID, -1);
-		mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(areaId, false);
+        Area area = DbManager.getInstance(this).getTerritoryService().getArea(
+                Settings.get(this).getLong(Settings.SELECTED_AREA_ID, -1));
+		mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(area.getId(), false);
 
         // If nothing found in DB, trigger downloading and wait for the results
         if(mRoutes == null || mRoutes.isEmpty()){
@@ -34,7 +36,7 @@ public class RouteChooserActivity extends ChooserActivity {
                     refresh(getDisplayItems());
                 }
             };
-            WebServiceManager.getInstance(this).getRoutesByAreaAsync(areaId, listener);
+            WebServiceManager.getInstance(this).getRoutesByAreaAsync(area.getServerID(), listener);
             return Collections.emptyList();
         }
 
@@ -59,7 +61,7 @@ public class RouteChooserActivity extends ChooserActivity {
                     }
                 }
             };
-            WebServiceManager.getInstance(this).getRouteAsync(selectedRoute.getId(), listener);
+            WebServiceManager.getInstance(this).getRouteAsync(selectedRoute.getServerID(), listener);
         }
         else {
             startMapActivityWith(selectedRoute.getId());
@@ -88,15 +90,10 @@ public class RouteChooserActivity extends ChooserActivity {
     }
 
     private void startMapActivityWith(long routeId) {
-        Settings settings = Settings.get(this);
-        settings.set(Settings.TRACK_NAME, routeId);
-        Intent myIntent = new Intent(this, pl.org.edk.MainActivity.class);
-
-        myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-//        stopService(new Intent(this, GPSService.class));
-//        Settings.get(this).set(Settings.IS_BACKGROUND_TRACKING_ON, false);
+        Settings.get(this).set(Settings.SELECTED_ROUTE_ID, routeId);
         Settings.get(this).set(Settings.START_TIME, System.currentTimeMillis());
-        startActivity(myIntent);
+
+        startActivity(new Intent(this, pl.org.edk.MainActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 }

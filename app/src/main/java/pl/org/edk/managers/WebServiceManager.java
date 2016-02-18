@@ -276,6 +276,12 @@ public class WebServiceManager {
             return;
         }
 
+        // Get route language-dependent data
+        RouteDesc routeDesc = mWsClient.getRouteDesc(serverID);
+        if(routeDesc != null){
+            rawRoute.getDescriptions().add(routeDesc);
+        }
+
         // If KML file is unavailable, leave it be
         String kmlServerPath = rawRoute.getKmlDataPath();
         if(kmlServerPath == null || kmlServerPath.length() == 0) {

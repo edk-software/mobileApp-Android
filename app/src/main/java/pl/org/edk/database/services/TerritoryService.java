@@ -135,6 +135,26 @@ public class TerritoryService extends DbServiceBase {
         return areas;
     }
 
+    public Area getArea(long areaId){
+        Cursor cursor = executeQueryWhere(Area.TABLE_NAME, Area.getFullProjection(),
+                DbEntityBase._ID, String.valueOf(areaId));
+
+        // Nothing found
+        if(cursor.getCount() == 0) {
+            return null;
+        }
+
+        // Sth found
+        cursor.moveToFirst();
+        Area nextArea = new Area();
+        if(nextArea.readFromCursor(cursor)) {
+            return nextArea;
+        }
+        else {
+            return null;
+        }
+    }
+
     public Area getAreaByServerId(long serverId) {
         Cursor cursor = executeQueryWhere(Area.TABLE_NAME, Area.getFullProjection(),
                 DbEntityBase.COLUMN_NAME_SERVER_ID, String.valueOf(serverId));

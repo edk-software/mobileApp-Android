@@ -155,7 +155,7 @@ public class ConsiderationsViewActivity extends ActivityWithGPSMenu {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 		Settings settings = Settings.get(this);
-		if (!settings.getBoolean(Settings.IS_BACKGROUND_TRACKING_ON) && settings.get(Settings.TRACK_NAME) == null) {
+		if (!settings.getBoolean(Settings.IS_BACKGROUND_TRACKING_ON) && settings.get(Settings.SELECTED_ROUTE_ID) == null) {
 			menu.getItem(MAP_MENU_INDEX).setVisible(false);
 		}
 		return true;

@@ -42,6 +42,24 @@ public class DbServiceBase {
         return dbWrite().update(tableName, values, whereClause, new String[]{String.valueOf(entity.getId())});
     }
 
+    protected int executeQueryUpdate(String tableName, DbEntityBase entity, ArrayList<String> whereColumns, String[] whereArgs){
+        if(entity.getId() <= 0)
+            return 0;
+
+        ContentValues values = entity.getContentValues();
+
+        // Format the statement
+        String whereStatement = "";
+        for(int i = 0; i < whereColumns.size(); i++){
+            String column = whereColumns.get(i);
+            whereStatement += column + " = ? ";
+            if(i + 1 < whereColumns.size())
+                whereStatement += "AND ";
+        }
+
+        return dbWrite().update(tableName, values, whereStatement, whereArgs);
+    }
+
     protected Cursor executeQueryGetAll(String tableName, String[] columns){
         return dbRead().query(tableName, columns, null, null, null, null, null);
     }

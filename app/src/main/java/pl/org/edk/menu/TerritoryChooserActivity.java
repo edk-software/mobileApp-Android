@@ -39,10 +39,11 @@ public class TerritoryChooserActivity extends ChooserActivity {
 	}
 
 	protected void onItemClick(int pos) {
-		Settings.get(this).set(Settings.TERRITORY_NAME, mTerritories.get(pos).getId());
-		Intent myIntent = new Intent(this, AreaChooserActivity.class);
-		myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(myIntent);
+		Territory selectedTerritory = mTerritories.get(pos);
+		Settings.get(this).set(Settings.SELECTED_TERRITORY_ID, selectedTerritory.getId());
+
+		startActivity(new Intent(this, AreaChooserActivity.class)
+				.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
 	@Override

@@ -8,9 +8,10 @@ import android.support.v7.preference.PreferenceManager;
 public final class Settings {
 
 	public static final String CAMERA_ZOOM = "cameraZoom";
-	public static final String TERRITORY_NAME = "countyName";
-	public static final String AREA_ID = "cityName";
-	public static final String TRACK_NAME = "trackName";
+
+	public static final String SELECTED_TERRITORY_ID = "territoryId";
+	public static final String SELECTED_AREA_ID = "areaId";
+	public static final String SELECTED_ROUTE_ID = "routeId";
 
 	public static final int IS_BACKGROUND_TRACKING_ON = R.string.pref_backgroundTrackingOn;
     public static final int FOLLOW_LOCATION_ON_MAP = R.string.pref_followLocationOnMap;

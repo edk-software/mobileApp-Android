@@ -8,6 +8,7 @@ import pl.org.edk.util.JsonHelper;
 import pl.org.edk.util.NumConverter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.*;
@@ -78,7 +79,22 @@ public class WebServiceAccess {
         return areas;
     }
 
-    public Route getRoute(long routeServerId){
+    public Route getRoute(long serverId){
+        String response = callMethod(METHOD_GET_ROUTES, "route", String.valueOf(serverId));
+
+        if(!validateResponse(response)){
+            return null;
+        }
+
+        Route route = JsonHelper.deserializeFromJson(response, Route.class);
+        route.setServerID(route.getId());
+        route.setId(0);
+
+        LogManager.LogInfo("WebServiceAccess.getRoute success.");
+        return route;
+    }
+
+    public RouteDesc getRouteDesc(long routeServerId){
         HashMap<String, String> parameters = new HashMap<>();
         parameters.put("route", String.valueOf(routeServerId));
         parameters.put("details", "full");
@@ -88,13 +104,12 @@ public class WebServiceAccess {
             return null;
 
         // Deserialize and rewrite the serverIDs
-        Route route = JsonHelper.deserializeFromJson(response, Route.class);
-        route.setKmlData(null);
-        route.setServerID(route.getId());
-        route.setId(0);
+        RouteDesc routeDesc = JsonHelper.deserializeFromJson(response, RouteDesc.class);
+        routeDesc.setLanguage("pl"); // TEMP
+        routeDesc.setRouteID(0);
 
-        LogManager.LogInfo("WebServiceAccess.getRoute success.");
-        return route;
+        LogManager.LogInfo("WebServiceAccess.getRouteDesc success.");
+        return routeDesc;
     }
 
     public ArrayList<Route> getRoutesByTerritory(long territoryServerId){

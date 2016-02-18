@@ -6,11 +6,8 @@ import java.io.InputStream;
 
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Route;
-import pl.org.edk.database.services.RouteService;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
-import pl.org.edk.menu.TrackInfo;
-import pl.org.edk.util.ResourcesUtil;
 
 import android.content.Context;
 import android.util.Log;
@@ -18,7 +15,7 @@ import android.util.Log;
 public class TrackerProvider {
     private static final String TAG = "EDK";
     private KMLTracker mKMLTracker;
-    private String mTrackId;
+    private String mKmlPath;
     private Context mContext;
 
     private static TrackerProvider INSTANCE = null;
@@ -44,28 +41,24 @@ public class TrackerProvider {
     }
 
     private KMLTracker getTracker() {
-        String trackId = getTrackId();
+        Route route = DbManager.getInstance(mContext).getRouteService()
+                .getRoute(Settings.get(mContext).getLong(Settings.SELECTED_ROUTE_ID, -1), "pl");
+        String kmlPath = route.getKmlDataPath();
+
         boolean wasStarted = false;
-        if (mKMLTracker != null && !trackId.equals(mTrackId)) {
+        if (mKMLTracker != null && !kmlPath.equals(mKmlPath)) {
             wasStarted = mKMLTracker.isStarted();
             mKMLTracker.stop();
             mKMLTracker = null;
         }
         if (mKMLTracker == null) {
-            initializeTracker(trackId);
-            mTrackId = trackId;
+            initializeTracker(kmlPath);
+            mKmlPath = kmlPath;
         }
         if (wasStarted) {
             mKMLTracker.start();
         }
         return mKMLTracker;
-    }
-
-    private String getTrackId() {
-
-        RouteService routeService = DbManager.getInstance(mContext).getRouteService();
-        Route route = routeService.getRoute(Settings.get(mContext).getLong(Settings.TRACK_NAME, -1));
-        return route.getKmlDataPath();
     }
 
     private void initializeTracker(String trackId) {

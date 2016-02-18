@@ -144,6 +144,13 @@ public class Route extends DbEntityBase {
         this.kmlDataPath = kmlDataPath;
     }
 
+    public ArrayList<RouteDesc> getDescriptions() {
+        return descriptions;
+    }
+    public void setDescriptions(ArrayList<RouteDesc> descriptions) {
+        this.descriptions = descriptions;
+    }
+
     public ArrayList<Station> getStations() {
         return stations;
     }

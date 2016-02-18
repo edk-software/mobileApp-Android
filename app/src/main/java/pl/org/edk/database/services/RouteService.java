@@ -21,6 +21,24 @@ public class RouteService extends DbServiceBase {
             return false;
 
         route.setId(newId);
+
+        // Insert descriptions
+        if(route.getDescriptions() != null){
+            for(RouteDesc routeDesc : route.getDescriptions()){
+                routeDesc.setRouteID(route.getId());
+                insertRouteDesc(routeDesc);
+            }
+        }
+
+        return true;
+    }
+
+    private boolean insertRouteDesc(RouteDesc routeDesc) {
+        long newId = executeQueryInsert(RouteDesc.TABLE_NAME, routeDesc);
+        if(newId <= 0)
+            return false;
+
+        routeDesc.setId(newId);
         return true;
     }
 
@@ -50,13 +68,38 @@ public class RouteService extends DbServiceBase {
     // Update
     // ---------------------------------------
     public boolean updateRoute(Route route){
-        // Try to update the route
         int count = executeQueryUpdate(Route.TABLE_NAME, route);
-        if(count > 0) {
+        // Route updated or inserted correctly
+        if(count > 0 ||  insertRoute(route)){
+            // Update descriptions
+            if(route.getDescriptions() != null){
+                for (RouteDesc routeDesc : route.getDescriptions()){
+                    routeDesc.setRouteID(route.getId());
+                    updateRouteDesc(routeDesc);
+                }
+            }
             return true;
         }
         else {
-            return insertRoute(route);
+            return false;
+        }
+    }
+
+    public boolean updateRouteDesc(RouteDesc routeDesc){
+        ArrayList<String> whereColumns = new ArrayList<>();
+        whereColumns.add(RouteDesc.COLUMN_NAME_ROUTE_ID);
+        whereColumns.add(RouteDesc.COLUMN_NAME_LANGUAGE);
+
+        String[] whereArgs = new String[]{
+                String.valueOf(routeDesc.getRouteID()), routeDesc.getLanguage()
+        };
+
+        int count = executeQueryUpdate(RouteDesc.TABLE_NAME, routeDesc, whereColumns, whereArgs);
+        if(count > 0){
+            return true;
+        }
+        else {
+            return insertRouteDesc(routeDesc);
         }
     }
 
@@ -74,6 +117,21 @@ public class RouteService extends DbServiceBase {
         cursor.moveToFirst();
         Route route = new Route();
         return route.readFromCursor(cursor) ? route : null;
+    }
+
+    public Route getRoute(long routeId, String language){
+        Route route = getRoute(routeId);
+        if(route == null){
+            return null;
+        }
+
+        // Fetch language-dependent data
+        RouteDesc routeDesc = getDescForRoute(routeId, language);
+        if(routeDesc != null){
+            route.getDescriptions().add(routeDesc);
+        }
+
+        return route;
     }
 
     public Route getRouteByServerID(long routeServerID){
@@ -122,8 +180,9 @@ public class RouteService extends DbServiceBase {
         Cursor cursor = executeQueryWhere(RouteDesc.TABLE_NAME, RouteDesc.getFullProjection(), whereColumns, whereValues);
 
         // No Routes with this id found
-        if(cursor.getCount() == 0)
+        if(cursor.getCount() == 0) {
             return null;
+        }
 
         // Get this Route info
         cursor.moveToFirst();

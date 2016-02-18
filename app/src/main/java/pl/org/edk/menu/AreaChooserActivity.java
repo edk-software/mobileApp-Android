@@ -21,7 +21,8 @@ public class AreaChooserActivity extends ChooserActivity {
 	@Override
 	protected List<String> getItems() {
 		// Get areas from DB
-		Territory territory = DbManager.getInstance(this).getTerritoryService().getTerritory(Settings.get(this).getLong(Settings.TERRITORY_NAME, -1));
+		Territory territory = DbManager.getInstance(this).getTerritoryService()
+				.getTerritory(Settings.get(this).getLong(Settings.SELECTED_TERRITORY_ID, -1));
         mAreas = territory.getAreas();
 
 		// If nothing found in DB, trigger downloading and wait for the results
@@ -46,10 +47,11 @@ public class AreaChooserActivity extends ChooserActivity {
 
 	@Override
 	protected void onItemClick(int pos) {
-		Settings.get(this).set(Settings.AREA_ID, mAreas.get(pos).getId());
-		Intent myIntent = new Intent(this, RouteChooserActivity.class);
-		myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(myIntent);
+		Area area = mAreas.get(pos);
+		Settings.get(this).set(Settings.SELECTED_AREA_ID, area.getId());
+
+		startActivity(new Intent(this, RouteChooserActivity.class)
+				.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
 	@Override
