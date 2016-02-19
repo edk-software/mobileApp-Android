@@ -16,6 +16,7 @@ public final class Settings {
 	public static final int IS_BACKGROUND_TRACKING_ON = R.string.pref_backgroundTrackingOn;
     public static final int FOLLOW_LOCATION_ON_MAP = R.string.pref_followLocationOnMap;
 	public static final int YEAR_ID = R.string.pref_reflectionsYear;
+	public static final int AUDIO_DOWNLOAD_DIALOG_SHOWN = R.string.pref_audioDownloadDialogShown;
 
 	public static final String APP_DIRECTORY_KML = "KmlDirectory";
 	public static final String APP_DIRECTORY_AUDIO = "AudioDirectory";

@@ -22,6 +22,7 @@
 	<string name="pref_followLocationOnMap">FollowLocationOnMap</string>
 	<string name="pref_backgroundTrackingOn">trackingTurnedOn</string>
 	<string name="pref_reflectionsYear">reflectionsYear</string>
+	<string name="pref_audioDownloadDialogShown">audioDownloadDialogShown</string>
 
 	<string name="app_name">EDK</string>
 	<string name="navigation_drawer_open">Open navigation drawer</string>
@@ -59,9 +60,7 @@
 		<item>Podsumowanie</item>
 	</string-array>
 	<string-array name="considerations_years">
-		<item>2015</item>
-		<item>2014</item>
-		<item>2013</item>
+		<item>2016</item>
 	</string-array>
 	<string name="out_of_track_message">Jesteś poza trasą</string>
 	<string name="go_to_consideration">Przejdź do rozważań</string>
