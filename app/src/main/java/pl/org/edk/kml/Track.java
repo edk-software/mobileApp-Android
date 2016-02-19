@@ -160,7 +160,7 @@ public class Track {
 		}
 
 		if (upperCaseName.contains(STACJA)) {
-			String[] parts = upperCaseName.split(" |,|\\.");
+			String[] parts = upperCaseName.split(" |,|\\.|_");
 			int stationPartIndex = getStationPartIndex(parts);
 			if (stationPartIndex != -1) {
 				String partAfter = stationPartIndex < (parts.length - 1) ? parts[stationPartIndex + 1] : null;
@@ -170,6 +170,12 @@ public class Track {
 				}
 				String partBefore = stationPartIndex > 0 ? parts[stationPartIndex - 1] : null;
 				stationIndex = tryGetStationIndex(partBefore);
+				if (stationIndex != -1) {
+					return stationIndex;
+				}
+
+				String lastPart = stationPartIndex != (parts.length - 1) ? parts[parts.length - 1] : null;
+				stationIndex = tryGetStationIndex(lastPart);
 				if (stationIndex != -1) {
 					return stationIndex;
 				}

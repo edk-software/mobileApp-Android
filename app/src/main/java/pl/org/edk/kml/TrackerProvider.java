@@ -12,6 +12,8 @@ import pl.org.edk.Settings;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class TrackerProvider {
     private static final String TAG = "EDK";
     private KMLTracker mKMLTracker;
@@ -67,7 +69,7 @@ public class TrackerProvider {
 //			InputStream stream = mContext.getAssets().open("tracks/" + trackId + ".kml");
             stream = new FileInputStream(trackId);
             Track track = Track.fromStream(stream);
-            if (track == null) {
+            if (track == null || !isTrackValid(track)) {
                 throw new IllegalStateException(mContext.getString(R.string.unrecognized_error_while_reading_track));
             }
             mKMLTracker = new KMLTracker(track, mContext);
@@ -84,6 +86,23 @@ public class TrackerProvider {
             }
         }
         Log.i(TAG, "mKMLTracker created");
+    }
+
+    private boolean isTrackValid(Track track) {
+        if (track.getCheckpoints().size() != 16){
+            Log.e(TAG, "Wrong number of stations in the track");
+            return false;
+        }
+        java.util.List<LatLng> checkpoints = track.getCheckpoints();
+        for (int i = 0; i < checkpoints.size(); i++) {
+            LatLng pos = checkpoints.get(i);
+            if (pos == null) {
+                Log.e(TAG, "Station " + i + " was not found in KML");
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
