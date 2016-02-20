@@ -6,6 +6,7 @@ import pl.org.edk.database.*;
 import pl.org.edk.managers.WebServiceManager;
 
 import java.io.File;
+import java.util.Calendar;
 
 /**
  * Created by pwawrzynek on 2016-01-28.
@@ -21,6 +22,7 @@ public final class BootStrap {
 
         DbManager.getInstance(context).Init();
         WebServiceManager.getInstance(context).init(R.drawable.edk_icon);
+        Settings.get(context).set(Settings.YEAR_ID, Calendar.getInstance().get(Calendar.YEAR));
 
         initStorage(context);
 
