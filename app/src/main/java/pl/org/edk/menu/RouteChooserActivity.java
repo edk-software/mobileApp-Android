@@ -23,10 +23,10 @@ public class RouteChooserActivity extends ChooserActivity {
         // Get routes from DB
         Area area = DbManager.getInstance(this).getTerritoryService().getArea(
                 Settings.get(this).getLong(Settings.SELECTED_AREA_ID, -1));
-		mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(area.getId(), false);
+        mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(area.getId(), false);
 
         // If nothing found in DB, trigger downloading and wait for the results
-        if(mRoutes == null || mRoutes.isEmpty()){
+        if (mRoutes == null || mRoutes.isEmpty()) {
             DialogUtil.showBusyDialog(getString(R.string.downloading_message), this);
             WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
                 @Override
@@ -43,30 +43,16 @@ public class RouteChooserActivity extends ChooserActivity {
         return getDisplayItems();
     }
 
+    private void startRouteDescriptionActivity(int pos) {
+        Settings.get(RouteChooserActivity.this).set(Settings.SELECTED_ROUTE_ID, mRoutes.get(pos).getId());
+        startActivity(new Intent(RouteChooserActivity.this, RouteDescriptionActivity.class));
+    }
+
     @Override
     protected void onItemClick(int pos) {
-        final Route selectedRoute = mRoutes.get(pos);
-        if(!selectedRoute.isDownloaded()) {
-            DialogUtil.showBusyDialog(getString(R.string.downloading_message), this);
-            WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
-                @Override
-                public void onOperationFinished(Object result) {
-                    DialogUtil.closeBusyDialog();
-                    if(result != null && ((Route)result).isDownloaded()) {
-                        startMapActivityWith(selectedRoute.getId());
-                    }
-                    else {
-                        DialogUtil.showWarningDialog("Szczegóły tej trasy aktualnie nie są dostępne, proszę spróbować później.",
-                                RouteChooserActivity.this, false);
-                    }
-                }
-            };
-            WebServiceManager.getInstance(this).getRouteAsync(selectedRoute.getServerID(), listener);
-        }
-        else {
-            startMapActivityWith(selectedRoute.getId());
-        }
+        startRouteDescriptionActivity(pos);
     }
+
 
     @Override
     protected String getChooserTitle() {
@@ -74,12 +60,12 @@ public class RouteChooserActivity extends ChooserActivity {
     }
 
     private List<String> getDisplayItems() {
-        if (mRoutes.isEmpty()){
+        if (mRoutes.isEmpty()) {
             DialogUtil.showWarningDialog(getString(R.string.no_info_about_tracks_in_region), this, true);
             return Collections.emptyList();
         }
         if (mRoutes.size() == 1) {
-            startMapActivityWith(mRoutes.get(0).getId());
+            startRouteDescriptionActivity(0);
         }
 
         ArrayList<String> items = new ArrayList<>();
@@ -89,11 +75,4 @@ public class RouteChooserActivity extends ChooserActivity {
         return items;
     }
 
-    private void startMapActivityWith(long routeId) {
-        Settings.get(this).set(Settings.SELECTED_ROUTE_ID, routeId);
-        Settings.get(this).set(Settings.START_TIME, System.currentTimeMillis());
-
-        startActivity(new Intent(this, pl.org.edk.MainActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-    }
 }

@@ -216,4 +216,5 @@
 	<string name="considerations_start_title">Wstęp</string>
 	<string name="stop_navigation_message">Zatrzymaj</string>
 	<string name="downloading_message">Trwa pobieranie danych...</string>
+	<string name="description_unavailable">Opis trasy chwilowo niedostępny</string>
 </resources>

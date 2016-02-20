@@ -49,6 +49,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".menu.RouteDescriptionActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".menu.ConsiderationsYearChooserActivity"
             android:screenOrientation="portrait" >
         </activity>
