@@ -53,18 +53,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".menu.ConsiderationsYearChooserActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".menu.StationsChooserActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".menu.ConsiderationsViewActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".menu.ReflectionsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseThemeNoTitle">
@@ -75,10 +63,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ActivityWithMap"
-            android:launchMode="singleTop" >
-        </activity>
-        <activity
             android:name=".EndActivity"
             android:theme="@style/AppBaseThemeNoTitle" >
         </activity>
@@ -86,23 +70,6 @@
             android:name=".MainActivity"
             android:theme="@style/MyMaterialTheme" >
         </activity>
-
-        <activity android:name=".EdkMobile.Activities.WelcomeActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity android:name=".EdkMobile.Activities.AboutEdkActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".EdkMobile.Activities.AboutAppActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".EdkMobile.Activities.SelectionActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".EdkMobile.Activities.ListActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".EdkMobile.Activities.MainActivity"
-            android:screenOrientation="portrait"/>
 
         <service android:name=".services.GPSService" >
     </service>

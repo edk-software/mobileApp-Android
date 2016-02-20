@@ -3,6 +3,7 @@ package pl.org.edk.menu;
 import pl.org.edk.*;
 import pl.org.edk.services.GPSService;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class MainMenuActivity extends ActivityWithGPSMenu {
+public class MainMenuActivity extends Activity {
 
 	private final class InfoButtonListener implements OnClickListener {
 		public void onClick(View v) {
@@ -76,11 +77,4 @@ public class MainMenuActivity extends ActivityWithGPSMenu {
 		infoImageButton.setOnClickListener(new InfoButtonListener());
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		menu.getItem(CONSIDERATIONS_MENU_INDEX).setVisible(false);
-		menu.getItem(MAP_MENU_INDEX).setVisible(false);
-		return true;
-	}
 }

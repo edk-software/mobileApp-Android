@@ -20,7 +20,7 @@
         android:layout_alignTop="@+id/tracksButton"
         android:layout_marginLeft="20dp"
         android:background="@null"
-        android:contentDescription="@string/trasy"
+        android:contentDescription="@string/routes"
         android:src="@drawable/tracks_big" />
 
     <ImageButton
@@ -42,7 +42,7 @@
         android:layout_alignTop="@+id/infoButton"
         android:layout_marginLeft="20dp"
         android:background="@null"
-        android:contentDescription="@string/trasy"
+        android:contentDescription="@string/routes"
         android:src="@drawable/info_big" />
 
     <Button
@@ -56,7 +56,7 @@
         android:layout_above="@+id/considerationsButton"
         android:background="@null"
         android:gravity="center_vertical"
-        android:text="@string/trasy"
+        android:text="@string/routes"
         android:textColor="@color/white_on_black"
         android:textSize="22sp" />
 
@@ -71,7 +71,7 @@
         android:layout_toRightOf="@+id/considerationsImageButton"
         android:background="@null"
         android:gravity="center_vertical"
-        android:text="@string/rozwazania"
+        android:text="@string/reflections"
         android:textColor="@color/white_on_black"
         android:textSize="22sp" />
 
@@ -86,7 +86,7 @@
         android:layout_toRightOf="@+id/infoImageButton"
         android:background="@null"
         android:gravity="center_vertical"
-        android:text="@string/o_edk"
+        android:text="@string/about_edk_title"
         android:textColor="@color/white_on_black"
         android:textSize="22sp" />
 
