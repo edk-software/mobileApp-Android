@@ -18,6 +18,7 @@ import pl.org.edk.kml.KMLHandler.Placemark;
 import pl.org.edk.kml.KMLHandler.Placemarks;
 import pl.org.edk.util.NumConverter;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -160,7 +161,7 @@ public class Track {
 		}
 
 		if (upperCaseName.contains(STACJA)) {
-			String[] parts = upperCaseName.split(" |,|\\.|_");
+			String[] parts = splitIntoParts(upperCaseName);
 			int stationPartIndex = getStationPartIndex(parts);
 			if (stationPartIndex != -1) {
 				String partAfter = stationPartIndex < (parts.length - 1) ? parts[stationPartIndex + 1] : null;
@@ -197,7 +198,19 @@ public class Track {
 		return -1;
 	}
 
-	private int tryGetStationIndex(String stationIndexString) {
+    @NonNull
+    private String[] splitIntoParts(String upperCaseName) {
+        String[] parts = upperCaseName.split(" |,|\\.|_|-");
+        List<String> partsList = new ArrayList<>();
+        for(int i=0;i<parts.length;i++){
+            String trimmed = parts[i].trim();
+            if (!trimmed.isEmpty()){
+            partsList.add(trimmed);}
+        }
+        return partsList.toArray(new String[partsList.size()]);
+    }
+
+    private int tryGetStationIndex(String stationIndexString) {
 		if (stationIndexString == null || stationIndexString.isEmpty()) {
 			return -1;
 		}

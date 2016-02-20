@@ -43,9 +43,7 @@ public class TrackerProvider {
     }
 
     private KMLTracker getTracker() {
-        Route route = DbManager.getInstance(mContext).getRouteService()
-                .getRoute(Settings.get(mContext).getLong(Settings.SELECTED_ROUTE_ID, -1), "pl");
-        String kmlPath = route.getKmlDataPath();
+        String kmlPath = getSelectedRoute().getKmlDataPath();
 
         boolean wasStarted = false;
         if (mKMLTracker != null && !kmlPath.equals(mKmlPath)) {
@@ -61,6 +59,18 @@ public class TrackerProvider {
             mKMLTracker.start();
         }
         return mKMLTracker;
+    }
+
+    private Route getSelectedRoute() {
+        long routeId = Settings.get(mContext).getLong(Settings.SELECTED_ROUTE_ID, -1);
+        Log.i(TAG, "Selected route id " + routeId);
+        Route route = DbManager.getInstance(mContext).getRouteService()
+                .getRoute(routeId, "pl");
+        if (route == null){
+            Log.e(TAG, "Route was null");
+            throw new IllegalStateException(mContext.getString(R.string.unrecognized_error_while_reading_track));
+        }
+        return route;
     }
 
     private void initializeTracker(String trackId) {
@@ -91,6 +101,7 @@ public class TrackerProvider {
     private boolean isTrackValid(Track track) {
         if (track.getCheckpoints().size() != 16){
             Log.e(TAG, "Wrong number of stations in the track");
+            Log.i(TAG, "KML contents: \n" +getSelectedRoute().getKmlData());
             return false;
         }
         java.util.List<LatLng> checkpoints = track.getCheckpoints();
@@ -98,6 +109,7 @@ public class TrackerProvider {
             LatLng pos = checkpoints.get(i);
             if (pos == null) {
                 Log.e(TAG, "Station " + i + " was not found in KML");
+                Log.i(TAG, "KML contents: \n" + getSelectedRoute().getKmlData());
                 return false;
             }
         }
