@@ -85,13 +85,10 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
 
     @Override
     public void onBackPressed() {
-        FragmentManager fm = getSupportFragmentManager();
-        if (fm.getBackStackEntryCount() > 0){
-            int currentItem = viewPager.getCurrentItem();
-            if (currentItem > 0){
-                viewPager.setCurrentItem(currentItem--);
-                return;
-            }
+        int currentItem = viewPager.getCurrentItem();
+        if (currentItem > 0) {
+            viewPager.setCurrentItem(currentItem-1);
+            return;
         }
         super.onBackPressed();
     }
