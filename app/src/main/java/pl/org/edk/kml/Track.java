@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,6 +31,8 @@ public class Track {
     private static final String TAG = "EDK";
     private LatLng[] checkpoints = new LatLng[16];
     private List<LatLng> track = new ArrayList<LatLng>();
+    private static HashSet<String> introStationNames = new HashSet<>();
+    private static HashSet<String> summaryStationNames = new HashSet<>();
 
     public Track(Placemarks placemarks) {
         createTrack(placemarks.getTrackPlacemarks());
@@ -41,6 +44,18 @@ public class Track {
         // attachCheckpointsToTrack();
         // }
         // orderCheckpoints();
+    }
+
+    static {
+        introStationNames.add("WSTĘP");
+        introStationNames.add("WPROWADZENIE");
+        introStationNames.add("POCZĄTEK");
+        introStationNames.add("START");
+        introStationNames.add("ROZPOCZĘCIE");
+
+        summaryStationNames.add("ZAKOŃCZENIE");
+        summaryStationNames.add("KONIEC");
+        summaryStationNames.add("PODSUMOWANIE");
     }
 
     // private void orderCheckpoints() {
@@ -130,7 +145,7 @@ public class Track {
         // checkpoints[0] = remainingPlacemarks.remove(0).getPoints().get(0);
         // }
 
-        if (track.indexOf(checkpoints[14]) < track.indexOf(checkpoints[1])) {
+        if (checkpoints[14] != null && track.indexOf(checkpoints[14]) < track.indexOf(checkpoints[1])) {
             Collections.reverse(track);
         }
 
@@ -161,8 +176,8 @@ public class Track {
             return stationIndex;
         }
 
+        String[] parts = splitIntoParts(upperCaseName);
         if (upperCaseName.contains(STACJA)) {
-            String[] parts = splitIntoParts(upperCaseName);
             int stationPartIndex = getStationPartIndex(parts);
             if (stationPartIndex != -1) {
                 String partAfter = stationPartIndex < (parts.length - 1) ? parts[stationPartIndex + 1] : null;
@@ -196,6 +211,18 @@ public class Track {
             }
 
         }
+
+        if (introStationNames.contains(upperCaseName.trim())) {
+            return 0;
+        }
+        if (summaryStationNames.contains(upperCaseName.trim())) {
+            return 15;
+        }
+        if (parts.length > 0) {
+            return tryGetStationIndex(parts[0]);
+        }
+
+
         return -1;
     }
 
@@ -293,12 +320,23 @@ public class Track {
 
     private int getClosestIndex(LatLng checkpoint) {
         double dist = Double.MAX_VALUE;
+        int closeEnoughDist = 20;
+        int locationsToCheckAfterCloseFound = 10;
+
+        boolean closeEnoughFound = false;
+
         int index = 0;
         for (int i = 0; i < track.size(); i++) {
+            if ((closeEnoughFound && i - index > locationsToCheckAfterCloseFound)) {
+                return index;
+            }
             LatLng point = track.get(i);
             double currDist = distanceBetween(point, checkpoint);
             if (currDist < dist) {
                 dist = currDist;
+                if (dist < closeEnoughDist) {
+                    closeEnoughFound = true;
+                }
                 index = i;
             }
         }

@@ -145,7 +145,7 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
             return -1;
         }
         if (checkpointId != -1 && checkpointId < 15) {
-            return checkpointId + 1;
+            return getNextValidCheckpointId(checkpointId + 1);
         }
         if (currentLoc == null) {
             return 0;
@@ -157,6 +157,25 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
             }
         }
         return -1;
+    }
+
+    private int getNextValidCheckpointId(int firstCandidateId) {
+        for (int i = firstCandidateId; i<checkpoints.size();i++){
+            if(checkpoints.get(i)!= null){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean isComplete(){
+        for (LatLng pos : checkpoints) {
+            if (pos == null){
+                return false;
+            }
+        }
+        return true;
+
     }
 
     public State getState() {
@@ -265,6 +284,9 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
 
     private int determineCheckpointId() {
         for (LatLng point : checkpoints) {
+            if (point == null){
+                continue;
+            }
             if (distanceBetween(point, currentLoc) < CHECKPOINT_MIN_DIST) {
                 return checkpoints.indexOf(point);
             }

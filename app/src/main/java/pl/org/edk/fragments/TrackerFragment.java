@@ -13,16 +13,13 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.kml.TrackerProvider;
 import pl.org.edk.util.DialogUtil;
-import pl.org.edk.util.NumConverter;
 
 /**
  * Created by darekpap on 2016-02-14.
@@ -30,6 +27,7 @@ import pl.org.edk.util.NumConverter;
 public abstract class TrackerFragment extends Fragment implements KMLTracker.TrackListener {
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 0;
     private boolean mTrackerAvailable = true;
+    private boolean mWarningShown = false;
 
 
     @Override
@@ -103,7 +101,11 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
         }
 
         try {
-            getTracker();
+            KMLTracker tracker = getTracker();
+            if (!tracker.isComplete() && !mWarningShown) {
+                DialogUtil.showWarningDialog(getActivity().getString(R.string.stations_missing_warning_message), getActivity(), false);
+                mWarningShown = true;
+            }
             return false;
         } catch (Exception e) {
             mTrackerAvailable = false;
@@ -194,5 +196,6 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
         doSetMenuVisibility(visible);
     }
 
-    protected void doSetMenuVisibility(boolean visible) {  }
+    protected void doSetMenuVisibility(boolean visible) {
+    }
 }

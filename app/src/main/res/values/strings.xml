@@ -54,4 +54,5 @@
 	<string name="stop_navigation_message">Zatrzymaj</string>
 	<string name="downloading_message">Trwa pobieranie danych...</string>
 	<string name="description_unavailable">Opis trasy chwilowo niedostępny</string>
+    <string name="stations_missing_warning_message">Wystąpił błąd podczas odczytywania współrzędnych niektórych stacji.</string>
 </resources>

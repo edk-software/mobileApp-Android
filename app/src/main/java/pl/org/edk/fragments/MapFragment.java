@@ -137,7 +137,11 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         //stations 1-14
         for (int i = 1; i < checkpoints.size() - 1; i++) {
             MarkerOptions marker = new MarkerOptions();
-            marker.position(checkpoints.get(i));
+            LatLng position = checkpoints.get(i);
+            if (position == null){
+                continue;
+            }
+            marker.position(position);
             marker.title(getString(R.string.station) + NumConverter.toRoman(i));
             markerOptions.add(marker);
         }

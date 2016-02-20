@@ -2,19 +2,14 @@ package pl.org.edk.menu;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import pl.org.edk.MainActivity;
 import pl.org.edk.R;
@@ -60,6 +55,7 @@ public class RouteDescriptionActivity extends Activity {
 
         if (mRoute == null) {
             showRouteUnavailableWarning();
+            return;
         }
 
         setTitle(mRoute.getName());

@@ -3,6 +3,7 @@ package pl.org.edk.kml;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Route;
@@ -104,14 +105,17 @@ public class TrackerProvider {
             Log.i(TAG, "KML contents: \n" +getSelectedRoute().getKmlData());
             return false;
         }
-        java.util.List<LatLng> checkpoints = track.getCheckpoints();
+        List<LatLng> checkpoints = track.getCheckpoints();
+        boolean printKML = false;
         for (int i = 0; i < checkpoints.size(); i++) {
             LatLng pos = checkpoints.get(i);
             if (pos == null) {
                 Log.e(TAG, "Station " + i + " was not found in KML");
-                Log.i(TAG, "KML contents: \n" + getSelectedRoute().getKmlData());
-                return false;
+                printKML = true;
             }
+        }
+        if (printKML){
+            Log.i(TAG, "KML contents: \n" +getSelectedRoute().getKmlData());
         }
 
         return true;
