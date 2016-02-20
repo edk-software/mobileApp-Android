@@ -191,5 +191,8 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
             verifyWhetherServicesAvailable();
             verifyWhetherGPSIsEnabled();
         }
+        doSetMenuVisibility(visible);
     }
+
+    protected void doSetMenuVisibility(boolean visible) {  }
 }

@@ -150,8 +150,7 @@ public class RouteInfoFragment extends TrackerFragment {
     }
 
     @Override
-    public void setMenuVisibility(boolean visible) {
-        super.setMenuVisibility(visible);
+    public void doSetMenuVisibility(boolean visible) {
         if (visible) {
             updateDistances();
         }

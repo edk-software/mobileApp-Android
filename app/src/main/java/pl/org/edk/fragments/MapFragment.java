@@ -266,8 +266,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
     }
 
     @Override
-    public void setMenuVisibility(final boolean visible) {
-        super.setMenuVisibility(visible);
+    public void doSetMenuVisibility(final boolean visible) {
         if (mMap == null) {
             return;
         }
