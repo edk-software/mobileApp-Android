@@ -83,6 +83,19 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
         processIntent(intent);
     }
 
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0){
+            int currentItem = viewPager.getCurrentItem();
+            if (currentItem > 0){
+                viewPager.setCurrentItem(currentItem--);
+                return;
+            }
+        }
+        super.onBackPressed();
+    }
+
     private void setupTabIcons() {
         tabLayout.getTabAt(MAP_INDEX).setIcon(tabIcons[MAP_INDEX]);
         tabLayout.getTabAt(REFLECTIONS_INDEX).setIcon(tabIcons[REFLECTIONS_INDEX]);
