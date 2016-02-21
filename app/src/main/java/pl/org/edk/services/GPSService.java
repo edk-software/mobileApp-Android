@@ -122,7 +122,7 @@ public class GPSService extends Service implements TrackListener{
 		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		Builder builder = new NotificationCompat.Builder(this)
 				.setContentTitle(getString(R.string.navigation_on_message))
-				.setSmallIcon(R.drawable.ic_launcher)
+				.setSmallIcon(R.drawable.edk_icon)
 				.setContentIntent(pIntent)
 		.setPriority(NotificationCompat.PRIORITY_MAX); 
 		Intent intent2 = new Intent(this, GPSService.class);

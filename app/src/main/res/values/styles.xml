@@ -52,7 +52,7 @@
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/white</item>
         <item name="android:alertDialogTheme">@style/AppBaseTheme.AlertDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceTheme</item>
 
