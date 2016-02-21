@@ -28,21 +28,27 @@ public class DbServiceBase {
         return dbClient.getWritableDatabase();
     }
 
-    protected long executeQueryInsert(String tableName, DbEntityBase entity){
+    protected long executeQueryInsert(DbEntityBase entity){
         ContentValues values = entity.getContentValues();
-        return dbWrite().insert(tableName, null, values);
+        return dbWrite().insert(entity.getTableName(), null, values);
     }
 
-    protected int executeQueryUpdate(String tableName, DbEntityBase entity){
+    protected int executeQueryUpdate(DbEntityBase entity){
         if(entity.getId() <= 0)
             return 0;
 
         ContentValues values = entity.getContentValues();
         String whereClause = DbEntityBase._ID + " = ? ";
-        return dbWrite().update(tableName, values, whereClause, new String[]{String.valueOf(entity.getId())});
+        return dbWrite().update(entity.getTableName(), values, whereClause, new String[]{String.valueOf(entity.getId())});
     }
 
-    protected int executeQueryUpdate(String tableName, DbEntityBase entity, ArrayList<String> whereColumns, String[] whereArgs){
+    protected int executeQueryUpdate(DbEntityBase entity, String comparisonColumn, String value){
+        ContentValues values = entity.getContentValues();
+        String whereClause = comparisonColumn + " = ? ";
+        return dbWrite().update(entity.getTableName(), values, whereClause, new String[]{value});
+    }
+
+    protected int executeQueryUpdate(DbEntityBase entity, ArrayList<String> whereColumns, String[] whereArgs){
         if(entity.getId() <= 0)
             return 0;
 
@@ -57,7 +63,7 @@ public class DbServiceBase {
                 whereStatement += "AND ";
         }
 
-        return dbWrite().update(tableName, values, whereStatement, whereArgs);
+        return dbWrite().update(entity.getTableName(), values, whereStatement, whereArgs);
     }
 
     protected Cursor executeQueryGetAll(String tableName, String[] columns){
@@ -88,7 +94,7 @@ public class DbServiceBase {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
-    public static void Init(DbHelper dbClient){
+    public static void init(DbHelper dbClient){
         DbServiceBase.dbClient = dbClient;
     }
 }

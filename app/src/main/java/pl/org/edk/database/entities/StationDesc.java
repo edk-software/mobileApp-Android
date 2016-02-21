@@ -90,6 +90,11 @@ public class StationDesc extends DbEntityBase {
         }
     }
 
+    @Override
+    public String getTableName(){
+        return TABLE_NAME;
+    }
+
     // ---------------------------------------
     // Public methods
     // ---------------------------------------

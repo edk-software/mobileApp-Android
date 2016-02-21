@@ -16,7 +16,7 @@ public class ReflectionService extends DbServiceBase {
     // ---------------------------------------
     public boolean insertReflectionList(ReflectionList reflectionList){
         // Insert the list
-        long listId = executeQueryInsert(ReflectionList.TABLE_NAME, reflectionList);
+        long listId = executeQueryInsert(reflectionList);
         if(listId <= 0)
             return false;
         reflectionList.setId(listId);
@@ -32,7 +32,7 @@ public class ReflectionService extends DbServiceBase {
     }
 
     public boolean insertReflection(Reflection reflection){
-        long reflectionId = executeQueryInsert(Reflection.TABLE_NAME, reflection);
+        long reflectionId = executeQueryInsert(reflection);
         if(reflectionId <= 0)
             return false;
         else {
@@ -46,7 +46,7 @@ public class ReflectionService extends DbServiceBase {
     // ---------------------------------------
     public boolean updateReflection(Reflection reflection){
         // Try to update the route
-        int count = executeQueryUpdate(Reflection.TABLE_NAME, reflection);
+        int count = executeQueryUpdate(reflection);
         if(count > 0) {
             return true;
         }

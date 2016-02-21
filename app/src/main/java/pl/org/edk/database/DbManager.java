@@ -65,7 +65,7 @@ public class DbManager {
 
         // initialize the main client and pass it to all future db services
         this.dbClient = new DbHelper(mContext);
-        DbServiceBase.Init(this.dbClient);
+        DbServiceBase.init(this.dbClient);
 
         /* NOTE: initialize all services here */
         reflectionService = new ReflectionService();

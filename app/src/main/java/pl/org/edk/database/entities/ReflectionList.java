@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by Admin on 2015-12-16.
+ * Created by pwawrzynek on 2015-12-16.
  */
 public class ReflectionList extends DbEntityBase {
     // ---------------------------------------
@@ -91,6 +91,11 @@ public class ReflectionList extends DbEntityBase {
         }
     }
 
+    @Override
+    public String getTableName(){
+        return TABLE_NAME;
+    }
+
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
@@ -120,5 +125,19 @@ public class ReflectionList extends DbEntityBase {
     }
     public void setReflections(ArrayList<Reflection> reflections) {
         this.reflections = reflections;
+    }
+
+    public boolean hasAudio(){
+        if(reflections == null || reflections.size() == 0){
+            return false;
+        }
+
+        for(Reflection reflection : reflections){
+            if (reflection.getAudioLocalPath() == null || reflection.getAudioLocalPath().length() == 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
