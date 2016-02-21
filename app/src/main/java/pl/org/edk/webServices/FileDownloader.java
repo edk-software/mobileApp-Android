@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
+import android.util.Log;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -110,6 +111,8 @@ public class FileDownloader {
                 byte data[] = new byte[4096];
                 long total = 0;
                 int count;
+                int fileLength = connection.getContentLength();
+                int lastProgressUpdate = 0;
                 while ((count = input.read(data)) != -1) {
                     // Cancel, if requested
                     if (isCancelled()) {
@@ -122,9 +125,15 @@ public class FileDownloader {
                     output.write(data, 0, count);
 
                     // Update the progress
-                    int fileLength = connection.getContentLength();
                     if (fileLength > 0) // only if total length is known
-                        publishProgress((int) (total * 100 / fileLength));
+                    {
+                        int currentProgress = (int) (total * 100 / fileLength);
+                        Log.d("Download", "Current progress is " + currentProgress);
+                        if (currentProgress - lastProgressUpdate >= 10){
+                            Log.d("Download", "Progress update");
+                            lastProgressUpdate = currentProgress;
+                            publishProgress(currentProgress);}
+                    }
                 }
             } catch (MalformedURLException e) {
                 return DownloadResult.IncorrectURL;
