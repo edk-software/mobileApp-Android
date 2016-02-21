@@ -11,83 +11,91 @@
         android:id="@+id/expandableList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/player"
+        android:layout_above="@+id/bottomContainer"
         android:layout_alignParentTop="true"
         android:layout_weight="1"
         android:divider="@color/red"
         android:dividerHeight="3px"
         android:paddingTop="2dp" />
 
-    <RelativeLayout
-        android:id="@+id/player"
+    <LinearLayout
+        android:id="@+id/bottomContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/red">
 
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="wrap_content"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/player"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true" />
+            android:background="@color/red">
 
-        <ImageButton
-            android:id="@+id/prevButton"
-            android:layout_width="wrap_content"
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true" />
+
+            <ImageButton
+                android:id="@+id/prevButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/playButton"
+                android:layout_below="@+id/seekBar"
+                android:layout_toLeftOf="@+id/playButton"
+                android:layout_toStartOf="@+id/playButton"
+                android:background="@android:color/transparent"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="5dp"
+                android:src="@drawable/prev" />
+
+
+            <ImageButton
+                android:id="@+id/playButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/seekBar"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="5dp"
+                android:src="@drawable/play" />
+
+            <ImageButton
+                android:id="@+id/nextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/playButton"
+                android:layout_below="@+id/seekBar"
+                android:layout_toEndOf="@+id/playButton"
+                android:layout_toRightOf="@+id/playButton"
+                android:background="@android:color/transparent"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="5dp"
+
+                android:src="@drawable/next" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/downloadButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/playButton"
-            android:layout_below="@+id/seekBar"
-            android:layout_toLeftOf="@+id/playButton"
-            android:layout_toStartOf="@+id/playButton"
-            android:background="@android:color/transparent"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="5dp"
-            android:src="@drawable/prev" />
-
-
-        <ImageButton
-            android:id="@+id/playButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/seekBar"
-            android:layout_centerHorizontal="true"
-            android:background="@android:color/transparent"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="5dp"
-            android:src="@drawable/play"/>
-
-        <ImageButton
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/playButton"
-            android:layout_below="@+id/seekBar"
-            android:layout_toEndOf="@+id/playButton"
-            android:layout_toRightOf="@+id/playButton"
-            android:background="@android:color/transparent"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="5dp"
-
-            android:src="@drawable/next" />
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/downloadButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="Pobierz rozważania audio"
-        android:textColor="@color/white_on_black"
-        android:background="@drawable/red_full_button" />
+            android:background="@drawable/red_full_button"
+            android:text="Pobierz rozważania audio"
+            android:textColor="@color/white_on_black" />
+    </LinearLayout>
 
 
 </RelativeLayout>
