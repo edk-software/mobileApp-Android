@@ -299,25 +299,23 @@ public class WebServiceManager {
             @Override
             public void onDownloadFinished(FileDownloader.DownloadResult result) {
                 // Download succeeded
-                if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
+                if (result == FileDownloader.DownloadResult.NoErrorsOccurred) {
                     rawRoute.setKmlDataPath(kmlLocalPath);
-                }
-                else {
+                } else {
                     rawRoute.setKmlDataPath("");
                 }
 
                 // Save the data to DB
                 Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(serverID);
-                if(previous != null){
+                if (previous != null) {
                     rawRoute.setId(previous.getId());
                     DbManager.getInstance(mContext).getRouteService().updateRoute(rawRoute);
-                }
-                else {
+                } else {
                     DbManager.getInstance(mContext).getRouteService().insertRoute(rawRoute);
                 }
 
                 // Inform interested parties
-                if (listener != null){
+                if (listener != null) {
                     listener.onOperationFinished(rawRoute);
                 }
             }
@@ -384,8 +382,9 @@ public class WebServiceManager {
 
         // Start the download and trigger the next one, when finished
         FileDownloader manager = new FileDownloader(mContext);
+        int totalReflectionsCount = list.getReflections().size();
         manager.setNotificationDetails(mNotificationIcon, "Pobieranie rozważań",
-                14 - mReflectionsToDownload.size() + "/14", "Rozważania pobrane");
+                totalReflectionsCount + 1 - mReflectionsToDownload.size() + "/" + totalReflectionsCount, "Rozważania pobrane");
         manager.setListener(new FileDownloader.OnDownloadEventListener() {
             @Override
             public void onDownloadFinished(FileDownloader.DownloadResult result) {
