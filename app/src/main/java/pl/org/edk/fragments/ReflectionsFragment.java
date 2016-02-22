@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,8 @@ import pl.org.edk.util.ExpandableListAdapter;
  * Created by darekpap on 2015-11-30.
  */
 public class ReflectionsFragment extends Fragment implements OnPlayerStopListener {
+    public static final String FRAGMENT_TAG = "reflectionsFragment";
+
     private ExpandableListView expListView;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
@@ -122,7 +125,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             Log.d("EDK", "List not ready");
             return;
         }
-        if (listDataHeader.isEmpty()){
+        if (listDataHeader.isEmpty()) {
             return;
         }
         if (listDataHeader.size() == 14) {
@@ -153,7 +156,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         expListView = (ExpandableListView) view.findViewById(R.id.expandableList);
 
         // Load reflections from DB or download them
-        if(!prepareListData()){
+        if (!prepareListData()) {
             DialogUtil.showWarningDialog("Nie udało się pobrać rozważań. Sprawdź połączenie z internetem i spróbuj ponownie.",
                     getActivity(), true);
             return view;
@@ -419,7 +422,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mCurrentStation = stationId;
     }
 
-    private boolean isAudioAvailable(){
+    private boolean isAudioAvailable() {
         return mReflectionList != null && mReflectionList.hasAudio();
     }
 
@@ -447,13 +450,15 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
                                 // Inform about the result
                                 String message;
-                                if(((ReflectionList) result).hasAudio()){
+                                if (((ReflectionList) result).hasAudio()) {
                                     message = "Zakończono pobieranie rozważań audio.";
-                                }
-                                else {
+                                } else {
                                     message = "Nie udało się pobrać rozważań audio. Spróbuj ponownie poźniej.";
                                 }
-                                DialogUtil.showDialog("Pobieranie zakończone", message, getActivity(), true, null);
+                                FragmentActivity activity = getActivity();
+                                if (activity != null) {
+                                    DialogUtil.showDialog("Pobieranie zakończone", message, activity, true, null);
+                                }
 
                                 bindAudioService();
                                 hideDownloadButton();

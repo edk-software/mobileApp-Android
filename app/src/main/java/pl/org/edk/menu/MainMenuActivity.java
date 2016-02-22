@@ -21,6 +21,13 @@ public class MainMenuActivity extends Activity {
 		}
 	}
 
+	private final class SettingsButtonListener implements OnClickListener {
+		public void onClick(View v) {
+			Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
+			MainMenuActivity.this.startActivity(i);
+		}
+	}
+
 	private final class ReflectionsButtonListener implements OnClickListener {
 		public void onClick(View v) {
 			Intent i = new Intent(MainMenuActivity.this, ReflectionsActivity.class);
@@ -37,9 +44,11 @@ public class MainMenuActivity extends Activity {
 
 	private Button tracksButton;
 	private Button considerationsButton;
+	private Button settingsButton;
 	private Button infoButton;
 	private ImageButton tracksImageButton;
 	private ImageButton considerationsImageButton;
+	private ImageButton settingsImageButton;
 	private ImageButton infoImageButton;
 
 	@Override
@@ -47,13 +56,15 @@ public class MainMenuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
 
-		if (Settings.get(this).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
-			Intent serviceIntent = new Intent(this, GPSService.class);
-			startService(serviceIntent);
-			Intent intent = new Intent(this, MainActivity.class);
-			startActivity(intent);
+        Settings settings = Settings.get(this);
+        if (settings.isUserOnTrack() && settings.getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
+            //TODO ask the user whether to go to map or sth
+//			Intent serviceIntent = new Intent(this, GPSService.class);
+//			startService(serviceIntent);
+//			Intent intent = new Intent(this, MainActivity.class);
+//			startActivity(intent);
 		} else {
-			Settings.get(this).clear();
+			settings.clear();
 		}
 
 		// Initialize application global stuff (singletons etc.)
@@ -61,10 +72,12 @@ public class MainMenuActivity extends Activity {
 
 		tracksButton = (Button) findViewById(R.id.tracksButton);
 		considerationsButton = (Button) findViewById(R.id.considerationsButton);
+		settingsButton = (Button) findViewById(R.id.settingsButton);
 		infoButton = (Button) findViewById(R.id.infoButton);
 
 		tracksImageButton = (ImageButton) findViewById(R.id.tracksImageButton);
 		considerationsImageButton = (ImageButton) findViewById(R.id.considerationsImageButton);
+		settingsImageButton = (ImageButton) findViewById(R.id.settingsImageButton);
 		infoImageButton = (ImageButton) findViewById(R.id.infoImageButton);
 
 		tracksButton.setOnClickListener(new TrackButtonListener());
@@ -72,6 +85,9 @@ public class MainMenuActivity extends Activity {
 
 		considerationsButton.setOnClickListener(new ReflectionsButtonListener());
 		considerationsImageButton.setOnClickListener(new ReflectionsButtonListener());
+
+		settingsButton.setOnClickListener(new SettingsButtonListener());
+		settingsImageButton.setOnClickListener(new SettingsButtonListener());
 
 		infoButton.setOnClickListener(new InfoButtonListener());
 		infoImageButton.setOnClickListener(new InfoButtonListener());

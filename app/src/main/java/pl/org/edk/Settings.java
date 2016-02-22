@@ -135,4 +135,9 @@ public final class Settings {
         editor.putBoolean(mContext.getString(resId), value);
         editor.apply();
 	}
+
+
+	public boolean isUserOnTrack() {
+		return getLong(Settings.START_TIME, -1) != -1;
+	}
 }

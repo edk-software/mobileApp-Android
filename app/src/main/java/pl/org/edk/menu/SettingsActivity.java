@@ -5,27 +5,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import pl.org.edk.fragments.ReflectionsFragment;
+import pl.org.edk.fragments.SettingsFragment;
 
 /**
  * Created by darekpap on 2016-02-10.
  */
-public class ReflectionsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ReflectionsFragment.FRAGMENT_TAG);
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(SettingsFragment.FRAGMENT_TAG);
             if (fragment == null) {
-                fragment = new ReflectionsFragment();
+                fragment = new SettingsFragment();
             }
 
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(android.R.id.content, fragment, ReflectionsFragment.FRAGMENT_TAG).commit();
+            ft.replace(android.R.id.content, fragment, SettingsFragment.FRAGMENT_TAG).commit();
         }
     }
-
 }
