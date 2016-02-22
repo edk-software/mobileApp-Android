@@ -57,6 +57,16 @@ public class DialogUtil {
 
 	/**
 	 * Displays a custom warning dialog
+	 * @param messageResId string id of the message to show
+	 * @param activity Activity that calls the pop-up
+	 * @param finishActivity Should the current activity be finished after the pop-up is closed?
+	 */
+	public static void showWarningDialog(int messageResId, final Activity activity, boolean finishActivity) {
+		showWarningDialog(activity.getString(messageResId), activity, finishActivity);
+	}
+
+	/**
+	 * Displays a custom warning dialog
 	 * @param message Information in the content of the pop-up
 	 * @param activity Activity that calls the pop-up
 	 * @param finishActivity Should the current activity be finished after the pop-up is closed?
@@ -96,11 +106,11 @@ public class DialogUtil {
 		}
 	}
 
-	public static void showYesNoDialog(String title, String message, final Activity activity, final OnSelectedEventListener listener){
+	public static void showYesNoDialog(int titleResId, int messageResId, final Activity activity, final OnSelectedEventListener listener){
 		AlertDialog.Builder builder = new Builder(activity);
-		builder.setTitle(title);
+		builder.setTitle(activity.getString(titleResId));
 		builder.setCancelable(false);
-		builder.setMessage(message);
+		builder.setMessage(activity.getString(messageResId));
 		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

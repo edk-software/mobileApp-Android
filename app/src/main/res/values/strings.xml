@@ -80,4 +80,10 @@
     <string name="reflections_category">Rozważania</string>
     <string name="reflections_year_select_dialog_title">Wybierz rocznik rozważań:</string>
     <string name="reflections_year_title">Rocznik rozważań</string>
+
+    <string name="failed_to_download_audio_message">Nie udało się pobrać rozważań. Sprawdź połączenie z internetem i spróbuj ponownie.</string>
+    <string name="downloading_reflections_title">Pobieranie rozważań</string>
+    <string name="downloading_audio_question">Dostępne są rozważania w formie audio. Czy mają zostać teraz pobrane (ok. 50MB)?</string>
+    <string name="audio_download_finished_message">Zakończono pobieranie rozważań audio.</string>
+    <string name="audio_download_finished_title">Pobieranie zakończone</string>
 </resources>

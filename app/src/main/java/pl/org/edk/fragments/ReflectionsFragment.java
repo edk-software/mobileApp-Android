@@ -162,8 +162,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
         // Load reflections from DB or download them
         if (!prepareListData()) {
-            DialogUtil.showWarningDialog("Nie udało się pobrać rozważań. Sprawdź połączenie z internetem i spróbuj ponownie.",
-                    getActivity(), true);
+            DialogUtil.showWarningDialog(R.string.failed_to_download_audio_message, getActivity(), true);
             return view;
         }
 
@@ -445,24 +444,25 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private void showDownloadDialog() {
-        DialogUtil.showYesNoDialog("Pobieranie rozważań", "Dostępne są rozważania w formie audio. Czy mają zostać teraz pobrane (ok. 50MB)?",
+        DialogUtil.showYesNoDialog(R.string.downloading_reflections_title, R.string.downloading_audio_question,
                 getActivity(), new DialogUtil.OnSelectedEventListener() {
                     @Override
                     public void onAccepted() {
                         WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, new WebServiceManager.OnOperationFinishedEventListener() {
                             @Override
                             public void onOperationFinished(Object result) {
+                                FragmentActivity activity = getActivity();
+
+                                if (activity != null) {
 
                                 // Inform about the result
                                 String message;
                                 if (((ReflectionList) result).hasAudio()) {
-                                    message = "Zakończono pobieranie rozważań audio.";
+                                    message = activity.getString(R.string.audio_download_finished_message);
                                 } else {
-                                    message = "Nie udało się pobrać rozważań audio. Spróbuj ponownie poźniej.";
+                                    message = activity.getString(R.string.failed_to_download_audio_message);
                                 }
-                                FragmentActivity activity = getActivity();
-                                if (activity != null) {
-                                    DialogUtil.showDialog("Pobieranie zakończone", message, activity, true, null);
+                                    DialogUtil.showDialog(activity.getString(R.string.audio_download_finished_title), message, activity, true, null);
                                 }
 
                                 bindAudioService();

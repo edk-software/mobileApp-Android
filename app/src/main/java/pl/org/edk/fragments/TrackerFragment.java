@@ -103,7 +103,7 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
         try {
             KMLTracker tracker = getTracker();
             if (!tracker.isComplete() && !mWarningShown && isFragmentVisible()) {
-                DialogUtil.showWarningDialog(getActivity().getString(R.string.stations_missing_warning_message), getActivity(), false);
+                DialogUtil.showWarningDialog(R.string.stations_missing_warning_message, getActivity(), false);
                 mWarningShown = true;
             }
             return false;
@@ -111,7 +111,7 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
             mTrackerAvailable = false;
             Log.e("EDK", "Invalid track", e);
             if (isFragmentVisible()) {
-                DialogUtil.showWarningDialog(e.getMessage(), getActivity(), false);
+                DialogUtil.showWarningDialog(R.string.unrecognized_error_while_reading_track, getActivity(), false);
             }
             return true;
         }
