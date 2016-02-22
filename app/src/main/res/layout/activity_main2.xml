@@ -35,6 +35,17 @@
         android:src="@drawable/considerations_big" />
 
     <ImageButton
+        android:id="@+id/settingsImageButton"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/settingsButton"
+        android:layout_marginLeft="20dp"
+        android:background="@null"
+        android:contentDescription="@string/go_to_settings"
+        android:src="@drawable/settings_big" />
+
+    <ImageButton
         android:id="@+id/infoImageButton"
         android:layout_width="64dp"
         android:layout_height="64dp"
@@ -76,10 +87,25 @@
         android:textSize="22sp" />
 
     <Button
-        android:id="@+id/infoButton"
+        android:id="@+id/settingsButton"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_below="@+id/considerationsButton"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/settingsImageButton"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:text="@string/settings"
+        android:textColor="@color/white_on_black"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/infoButton"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/settingsButton"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"

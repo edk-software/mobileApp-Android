@@ -53,7 +53,13 @@
         <activity
             android:name=".menu.ReflectionsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppBaseThemeNoTitle">
+            android:theme="@style/MyMaterialTheme">
+        </activity>
+        <activity
+            android:name=".menu.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:label="Preferences"
+            android:theme="@style/MyMaterialTheme">
         </activity>
         <activity
             android:name=".menu.EDKInfoActivity"

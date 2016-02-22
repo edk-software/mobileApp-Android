@@ -21,6 +21,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         // Required empty public constructor
     }
 
+    public static final String FRAGMENT_TAG = "settingsFragment";
+
     private boolean mInitialized = false;
 
     @Override
@@ -65,7 +67,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(Settings.IS_BACKGROUND_TRACKING_ON))) {
+        if (key.equals(getString(Settings.IS_BACKGROUND_TRACKING_ON))&& Settings.get(getActivity()).isUserOnTrack()) {
             boolean trackingOn = sharedPreferences.getBoolean(key, false);
             Intent serviceIntent = new Intent(getActivity(), GPSService.class);
 

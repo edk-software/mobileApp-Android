@@ -55,4 +55,6 @@
 	<string name="downloading_message">Trwa pobieranie danych...</string>
 	<string name="description_unavailable">Opis trasy chwilowo niedostępny</string>
     <string name="stations_missing_warning_message">Wystąpił błąd podczas odczytywania współrzędnych niektórych stacji.</string>
+    <string name="go_to_settings">Przejdź do ustawień</string>
+    <string name="settings">Ustawienia</string>
 </resources>
