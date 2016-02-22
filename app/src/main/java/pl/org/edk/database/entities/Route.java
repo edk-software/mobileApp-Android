@@ -113,6 +113,11 @@ public class Route extends DbEntityBase {
         }
     }
 
+    @Override
+    public String getTableName(){
+        return TABLE_NAME;
+    }
+
     // ---------------------------------------
     // Getters and setters
     // ---------------------------------------

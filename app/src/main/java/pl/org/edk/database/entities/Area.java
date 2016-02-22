@@ -83,6 +83,11 @@ public class Area extends DbEntityBase {
         }
     }
 
+    @Override
+    public String getTableName(){
+        return TABLE_NAME;
+    }
+
     // ---------------------------------------
     // Public methods
     // ---------------------------------------

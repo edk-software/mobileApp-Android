@@ -16,7 +16,7 @@ public class RouteService extends DbServiceBase {
     // Insert
     // ---------------------------------------
     public boolean insertRoute(Route route){
-        long newId = executeQueryInsert(Route.TABLE_NAME, route);
+        long newId = executeQueryInsert(route);
         if(newId <= 0)
             return false;
 
@@ -34,7 +34,7 @@ public class RouteService extends DbServiceBase {
     }
 
     private boolean insertRouteDesc(RouteDesc routeDesc) {
-        long newId = executeQueryInsert(RouteDesc.TABLE_NAME, routeDesc);
+        long newId = executeQueryInsert(routeDesc);
         if(newId <= 0)
             return false;
 
@@ -45,7 +45,7 @@ public class RouteService extends DbServiceBase {
     public boolean insertStation(Station station, long routeId){
         station.setRouteID(routeId);
 
-        long newId = executeQueryInsert(Station.TABLE_NAME, station);
+        long newId = executeQueryInsert(station);
         if(newId <= 0)
             return false;
 
@@ -68,7 +68,7 @@ public class RouteService extends DbServiceBase {
     // Update
     // ---------------------------------------
     public boolean updateRoute(Route route){
-        int count = executeQueryUpdate(Route.TABLE_NAME, route);
+        int count = executeQueryUpdate(route);
         // Route updated or inserted correctly
         if(count > 0 ||  insertRoute(route)){
             // Update descriptions
@@ -94,7 +94,7 @@ public class RouteService extends DbServiceBase {
                 String.valueOf(routeDesc.getRouteID()), routeDesc.getLanguage()
         };
 
-        int count = executeQueryUpdate(RouteDesc.TABLE_NAME, routeDesc, whereColumns, whereArgs);
+        int count = executeQueryUpdate(routeDesc, whereColumns, whereArgs);
         if(count > 0){
             return true;
         }

@@ -30,6 +30,7 @@ public abstract class DbEntityBase implements BaseColumns {
     // ---------------------------------------
     public abstract ContentValues getContentValues();
     public abstract boolean readFromCursor(Cursor cursor);
+    public abstract String getTableName();
 
     public long getId() {
         return id;
