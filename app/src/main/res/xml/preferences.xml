@@ -3,31 +3,31 @@
 
     <PreferenceCategory
         android:layout="@layout/red_preference_category"
-        android:title="Ustawienia lokalizacji">
+        android:title="@string/location_settings_category">
 
         <CheckBoxPreference
             android:key="@string/pref_backgroundTrackingOn"
-            android:summary="Pozwala na powiadomienie o opuszczeniu trasy. Zwiększa zużycie baterii."
-            android:title="Sprawdzaj pozycję w tle" />
+            android:summary="@string/tracking_summary"
+            android:title="@string/tracking_title" />
         <CheckBoxPreference
             android:key="@string/pref_followLocationOnMap"
-            android:summary="Automatyczne przewijanie mapy do najnowszej pozycji."
-            android:title="Wyśrodkuj mapę na aktualnej pozycji" />
+            android:summary="@string/follow_on_map_summary"
+            android:title="@string/follow_on_map_title" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:layout="@layout/red_preference_category"
-        android:title="Rozważania">
+        android:title="@string/reflections_category">
 
         <ListPreference
-            android:defaultValue="2015"
-            android:dialogTitle="Wybierz rocznik rozważań"
+            android:defaultValue="2016"
+            android:dialogTitle="@string/reflections_year_select_dialog_title"
             android:entries="@array/considerations_years"
             android:entryValues="@array/considerations_years"
             android:key="@string/pref_reflectionsYear"
             android:summary="%s"
-            android:title="Rocznik rozważań" />
+            android:title="@string/reflections_year_title" />
 
     </PreferenceCategory>
 

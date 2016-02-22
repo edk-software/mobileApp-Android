@@ -13,7 +13,7 @@
         android:background="@drawable/red_full_button"
         android:layout_marginTop="30dp"
         android:padding="8dp"
-        android:text="Podejmij wyzwanie"
+        android:text="@string/accept_challenge"
         android:textColor="@color/white_on_black" />
 
     <Button
@@ -27,7 +27,7 @@
         android:layout_marginTop="20dp"
         android:padding="8dp"
 
-        android:text="Zmień trasę"
+        android:text="@string/change_route"
         android:textColor="@color/white_on_black" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:layout_below="@+id/changeButton"
         android:background="@drawable/red_underscore_button"
         android:paddingTop="20dp"
-        android:text="Opis trasy"
+        android:text="@string/route_description"
         android:paddingBottom="3dp"
         android:textColor="@color/white_on_black"
         android:textSize="18sp" />
@@ -52,7 +52,7 @@
         <WebView
             android:id="@+id/descriptionText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/darkGray"
             android:textSize="17sp"
             android:lineSpacingMultiplier="1.3"

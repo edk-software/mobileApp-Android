@@ -16,6 +16,9 @@
     <string name="routes">Trasy</string>
 	<string name="reflections">Rozważania</string>
 	<string name="about_edk_title">Informacje o EDK</string>
+    <string name="go_to_settings">Przejdź do ustawień</string>
+    <string name="settings">Ustawienia</string>
+
 	<string name="about_edk_text">Droga Krzyżowa może zaboleć. Proponujemy Ci rozważanie jej na dystansie około 40 km, w nocy, w milczeniu i samotności. \nEDK to: Wyzwanie, Droga, Zmaganie, Spotkanie. \n \nW aplikacji i na naszej stronie proponujemy Ci przykładowe trasy, którymi możesz podążać. Możesz także wymyślić swoją trasę. \nJeśli masz pomysł na nową trasę lub chcesz stworzyć rejon EDK - skontaktuj się z nami. \n \nWięcej informacji znajdziesz na:</string>
 	<string-array name="considerations_years">
 		<item>2016</item>
@@ -44,10 +47,8 @@
 	<string name="no_info_about_tracks_in_region">Informacje o trasach w wybranym rejonie są niedostępne</string>
 	<string name="instruction_how_to_end_app">Naciśnij klawisz powrotu, aby wyjść</string>
 	<string name="track_chooser_title">Wybierz trasę:</string>
-	<string name="stations_chooser_title">Wybierz stację:</string>
 	<string name="city_chooser_title">Wybierz miasto:</string>
 	<string name="county_chooser_title">Wybierz województwo:</string>
-
 
 	<string name="considerations_end_title">Podsumowanie</string>
 	<string name="considerations_start_title">Wstęp</string>
@@ -55,6 +56,28 @@
 	<string name="downloading_message">Trwa pobieranie danych...</string>
 	<string name="description_unavailable">Opis trasy chwilowo niedostępny</string>
     <string name="stations_missing_warning_message">Wystąpił błąd podczas odczytywania współrzędnych niektórych stacji.</string>
-    <string name="go_to_settings">Przejdź do ustawień</string>
-    <string name="settings">Ustawienia</string>
+
+
+    <string name="accept_challenge">Podejmij wyzwanie</string>
+    <string name="change_route">Zmień trasę</string>
+    <string name="route_description">Opis trasy</string>
+
+    <string name="edk_website">www.edk.org.pl</string>
+
+    <string name="time_of_travel_title">Idziesz od:</string>
+    <string name="time_of_travel_default_value">0:00:00</string>
+    <string name="distance_traveled_title">Masz za sobą:</string>
+    <string name="distance_to_next_title">Następna stacja za:</string>
+    <string name="distance_left_title">Do końca:</string>
+    <string name="distance_default_value">0 km</string>
+    <string name="finish_application">Zakończ</string>
+
+    <string name="location_settings_category">Ustawienia lokalizacji</string>
+    <string name="tracking_summary">Pozwala na powiadomienie o opuszczeniu trasy. Zwiększa zużycie baterii.</string>
+    <string name="tracking_title">Sprawdzaj pozycję w tle</string>
+    <string name="follow_on_map_summary">Automatyczne przewijanie mapy do najnowszej pozycji.</string>
+    <string name="follow_on_map_title">Wyśrodkuj mapę na aktualnej pozycji</string>
+    <string name="reflections_category">Rozważania</string>
+    <string name="reflections_year_select_dialog_title">Wybierz rocznik rozważań:</string>
+    <string name="reflections_year_title">Rocznik rozważań</string>
 </resources>
