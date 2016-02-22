@@ -93,4 +93,5 @@
 	</string>
 	<string name="reflections_audio_download_button_text">Pobierz rozważania audio</string>
 	<string name="reflections_audio_download_in_progress">Trwa pobieranie audio</string>
+	<string name="reflections_text_download_finished">Pobieranie zakończone</string>
 </resources>

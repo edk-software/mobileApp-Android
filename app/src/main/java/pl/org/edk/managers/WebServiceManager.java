@@ -100,20 +100,13 @@ public class WebServiceManager {
             return null;
 
         for(Area area : rawAreas) {
-            Area previous = DbManager.getInstance(mContext).getTerritoryService().getAreaByServerId(area.getServerID());
-            // The area doesn't exist in DB - add it
-            if(previous == null){
-                Territory territory = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(area.getTerritoryId());
-                if(territory != null) {
-                    area.setTerritoryId(territory.getId());
-                    DbManager.getInstance(mContext).getTerritoryService().insertArea(area);
-                }
-            }
-            // There's no territory to add it ofr
-            else {
-                // TODO: Add some error handling
+            Territory territory = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(area.getTerritoryId());
+            if(territory != null){
+                area.setTerritoryId(territory.getId());
+                DbManager.getInstance(mContext).getTerritoryService().updateAreaByServerId(area);
             }
         }
+
         return rawAreas;
     }
 
@@ -357,6 +350,35 @@ public class WebServiceManager {
 
     public boolean isDownloadInProgress(){
         return mDownloadInProgress;
+    }
+
+    // Sync
+
+    public void sync(boolean includeAreas, boolean includeLocalRoutes, boolean includeReflections, boolean includeAudio){
+        if (includeAreas){
+            syncAreas();
+        }
+
+        if (includeLocalRoutes){
+            syncRoutes();
+        }
+
+        if (includeReflections){
+            syncReflections(includeAudio);
+        }
+    }
+
+    public void syncAreas(){
+        getTerritories();
+        getAreas();
+    }
+
+    public void syncRoutes(){
+
+    }
+
+    public void syncReflections(boolean includeAudio){
+
     }
 
     // ---------------------------------------

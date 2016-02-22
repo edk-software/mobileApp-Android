@@ -466,7 +466,8 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                                     } else {
                                         message = activity.getString(R.string.reflections_audio_download_failed);
                                     }
-                                    DialogUtil.showDialog("Pobieranie zakończone", message, activity, true, null);
+                                    DialogUtil.showDialog(activity.getString(R.string.reflections_text_download_finished),
+                                            message, activity, true, null);
                                 }
 
                                 bindAudioService();
