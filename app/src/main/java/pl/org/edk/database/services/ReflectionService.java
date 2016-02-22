@@ -4,6 +4,7 @@ import android.database.Cursor;
 import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -44,6 +45,25 @@ public class ReflectionService extends DbServiceBase {
     // ---------------------------------------
     // Update
     // ---------------------------------------
+    public boolean updateReflectionList(ReflectionList reflectionList){
+        if(reflectionList.getId() <= 0){
+            throw new InvalidParameterException("Specified ReflectionList has Id=0!");
+        }
+
+        int count = executeQueryUpdate(reflectionList);
+        if(count == 0){
+            if(!insertReflectionList(reflectionList)){
+                return false;
+            }
+        }
+
+        for (Reflection reflection : reflectionList.getReflections()){
+            updateReflection(reflection);
+        }
+
+        return true;
+    }
+
     public boolean updateReflection(Reflection reflection){
         // Try to update the route
         int count = executeQueryUpdate(reflection);

@@ -157,7 +157,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
         // Load reflections from DB or download them
         if (!prepareListData()) {
-            DialogUtil.showWarningDialog("Nie udało się pobrać rozważań. Sprawdź połączenie z internetem i spróbuj ponownie.",
+            DialogUtil.showWarningDialog(mAudioService.getString(R.string.reflections_text_download_failed),
                     getActivity(), true);
             return view;
         }
@@ -172,15 +172,12 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         refreshViewItems();
 
         initializePlayerView(view);
-        initializeDownloadButton(view);
         if (mCurrentStation == -1 || !isAudioAvailable()) {
             hidePlayer();
         }
-        if (mReflectionList.hasAudio()) {
-            hideDownloadButton();
-        } else {
-            showDownloadButtonIfNeeded();
-        }
+
+        initializeDownloadButton(view);
+
         return view;
     }
 
@@ -189,21 +186,30 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mDownloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(WebServiceManager.getInstance(getActivity()).isDownloadInProgress()){
+                    return;
+                }
+
                 showDownloadDialog();
                 refreshViewItems();
             }
         });
+
+        refreshDownloadButton(false);
     }
 
-    private void showDownloadButtonIfNeeded() {
-        if (isAudioAvailable()) {
-            return;
+    private void refreshDownloadButton(boolean forceHide) {
+        if (forceHide || isAudioAvailable()) {
+            mDownloadButton.setVisibility(View.GONE);
         }
-        mDownloadButton.setVisibility(View.VISIBLE);
-    }
-
-    private void hideDownloadButton() {
-        mDownloadButton.setVisibility(View.GONE);
+        else if(WebServiceManager.getInstance(getActivity()).isDownloadInProgress()){
+            mDownloadButton.setVisibility(View.VISIBLE);
+            mDownloadButton.setText(getActivity().getString(R.string.reflections_audio_download_in_progress));
+        }
+        else {
+            mDownloadButton.setVisibility(View.VISIBLE);
+            mDownloadButton.setText(getActivity().getString(R.string.reflections_audio_download_button_text));
+        }
     }
 
     //start and bind the service when the activity starts
@@ -440,20 +446,23 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private void showDownloadDialog() {
-        DialogUtil.showYesNoDialog("Pobieranie rozważań", "Dostępne są rozważania w formie audio. Czy mają zostać teraz pobrane (ok. 50MB)?",
-                getActivity(), new DialogUtil.OnSelectedEventListener() {
+        String dialogTitle = getActivity().getString(R.string.reflections_audio_download_dialog_title);
+        String dialogText = getActivity().getString(R.string.reflections_audio_download_dialog_message);
+
+        DialogUtil.showYesNoDialog(dialogTitle, dialogText, getActivity(), new DialogUtil.OnSelectedEventListener() {
                     @Override
                     public void onAccepted() {
                         WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, new WebServiceManager.OnOperationFinishedEventListener() {
                             @Override
                             public void onOperationFinished(Object result) {
 
+                                FragmentActivity a = getActivity();
                                 // Inform about the result
                                 String message;
                                 if (((ReflectionList) result).hasAudio()) {
-                                    message = "Zakończono pobieranie rozważań audio.";
+                                    message = getActivity().getString(R.string.reflections_audio_download_success);
                                 } else {
-                                    message = "Nie udało się pobrać rozważań audio. Spróbuj ponownie poźniej.";
+                                    message = getActivity().getString(R.string.reflections_audio_download_failed);
                                 }
                                 FragmentActivity activity = getActivity();
                                 if (activity != null) {
@@ -461,10 +470,10 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                                 }
 
                                 bindAudioService();
-                                hideDownloadButton();
+                                refreshDownloadButton(false);
                             }
                         });
-                        hideDownloadButton();
+                        refreshDownloadButton(true);
                     }
 
                     @Override
@@ -505,14 +514,14 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                 if (parent.isGroupExpanded(groupPosition)) {
                     parent.collapseGroup(groupPosition);
                     hidePlayer();
-                    showDownloadButtonIfNeeded();
+                    refreshDownloadButton(false);
                     mCurrentStation = -1;
                     if (mServiceBound && mAudioService.isPlaying()) {
                         mAudioService.continueInForeground(getActivity().getClass());
                     }
                 } else {
                     openReflections(groupPosition);
-                    hideDownloadButton();
+                    refreshDownloadButton(true);
                     if (mServiceBound && mAudioService.isPlaying() && mAudioService.getReflection().getStationIndex() == groupPosition) {
                         loadPlayer();
                     } else {

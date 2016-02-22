@@ -27,7 +27,7 @@ public final class BootStrap {
         initStorage(context);
 
         // TEMP: Remove DB
-        DbManager.getInstance(context).Reset();
+        //DbManager.getInstance(context).Reset();
 
         mIsInitialized = true;
     }

@@ -57,4 +57,17 @@
     <string name="stations_missing_warning_message">Wystąpił błąd podczas odczytywania współrzędnych niektórych stacji.</string>
     <string name="go_to_settings">Przejdź do ustawień</string>
     <string name="settings">Ustawienia</string>
+
+	<string name="reflections_audio_download_success">Zakończono pobieranie rozważań audio.</string>
+	<string name="reflections_audio_download_failed">Nie udało się pobrać rozważań audio. Spróbuj ponownie poźniej.
+	</string>
+	<string name="reflections_audio_download_dialog_title">Pobieranie rozważań</string>
+	<string name="reflections_audio_download_dialog_message">Dostępne są rozważania w formie audio. Czy mają zostać
+		teraz pobrane (ok. 50MB)?
+	</string>
+	<string name="reflections_text_download_failed">Nie udało się pobrać rozważań. Sprawdź połączenie z internetem i
+		spróbuj ponownie.
+	</string>
+	<string name="reflections_audio_download_button_text">Pobierz rozważania audio</string>
+	<string name="reflections_audio_download_in_progress">Trwa pobieranie audio</string>
 </resources>

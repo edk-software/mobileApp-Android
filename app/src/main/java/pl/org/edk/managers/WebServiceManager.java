@@ -355,14 +355,18 @@ public class WebServiceManager {
         downloadNext(list, listener);
     }
 
+    public boolean isDownloadInProgress(){
+        return mDownloadInProgress;
+    }
+
     // ---------------------------------------
-    // Public methods
+    // Private methods
     // ---------------------------------------
     private void downloadNext(final ReflectionList list, final OnOperationFinishedEventListener listener){
         // Downloading finished
         if(mReflectionsToDownload.size() == 0){
             // Save the results
-            DbManager.getInstance(mContext).getReflectionService().insertReflectionList(list);
+            DbManager.getInstance(mContext).getReflectionService().updateReflectionList(list);
 
             listener.onOperationFinished(list);
             mDownloadInProgress = false;
