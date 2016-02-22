@@ -1,33 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Activities/AboutAppActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Activities/AboutEdkActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Activities/ListActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Activities/MainActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Activities/SelectionActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Activities/WelcomeActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Bootstrap.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Common/Constants.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Entities/CrossRoute.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Entities/CrossStation.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Fragments/Main/MainActivityFragmentBase.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Fragments/Main/MapDisplayFragment.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Fragments/Main/StationFragment.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Fragments/Main/StatisticsFragment.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Managers/AppConfiguration.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Managers/GpsManager.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/pl/org/edk/EdkMobile/Managers/JsonManager.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/about_app.xml" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/about_edk.xml" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/frag_map.xml" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/frag_station.xml" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/frag_statistics.xml" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/list.xml" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/main.xml" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/selection.xml" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/welcome.xml" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/values/button_styles.xml" charset="windows-1250" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

@@ -6,6 +6,7 @@ import pl.org.edk.database.entities.Route;
 import pl.org.edk.database.entities.RouteDesc;
 import pl.org.edk.database.entities.Station;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 /**
@@ -16,6 +17,10 @@ public class RouteService extends DbServiceBase {
     // Insert
     // ---------------------------------------
     public boolean insertRoute(Route route){
+        if(route.getAreaId() <= 0){
+            throw new InvalidParameterException("Specified Route is not linked with any Area!");
+        }
+
         long newId = executeQueryInsert(route);
         if(newId <= 0)
             return false;
@@ -34,6 +39,10 @@ public class RouteService extends DbServiceBase {
     }
 
     private boolean insertRouteDesc(RouteDesc routeDesc) {
+        if(routeDesc.getRouteID() <= 0){
+            throw new InvalidParameterException("Specified Area is not linked with any Territory!");
+        }
+
         long newId = executeQueryInsert(routeDesc);
         if(newId <= 0)
             return false;

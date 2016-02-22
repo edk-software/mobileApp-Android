@@ -50,8 +50,7 @@ public class AreaChooserActivity extends ChooserActivity {
 		Area area = mAreas.get(pos);
 		Settings.get(this).set(Settings.SELECTED_AREA_ID, area.getId());
 
-		startActivity(new Intent(this, RouteChooserActivity.class)
-				.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		startActivity(new Intent(this, RouteChooserActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
 	@Override
