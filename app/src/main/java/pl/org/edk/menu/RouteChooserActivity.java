@@ -23,8 +23,7 @@ public class RouteChooserActivity extends ChooserActivity {
         // Get routes from DB
         Area area = DbManager.getInstance(this).getTerritoryService().getArea(
                 Settings.get(this).getLong(Settings.SELECTED_AREA_ID, -1));
-        //TODO verify this fix - changed area.getId() to area.getServerID()
-        mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(area.getServerID(), false);
+        mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(area.getId(), false);
 
         // If nothing found in DB, trigger downloading and wait for the results
         if (mRoutes == null || mRoutes.isEmpty()) {

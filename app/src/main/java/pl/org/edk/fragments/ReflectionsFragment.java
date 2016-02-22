@@ -91,10 +91,6 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                 mDurationHandler.postDelayed(this, 1000);
                 return;
             }
-//            if (!mAudioService.isPlaying()) {
-//                preparePlayer(mCurrentStation);
-//                return;
-//            }
 
             if (finalTime == 100) {
                 finalTime = mAudioService.getDuration();

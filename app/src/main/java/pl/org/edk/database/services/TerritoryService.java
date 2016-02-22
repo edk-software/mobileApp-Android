@@ -1,11 +1,11 @@
 package pl.org.edk.database.services;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import pl.org.edk.database.entities.Area;
 import pl.org.edk.database.entities.DbEntityBase;
 import pl.org.edk.database.entities.Territory;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 /**
@@ -17,34 +17,82 @@ public class TerritoryService extends DbServiceBase {
     // ---------------------------------------
     public boolean insertTerritoryWithAreas(Territory territory){
         // Insert the territory
-        ContentValues territoryValues = territory .getContentValues();
-        long territoryId = dbWrite().insert(Territory.TABLE_NAME, null, territoryValues);
+        long territoryId = executeQueryInsert(territory);
         if(territoryId <= 0)
             return false;
         territory.setId(territoryId);
 
-
         // Add areas
         if(territory.getAreas() != null) {
             for (Area area : territory.getAreas()) {
-                insertAreaForTerritory(area, territoryId);
+                area.setTerritoryId(territoryId);
+                insertArea(area);
             }
         }
         return true;
     }
 
-    public boolean insertAreaForTerritory(Area area, long territoryId){
-        // Make sure they are linked
-        area.setTerritoryId(territoryId);
+    public boolean insertArea(Area area){
+        if(area.getTerritoryId() <= 0){
+            throw new InvalidParameterException("Specified Area is not linked with any Territory!");
+        }
 
         // Make the insert
-        ContentValues areaValues = area.getContentValues();
-        long areaId = dbWrite().insert(Area.TABLE_NAME, null, areaValues);
+        long areaId = executeQueryInsert(area);
         if(areaId <= 0)
             return false;
 
         area.setId(areaId);
         return true;
+    }
+
+    // ---------------------------------------
+    // Update
+    // ---------------------------------------
+
+    /**
+     * Updates the specified Territory in the database based on it's ServerId.
+     * Al of the linked Areas are updated as well. If any of the entities doesn't exist in the DB, it's inserted.
+     * @param territory Territory to be updated (its serverId has to be a positive integer)
+     * @return Update result
+     */
+    public boolean updateTerritoryWithAreasByServerId(Territory territory){
+        if(territory.getServerID() <= 0){
+            throw new InvalidParameterException("Specified Territory ServerId is not a positive value!");
+        }
+
+        Territory previous = getTerritoryByServerId(territory.getServerID());
+        if(previous == null){
+            return insertTerritoryWithAreas(territory);
+        }
+
+        territory.setId(previous.getId());
+        if(executeQueryUpdate(territory) > 0){
+            for(Area area : territory.getAreas()){
+                updateAreaByServerId(area);
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public boolean updateAreaByServerId(Area area){
+        if(area.getTerritoryId() <= 0){
+            throw new InvalidParameterException("Specified Area is not linked with any Territory!");
+        }
+        if(area.getServerID() <= 0){
+            throw new InvalidParameterException("Specified Area ServerId is not a positive value!");
+        }
+
+        Area previous = getAreaByServerId(area.getServerID());
+        if(previous == null) {
+            return insertArea(area);
+        }
+
+        area.setId(previous.getId());
+        return executeQueryUpdate(area) > 0;
     }
 
     // ---------------------------------------

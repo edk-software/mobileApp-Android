@@ -35,7 +35,6 @@ public class WebServiceManager {
     private boolean mDownloadInProgress = false;
     private ArrayList<Reflection> mReflectionsToDownload = new ArrayList<>();
 
-
     // ---------------------------------------
     // Constructors
     // ---------------------------------------
@@ -69,13 +68,7 @@ public class WebServiceManager {
             return null;
 
         for(Territory territory : rawTerritories){
-            Territory previous = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(territory.getServerID());
-            if(previous == null){
-                DbManager.getInstance(mContext).getTerritoryService().insertTerritoryWithAreas(territory);
-            }
-            else {
-                // TODO: Update the territory
-            }
+            DbManager.getInstance(mContext).getTerritoryService().updateTerritoryWithAreasByServerId(territory);
         }
         return rawTerritories;
     }
@@ -112,7 +105,8 @@ public class WebServiceManager {
             if(previous == null){
                 Territory territory = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(area.getTerritoryId());
                 if(territory != null) {
-                    DbManager.getInstance(mContext).getTerritoryService().insertAreaForTerritory(area, territory.getId());
+                    area.setTerritoryId(territory.getId());
+                    DbManager.getInstance(mContext).getTerritoryService().insertArea(area);
                 }
             }
             // There's no territory to add it ofr
@@ -161,7 +155,8 @@ public class WebServiceManager {
             if(previous == null) {
                 Territory territory = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(area.getTerritoryId());
                 if (territory != null) {
-                    DbManager.getInstance(mContext).getTerritoryService().insertAreaForTerritory(area, territory.getId());
+                    area.setTerritoryId(territory.getId());
+                    DbManager.getInstance(mContext).getTerritoryService().insertArea(area);
                 }
                 // There's no territory to add it ofr
                 else {
@@ -199,14 +194,14 @@ public class WebServiceManager {
         if(rawRoutes == null)
             return null;
 
+        Area area = DbManager.getInstance(mContext).getTerritoryService().getAreaByServerId(areaServerId);
+        if(area == null){
+            // TODO: Fetch a single area (WS doesn't provide that data now)
+        }
+
         for(Route route : rawRoutes){
-            Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(route.getServerID());
-            if (previous == null){
-                DbManager.getInstance(mContext).getRouteService().insertRouteWithStations(route);
-            }
-            else {
-                // TODO: Update the route data
-            }
+            route.setAreaId(area.getId());
+            DbManager.getInstance(mContext).getRouteService().updateRoute(route);
         }
 
         return rawRoutes;
@@ -257,6 +252,7 @@ public class WebServiceManager {
         Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(serverID);
         if(previous != null){
             rawRoute.setId(previous.getId());
+            rawRoute.setAreaId(previous.getAreaId());
             DbManager.getInstance(mContext).getRouteService().updateRoute(rawRoute);
         }
         else {
@@ -309,6 +305,7 @@ public class WebServiceManager {
                 Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(serverID);
                 if (previous != null) {
                     rawRoute.setId(previous.getId());
+                    rawRoute.setAreaId(previous.getAreaId());
                     DbManager.getInstance(mContext).getRouteService().updateRoute(rawRoute);
                 } else {
                     DbManager.getInstance(mContext).getRouteService().insertRoute(rawRoute);

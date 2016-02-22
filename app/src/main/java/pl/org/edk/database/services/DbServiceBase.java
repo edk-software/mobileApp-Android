@@ -18,16 +18,15 @@ public class DbServiceBase {
     private static DbHelper dbClient;
 
     // ---------------------------------------
+    // Public methods
+    // ---------------------------------------
+    public static void init(DbHelper dbClient){
+        DbServiceBase.dbClient = dbClient;
+    }
+
+    // ---------------------------------------
     // Protected methods
     // ---------------------------------------
-    protected SQLiteDatabase dbRead(){
-        return dbClient.getReadableDatabase();
-    }
-
-    protected SQLiteDatabase dbWrite(){
-        return dbClient.getWritableDatabase();
-    }
-
     protected long executeQueryInsert(DbEntityBase entity){
         ContentValues values = entity.getContentValues();
         return dbWrite().insert(entity.getTableName(), null, values);
@@ -92,9 +91,13 @@ public class DbServiceBase {
     }
 
     // ---------------------------------------
-    // Public methods
+    // Private methods
     // ---------------------------------------
-    public static void init(DbHelper dbClient){
-        DbServiceBase.dbClient = dbClient;
+    private SQLiteDatabase dbRead(){
+        return dbClient.getReadableDatabase();
+    }
+
+    private SQLiteDatabase dbWrite(){
+        return dbClient.getWritableDatabase();
     }
 }
