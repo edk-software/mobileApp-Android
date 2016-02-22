@@ -57,6 +57,16 @@ public class DialogUtil {
 
 	/**
 	 * Displays a custom warning dialog
+	 * @param messageResId string id of the message to show
+	 * @param activity Activity that calls the pop-up
+	 * @param finishActivity Should the current activity be finished after the pop-up is closed?
+	 */
+	public static void showWarningDialog(int messageResId, final Activity activity, boolean finishActivity) {
+		showWarningDialog(activity.getString(messageResId), activity, finishActivity);
+	}
+
+	/**
+	 * Displays a custom warning dialog
 	 * @param message Information in the content of the pop-up
 	 * @param activity Activity that calls the pop-up
 	 * @param finishActivity Should the current activity be finished after the pop-up is closed?
@@ -120,6 +130,12 @@ public class DialogUtil {
 
 		mDialog = builder.show();
 		addRedTitleDivider(activity, mDialog);
+	}
+
+	public static void showYesNoDialog(int titleResId, int messageResId, final Activity activity, final OnSelectedEventListener listener){
+		String title = activity.getString(titleResId);
+		String message = activity.getString(messageResId);
+		showYesNoDialog(title, message, activity, listener);
 	}
 
 	public static void addRedTitleDivider(final Context context, AlertDialog dialog) {

@@ -5,8 +5,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.support.v7.preference.PreferenceManager;
 
-public final class Settings {
+import java.util.ArrayList;
+import java.util.List;
 
+public final class Settings {
+	// ---------------------------------------
+	// Constants
+	// ---------------------------------------
 	public static final String CAMERA_ZOOM = "cameraZoom";
 
 	public static final String SELECTED_TERRITORY_ID = "territoryId";
@@ -23,9 +28,15 @@ public final class Settings {
 
 	public static String START_TIME = "StartTime";
 
-	private static Settings INSTANCE = null;
+	// ---------------------------------------
+	// Class variables
+	// ---------------------------------------
+	private static Settings mInstance = null;
     private Context mContext = null;
 
+	// ---------------------------------------
+	// Singleton
+	// ---------------------------------------
 	private Settings(Context context) {
 		mContext = context;
 	}
@@ -35,15 +46,17 @@ public final class Settings {
 	}
 
 	private static synchronized Settings get0(Context applicationContext) {
-		if (INSTANCE == null) {
-			INSTANCE = new Settings(applicationContext);
+		if (mInstance == null) {
+			mInstance = new Settings(applicationContext);
 		}
-		return INSTANCE;
+		return mInstance;
 	}
 
+	// ---------------------------------------
+	// Public methods
+	// ---------------------------------------
 	public static synchronized void clear(Context context) {
-		Settings instance = get(context);
-		instance.clear();
+		mInstance.clear();
 	}
 
 	public void clear() {
@@ -51,9 +64,11 @@ public final class Settings {
 		Editor editor = preferences.edit();
 		editor.clear();
 		editor.apply();
-		INSTANCE.mContext = null;
-		INSTANCE = null;
+		mInstance.mContext = null;
+		mInstance = null;
 	}
+
+	// Getters
 
     public String get(int resId){
         return get(mContext.getString(resId));
@@ -105,10 +120,11 @@ public final class Settings {
 		return getBoolean(resId, false);
 	}
 
+	// Setters
+
     public <T> void set(int resId, T  value){
         set(mContext.getString(resId), String.valueOf(value));
     }
-
 
 	public void set(String key, String value) {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -136,6 +152,7 @@ public final class Settings {
         editor.apply();
 	}
 
+	// Other
 
 	public boolean isUserOnTrack() {
 		return getLong(Settings.START_TIME, -1) != -1;

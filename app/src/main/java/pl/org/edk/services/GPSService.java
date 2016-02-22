@@ -118,6 +118,7 @@ public class GPSService extends Service implements TrackListener{
 	
 	private Builder getNotificationBuilder() {
 		Intent intent = new Intent(this, MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		intent.putExtra(Extra.GO_TO_MAP, true);
 		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		Builder builder = new NotificationCompat.Builder(this)

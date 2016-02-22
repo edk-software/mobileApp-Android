@@ -134,6 +134,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
         boolean playerResetNeeded = stationIndex != mCurrentStation;
         openReflections(stationIndex);
+        refreshDownloadButton(true);
         if (playerResetNeeded) {
             preparePlayer(stationIndex);
             return;
@@ -455,17 +456,16 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                         WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, new WebServiceManager.OnOperationFinishedEventListener() {
                             @Override
                             public void onOperationFinished(Object result) {
-
-                                FragmentActivity a = getActivity();
-                                // Inform about the result
-                                String message;
-                                if (((ReflectionList) result).hasAudio()) {
-                                    message = getActivity().getString(R.string.reflections_audio_download_success);
-                                } else {
-                                    message = getActivity().getString(R.string.reflections_audio_download_failed);
-                                }
                                 FragmentActivity activity = getActivity();
+
+                                // Inform about the result
                                 if (activity != null) {
+                                    String message;
+                                    if (((ReflectionList) result).hasAudio()) {
+                                        message = activity.getString(R.string.reflections_audio_download_success);
+                                    } else {
+                                        message = activity.getString(R.string.reflections_audio_download_failed);
+                                    }
                                     DialogUtil.showDialog("Pobieranie zakończone", message, activity, true, null);
                                 }
 
