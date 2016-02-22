@@ -138,6 +138,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
         boolean playerResetNeeded = stationIndex != mCurrentStation;
         openReflections(stationIndex);
+        hideDownloadButton();
         if (playerResetNeeded) {
             preparePlayer(stationIndex);
             return;

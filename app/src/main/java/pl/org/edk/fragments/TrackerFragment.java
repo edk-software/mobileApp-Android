@@ -186,6 +186,7 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
             return;
         }
         if (verifyTracker()) {
+            doSetMenuVisibility(visible);
             return;
         }
 

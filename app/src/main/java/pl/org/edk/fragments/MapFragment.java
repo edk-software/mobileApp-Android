@@ -100,7 +100,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         KMLTracker tracker = getTracker();
         LatLng center = null;
             LatLng lastLoc = tracker.getLastLoc();
-            if (lastLoc != null) {
+            if (shouldFollowLocation() && lastLoc != null) {
                 center = lastLoc;
             } else if (lastCameraPos != null) {
                 center = lastCameraPos;
@@ -211,10 +211,14 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         if (getActivity() == null){
             return;
         }
-        if (mMap != null && Settings.get(getActivity()).getBoolean(Settings.FOLLOW_LOCATION_ON_MAP)) {
+        if (mMap != null && shouldFollowLocation()) {
             mMap.animateCamera(CameraUpdateFactory.newLatLng(location), 2000, null);
         }
 
+    }
+
+    private boolean shouldFollowLocation() {
+        return Settings.get(getActivity()).getBoolean(Settings.FOLLOW_LOCATION_ON_MAP);
     }
 
     @Override
