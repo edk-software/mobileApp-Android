@@ -106,11 +106,11 @@ public class DialogUtil {
 		}
 	}
 
-	public static void showYesNoDialog(int titleResId, int messageResId, final Activity activity, final OnSelectedEventListener listener){
+	public static void showYesNoDialog(String title, String message, final Activity activity, final OnSelectedEventListener listener){
 		AlertDialog.Builder builder = new Builder(activity);
-		builder.setTitle(activity.getString(titleResId));
+		builder.setTitle(title);
 		builder.setCancelable(false);
-		builder.setMessage(activity.getString(messageResId));
+		builder.setMessage(message);
 		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -130,6 +130,12 @@ public class DialogUtil {
 
 		mDialog = builder.show();
 		addRedTitleDivider(activity, mDialog);
+	}
+
+	public static void showYesNoDialog(int titleResId, int messageResId, final Activity activity, final OnSelectedEventListener listener){
+		String title = activity.getString(titleResId);
+		String message = activity.getString(messageResId);
+		showYesNoDialog(title, message, activity, listener);
 	}
 
 	public static void addRedTitleDivider(final Context context, AlertDialog dialog) {

@@ -93,7 +93,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/red_full_button"
-            android:text="Pobierz rozważania audio"
             android:textColor="@color/white_on_black" />
     </LinearLayout>
 

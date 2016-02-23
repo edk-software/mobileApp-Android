@@ -90,9 +90,10 @@ public class TerritoryService extends DbServiceBase {
         if(previous == null) {
             return insertArea(area);
         }
-
-        area.setId(previous.getId());
-        return executeQueryUpdate(area) > 0;
+        else {
+            area.setId(previous.getId());
+            return executeQueryUpdate(area) > 0;
+        }
     }
 
     // ---------------------------------------
