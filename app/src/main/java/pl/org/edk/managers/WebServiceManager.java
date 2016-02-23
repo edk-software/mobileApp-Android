@@ -2,6 +2,7 @@ package pl.org.edk.managers;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import pl.org.edk.BootStrap;
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.*;
@@ -354,7 +355,7 @@ public class WebServiceManager {
 
     // Sync
 
-    public void sync(boolean includeAreas, boolean includeLocalRoutes, boolean includeReflections, boolean includeAudio){
+    public void updateData(boolean includeAreas, boolean includeLocalRoutes, boolean includeReflections, boolean includeAudio) {
         if (includeAreas){
             syncAreas();
         }
@@ -368,17 +369,25 @@ public class WebServiceManager {
         }
     }
 
-    public void syncAreas(){
-        getTerritories();
-        getAreas();
-    }
+    public void updateDataAsync(boolean includeAreas, boolean includeLocalRoutes, boolean includeReflections, boolean includeAudio,
+                                final OnOperationFinishedEventListener listener){
+        AsyncTask<Boolean, Integer, Boolean> downloadTask = new AsyncTask<Boolean, Integer, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Boolean... params) {
+                updateData(params[0], params[1], params[2], params[3]);
+                return true;
+            }
 
-    public void syncRoutes(){
+            @Override
+            protected void onPostExecute(Boolean result) {
+                super.onPostExecute(result);
 
-    }
-
-    public void syncReflections(boolean includeAudio){
-
+                if (listener != null){
+                    listener.onOperationFinished(result);
+                }
+            }
+        };
+        downloadTask.execute(includeAreas, includeLocalRoutes, includeReflections, includeAudio);
     }
 
     // ---------------------------------------
@@ -422,4 +431,18 @@ public class WebServiceManager {
         });
         manager.downloadFileAsync(serverPath, localPath);
     }
+
+    private void syncAreas(){
+        getTerritories();
+        getAreas();
+    }
+
+    private void syncRoutes(){
+
+    }
+
+    private void syncReflections(boolean includeAudio){
+
+    }
+
 }

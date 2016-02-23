@@ -1,35 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:layout="@layout/red_preference_category"
-        android:title="@string/location_settings_category">
+        android:title="@string/settings_location_category">
 
         <CheckBoxPreference
             android:key="@string/pref_backgroundTrackingOn"
-            android:summary="@string/tracking_summary"
-            android:title="@string/tracking_title" />
+            android:summary="@string/settings_location_tracking_summary"
+            android:title="@string/settings_location_tracking_title" />
         <CheckBoxPreference
             android:key="@string/pref_followLocationOnMap"
-            android:summary="@string/follow_on_map_summary"
-            android:title="@string/follow_on_map_title" />
+            android:summary="@string/settings_location_follow_summary"
+            android:title="@string/settings_location_follow_title" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:layout="@layout/red_preference_category"
-        android:title="@string/reflections_category">
+        android:title="@string/settings_reflections_category">
 
         <ListPreference
             android:defaultValue="2016"
-            android:dialogTitle="@string/reflections_year_select_dialog_title"
+            android:dialogTitle="@string/settings_reflections_year_select_dialog_title"
             android:entries="@array/considerations_years"
             android:entryValues="@array/considerations_years"
             android:key="@string/pref_reflectionsYear"
             android:summary="%s"
-            android:title="@string/reflections_year_title" />
+            android:title="@string/settings_reflections_year_title" />
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+            android:layout="@layout/red_preference_category"
+            android:title="@string/settings_update_category">
+
+        <!--<MultiSelectListPreference-->
+                <!--android:dialogTitle="@string/settings_reflections_year_select_dialog_title"-->
+                <!--android:key="anything"-->
+                <!--android:summary=""-->
+                <!--android:title="@string/settings_reflections_year_title"-->
+                <!--android:entries="@array/settings_update_list"-->
+                <!--android:entryValues="@array/settings_update_list"-->
+                <!--android:defaultValue="@array/empty_array"/>-->
+
+        <CheckBoxPreference
+                android:key="@string/pref_update_areas"
+                android:title="@string/settings_update_areas"
+                android:summary="@string/settings_update_areas_desc"
+                app:defaultValue="true"/>
+        <CheckBoxPreference
+                android:key="@string/pref_update_routes"
+                android:title="@string/settings_update_routes"
+                android:summary="@string/settings_update_routes_desc"
+                app:defaultValue="true"/>
+        <CheckBoxPreference
+                android:key="@string/pref_update_reflections"
+                android:title="@string/settings_update_reflections"
+                android:summary="@string/settings_update_reflections_desc"
+                app:defaultValue="true"/>
+        <CheckBoxPreference
+                android:key="@string/pref_update_reflections_audio"
+                android:title="@string/settings_update_reflections_audio"
+                android:summary="@string/settings_update_reflections_audio_desc"/>
+        <Preference android:title="@string/settings_update_button_text"
+                    android:key="@string/pref_update_button"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

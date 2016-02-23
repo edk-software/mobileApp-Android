@@ -32,7 +32,7 @@ public class DbManager {
     private static synchronized DbManager get(Context applicationContext){
         if(_instance == null){
             _instance = new DbManager(applicationContext);
-            _instance.Init();
+            _instance.init();
         }
         return _instance;
     }
@@ -59,7 +59,7 @@ public class DbManager {
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
-    public void Init(){
+    public void init(){
         if(initialized)
             return;
 
@@ -78,7 +78,7 @@ public class DbManager {
     /**
      * Removed the database. It will be recreated before the first usage
      */
-    public void Reset(){
+    public void reset(){
         dbClient.delete(mContext);
     }
 }

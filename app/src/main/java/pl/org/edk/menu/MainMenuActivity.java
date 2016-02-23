@@ -1,6 +1,7 @@
 package pl.org.edk.menu;
 
 import pl.org.edk.*;
+import pl.org.edk.database.DbManager;
 import pl.org.edk.services.GPSService;
 
 import android.app.Activity;
@@ -11,19 +12,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import pl.org.edk.util.DialogUtil;
 
 public class MainMenuActivity extends Activity {
-
-	private final class InfoButtonListener implements OnClickListener {
+	// ---------------------------------------
+	// Subclasses
+	// ---------------------------------------
+	private final class TrackButtonListener implements OnClickListener {
 		public void onClick(View v) {
-			Intent i = new Intent(MainMenuActivity.this, EDKInfoActivity.class);
-			MainMenuActivity.this.startActivity(i);
-		}
-	}
-
-	private final class SettingsButtonListener implements OnClickListener {
-		public void onClick(View v) {
-			Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
+			Intent i = new Intent(MainMenuActivity.this, TerritoryChooserActivity.class);
 			MainMenuActivity.this.startActivity(i);
 		}
 	}
@@ -35,13 +32,22 @@ public class MainMenuActivity extends Activity {
 		}
 	}
 
-	private final class TrackButtonListener implements OnClickListener {
+	private final class SettingsButtonListener implements OnClickListener {
 		public void onClick(View v) {
-			Intent i = new Intent(MainMenuActivity.this, TerritoryChooserActivity.class);
+			openSettings();
+		}
+	}
+
+	private final class InfoButtonListener implements OnClickListener {
+		public void onClick(View v) {
+			Intent i = new Intent(MainMenuActivity.this, EDKInfoActivity.class);
 			MainMenuActivity.this.startActivity(i);
 		}
 	}
 
+	// ---------------------------------------
+	// Members
+	// ---------------------------------------
 	private Button tracksButton;
 	private Button considerationsButton;
 	private Button settingsButton;
@@ -51,6 +57,9 @@ public class MainMenuActivity extends Activity {
 	private ImageButton settingsImageButton;
 	private ImageButton infoImageButton;
 
+	// ---------------------------------------
+	// Protected methods
+	// ---------------------------------------
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,6 +79,15 @@ public class MainMenuActivity extends Activity {
 		// Initialize application global stuff (singletons etc.)
 		BootStrap.initialize(getApplicationContext());
 
+		initUI();
+
+		checkDB();
+	}
+
+	// ---------------------------------------
+	// Private methods
+	// ---------------------------------------
+	private void initUI(){
 		tracksButton = (Button) findViewById(R.id.tracksButton);
 		considerationsButton = (Button) findViewById(R.id.considerationsButton);
 		settingsButton = (Button) findViewById(R.id.settingsButton);
@@ -93,4 +111,24 @@ public class MainMenuActivity extends Activity {
 		infoImageButton.setOnClickListener(new InfoButtonListener());
 	}
 
+	private void checkDB(){
+		if(DbManager.getInstance(this).getTerritoryService().getTerritories().size() == 0){
+			DialogUtil.showYesNoDialog(getString(R.string.main_menu_get_data_title),
+					getString(R.string.main_menu_get_data_message),
+					this, new DialogUtil.OnSelectedEventListener() {
+				@Override
+				public void onAccepted() {
+					openSettings();
+				}
+
+				@Override
+				public void onRejected() { /* Just proceed */ }
+			});
+		}
+	}
+
+	private void openSettings(){
+		Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
+		MainMenuActivity.this.startActivity(i);
+	}
 }
