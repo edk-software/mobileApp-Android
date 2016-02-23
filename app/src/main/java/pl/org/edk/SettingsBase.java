@@ -12,11 +12,11 @@ public abstract class SettingsBase {
 	// ---------------------------------------
 	private Context mContext = null;
 
-	public SettingsBase(Context context) {
+	protected SettingsBase(Context context) {
 		mContext = context;
 	}
 
-	public void clear() {
+	protected void clear() {
 		SharedPreferences preferences = getSharedPreferences();
 		SharedPreferences.Editor editor = preferences.edit();
 		editor.clear();
