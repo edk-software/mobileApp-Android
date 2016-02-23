@@ -33,6 +33,7 @@ public class Track {
     private List<LatLng> track = new ArrayList<LatLng>();
     private static HashSet<String> introStationNames = new HashSet<>();
     private static HashSet<String> summaryStationNames = new HashSet<>();
+    private List<Placemark> mIgnoredPlacemarks = new ArrayList<>();
 
     public Track(Placemarks placemarks) {
         createTrack(placemarks.getTrackPlacemarks());
@@ -136,6 +137,8 @@ public class Track {
             for (Placemark placemark : remainingPlacemarks) {
                 sb.append(System.getProperty("line.separator"));
                 sb.append(placemark);
+                mIgnoredPlacemarks.add(placemark);
+
             }
             Log.w(TAG, "Possible duplicates of placemarks " + sb.toString());
             // return;
@@ -372,6 +375,10 @@ public class Track {
             }
         }
         return true;
+    }
+
+    public List<Placemark> getIgnoredPlacemarks(){
+        return mIgnoredPlacemarks;
     }
 
     public double calculateLength() {
