@@ -22,7 +22,7 @@ public class RouteChooserActivity extends ChooserActivity {
     protected List<String> getItems() {
         // Get routes from DB
         Area area = DbManager.getInstance(this).getTerritoryService().getArea(
-                Settings.get(this).getLong(Settings.SELECTED_AREA_ID, -1));
+                TempSettings.get(this).getLong(TempSettings.SELECTED_AREA_ID, -1));
         mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(area.getId(), false);
 
         // If nothing found in DB, trigger downloading and wait for the results
@@ -44,7 +44,7 @@ public class RouteChooserActivity extends ChooserActivity {
     }
 
     private void startRouteDescriptionActivity(int pos) {
-        Settings.get(RouteChooserActivity.this).set(Settings.SELECTED_ROUTE_ID, mRoutes.get(pos).getId());
+        TempSettings.get(RouteChooserActivity.this).set(TempSettings.SELECTED_ROUTE_ID, mRoutes.get(pos).getId());
         startActivity(new Intent(RouteChooserActivity.this, RouteDescriptionActivity.class));
     }
 

@@ -1,19 +1,19 @@
 package pl.org.edk.kml;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import pl.org.edk.R;
+import pl.org.edk.TempSettings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Route;
-import pl.org.edk.R;
-import pl.org.edk.Settings;
-
-import android.content.Context;
-import android.util.Log;
-
-import com.google.android.gms.maps.model.LatLng;
 
 public class TrackerProvider {
     private static final String TAG = "EDK";
@@ -63,7 +63,7 @@ public class TrackerProvider {
     }
 
     private Route getSelectedRoute() {
-        long routeId = Settings.get(mContext).getLong(Settings.SELECTED_ROUTE_ID, -1);
+        long routeId = TempSettings.get(mContext).getLong(TempSettings.SELECTED_ROUTE_ID, -1);
         Log.i(TAG, "Selected route id " + routeId);
         Route route = DbManager.getInstance(mContext).getRouteService()
                 .getRoute(routeId, "pl");

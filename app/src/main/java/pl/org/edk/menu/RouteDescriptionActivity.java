@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -13,7 +12,7 @@ import android.widget.Button;
 
 import pl.org.edk.MainActivity;
 import pl.org.edk.R;
-import pl.org.edk.Settings;
+import pl.org.edk.TempSettings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Route;
 import pl.org.edk.managers.WebServiceManager;
@@ -34,7 +33,7 @@ public class RouteDescriptionActivity extends Activity {
         startButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Settings.get(RouteDescriptionActivity.this).set(Settings.START_TIME, System.currentTimeMillis());
+                TempSettings.get(RouteDescriptionActivity.this).set(TempSettings.START_TIME, System.currentTimeMillis());
                 startActivity(new Intent(RouteDescriptionActivity.this, MainActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             }
@@ -51,7 +50,7 @@ public class RouteDescriptionActivity extends Activity {
         mDescriptionTextView = (WebView) findViewById(R.id.descriptionText);
 
         mRoute = DbManager.getInstance(this).getRouteService()
-                .getRoute(Settings.get(this).getLong(Settings.SELECTED_ROUTE_ID, -1), "pl");
+                .getRoute(TempSettings.get(this).getLong(TempSettings.SELECTED_ROUTE_ID, -1), "pl");
 
         if (mRoute == null) {
             showRouteUnavailableWarning();

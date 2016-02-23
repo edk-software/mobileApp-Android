@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import pl.org.edk.EndActivity;
 import pl.org.edk.R;
-import pl.org.edk.Settings;
+import pl.org.edk.TempSettings;
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.services.GPSService;
 import pl.org.edk.util.DialogUtil;
@@ -70,7 +70,7 @@ public class RouteInfoFragment extends TrackerFragment {
         mDistanceToNextView = (TextView) view.findViewById(R.id.distanceToStationValue);
         mDistanceLeftView = (TextView) view.findViewById(R.id.distanceLeftValue);
 
-        mStartTime = Settings.get(getActivity()).getLong(Settings.START_TIME, System.currentTimeMillis());
+        mStartTime = TempSettings.get(getActivity()).getLong(TempSettings.START_TIME, System.currentTimeMillis());
 
         configureFinishButton(view);
 

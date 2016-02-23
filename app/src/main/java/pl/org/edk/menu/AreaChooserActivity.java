@@ -1,18 +1,18 @@
 package pl.org.edk.menu;
 
+import android.content.Intent;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import pl.org.edk.R;
+import pl.org.edk.TempSettings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Area;
-import pl.org.edk.R;
-import pl.org.edk.Settings;
 import pl.org.edk.database.entities.Territory;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.util.DialogUtil;
-
-import android.content.Intent;
 
 public class AreaChooserActivity extends ChooserActivity {
 
@@ -22,7 +22,7 @@ public class AreaChooserActivity extends ChooserActivity {
 	protected List<String> getItems() {
 		// Get areas from DB
 		Territory territory = DbManager.getInstance(this).getTerritoryService()
-				.getTerritory(Settings.get(this).getLong(Settings.SELECTED_TERRITORY_ID, -1));
+				.getTerritory(TempSettings.get(this).getLong(TempSettings.SELECTED_TERRITORY_ID, -1));
         mAreas = territory.getAreas();
 
 		// If nothing found in DB, trigger downloading and wait for the results
@@ -48,7 +48,7 @@ public class AreaChooserActivity extends ChooserActivity {
 	@Override
 	protected void onItemClick(int pos) {
 		Area area = mAreas.get(pos);
-		Settings.get(this).set(Settings.SELECTED_AREA_ID, area.getId());
+		TempSettings.get(this).set(TempSettings.SELECTED_AREA_ID, area.getId());
 
 		startActivity(new Intent(this, RouteChooserActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
