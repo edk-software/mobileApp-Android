@@ -12,6 +12,7 @@ import android.support.v7.preference.PreferenceScreen;
 
 import pl.org.edk.R;
 import pl.org.edk.Settings;
+import pl.org.edk.TempSettings;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.services.GPSService;
 import pl.org.edk.util.DialogUtil;
@@ -66,7 +67,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(Settings.IS_BACKGROUND_TRACKING_ON))&& Settings.get(getActivity()).isUserOnTrack()) {
+        if (key.equals(getString(Settings.IS_BACKGROUND_TRACKING_ON))&& TempSettings.get(getActivity()).isUserOnTrack()) {
             boolean trackingOn = sharedPreferences.getBoolean(key, false);
             Intent serviceIntent = new Intent(getActivity(), GPSService.class);
 
@@ -151,7 +152,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             @Override
             public void onOperationFinished(Object result) {
                 DialogUtil.closeBusyDialog();
-                DialogUtil.showWarningDialog("ZakoÅ„czono aktualizacjÄ™ danych.", getActivity(), true);
+                DialogUtil.showWarningDialog("Zakoñczono aktualizacjê danych.", getActivity(), true);
             }
         };
         WebServiceManager.getInstance(getActivity()).updateDataAsync(regions, routes, reflections, audio, listener);

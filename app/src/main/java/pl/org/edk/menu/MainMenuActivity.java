@@ -65,15 +65,14 @@ public class MainMenuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
 
-        Settings settings = Settings.get(this);
-        if (settings.isUserOnTrack() && settings.getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
+        if (TempSettings.get(this).isUserOnTrack() && Settings.get(this).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
             //TODO ask the user whether to go to map or sth
 //			Intent serviceIntent = new Intent(this, GPSService.class);
 //			startService(serviceIntent);
 //			Intent intent = new Intent(this, MainActivity.class);
 //			startActivity(intent);
 		} else {
-			settings.clear();
+			TempSettings.clear(this);
 		}
 
 		// Initialize application global stuff (singletons etc.)

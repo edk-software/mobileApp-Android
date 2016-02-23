@@ -12,7 +12,7 @@ public class EndActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_end);
 		TrackerProvider.dismiss();
-		Settings.clear(this);
+		TempSettings.clear(this);
 	}
 	
 	@Override

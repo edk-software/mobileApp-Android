@@ -11,6 +11,8 @@
 	<string name="pref_backgroundTrackingOn">trackingTurnedOn</string>
 	<string name="pref_reflectionsYear">reflectionsYear</string>
 	<string name="pref_audioDownloadDialogShown">audioDownloadDialogShown</string>
+    <string name="pref_kml_directory">KmlDirectory</string>
+    <string name="pref_audio_directory">AudioDirectory</string>
 	<string name="pref_update_areas">syncAreas</string>
 	<string name="pref_update_routes">syncRoutes</string>
 	<string name="pref_update_reflections">syncReflections</string>

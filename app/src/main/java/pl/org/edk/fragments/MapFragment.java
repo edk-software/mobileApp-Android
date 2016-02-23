@@ -28,6 +28,7 @@ import java.util.List;
 
 import pl.org.edk.R;
 import pl.org.edk.Settings;
+import pl.org.edk.TempSettings;
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.util.NumConverter;
 
@@ -75,9 +76,9 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
     }
 
     private void loadCameraZoom() {
-        Settings settings = Settings.get(getActivity());
+        TempSettings settings = TempSettings.get(getActivity());
         float defaultValue = -1;
-        float loadedZoom = settings.getFloat(Settings.CAMERA_ZOOM, defaultValue);
+        float loadedZoom = settings.getFloat(TempSettings.CAMERA_ZOOM, defaultValue);
         if (Math.abs(loadedZoom - defaultValue) > 0.1) {
             lastCameraZoom = loadedZoom;
         }
@@ -92,7 +93,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
     private void saveCameraZoom() {
         if (lastCameraZoom != null) {
-            Settings.get(getActivity()).set(Settings.CAMERA_ZOOM, lastCameraZoom);
+            TempSettings.get(getActivity()).set(TempSettings.CAMERA_ZOOM, lastCameraZoom);
         }
     }
 

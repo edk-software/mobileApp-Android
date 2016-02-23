@@ -1,15 +1,15 @@
 package pl.org.edk.menu;
 
+import android.content.Intent;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import pl.org.edk.R;
+import pl.org.edk.TempSettings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Territory;
-import pl.org.edk.R;
-import pl.org.edk.Settings;
-
-import android.content.Intent;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.util.DialogUtil;
 
@@ -40,7 +40,7 @@ public class TerritoryChooserActivity extends ChooserActivity {
 
 	protected void onItemClick(int pos) {
 		Territory selectedTerritory = mTerritories.get(pos);
-		Settings.get(this).set(Settings.SELECTED_TERRITORY_ID, selectedTerritory.getId());
+		TempSettings.get(this).set(TempSettings.SELECTED_TERRITORY_ID, selectedTerritory.getId());
 
 		startActivity(new Intent(this, AreaChooserActivity.class)
 				.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
