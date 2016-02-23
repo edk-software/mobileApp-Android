@@ -58,7 +58,7 @@ public class TrackerTest extends InstrumentationTestCase {
                     }
                 }
             };
-            WebServiceManager.getInstance(getInstrumentation().getTargetContext()).getRouteAsync(routeId, listener);
+            WebServiceManager.getInstance(getInstrumentation().getTargetContext()).updateRouteAsync(routeId, listener);
         }
 
 

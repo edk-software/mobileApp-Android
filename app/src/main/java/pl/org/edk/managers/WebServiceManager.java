@@ -2,7 +2,6 @@ package pl.org.edk.managers;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import pl.org.edk.BootStrap;
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.*;
@@ -11,6 +10,7 @@ import pl.org.edk.webServices.WebServiceAccess;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by pwawrzynek on 2016-02-11.
@@ -220,50 +220,18 @@ public class WebServiceManager {
         downloadTask.execute(areaServerId);
     }
 
-    public Route getRoute(long serverID){
-        // Get the route data
-        Route rawRoute = mWsClient.getRoute(serverID);
-        if(rawRoute == null)
-            return null;
-
-        // If KML file is available, download it
-        String kmlServerPath = rawRoute.getKmlDataPath();
-        if(kmlServerPath != null && kmlServerPath.length() > 0) {
-            String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) + "/route_" + String.valueOf(serverID) + ".kml";
-            FileDownloader manager = new FileDownloader(mContext);
-            FileDownloader.DownloadResult result = manager.downloadFile(kmlServerPath, kmlLocalPath);
-
-            // Download succeeded
-            if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
-                rawRoute.setKmlDataPath(kmlLocalPath);
-            }
-            else {
-                rawRoute.setKmlDataPath("");
-            }
-        }
-
-        // Save the data to DB
-        Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(serverID);
-        if(previous != null){
-            rawRoute.setId(previous.getId());
-            rawRoute.setAreaId(previous.getAreaId());
-            DbManager.getInstance(mContext).getRouteService().updateRoute(rawRoute);
-        }
-        else {
-            DbManager.getInstance(mContext).getRouteService().insertRoute(rawRoute);
-        }
-
-        return rawRoute;
-    }
-
-    public void getRouteAsync(final long serverID, final OnOperationFinishedEventListener listener){
+    /**
+     * Download the latest version of the Route, its KML data and RouteDesc (pl) from WS and update it in the local DB
+     * @param serverID ServerId of the Route to be updated
+     * @param listener Operations to be performed, when the download's finished
+     */
+    public void updateRouteAsync(final long serverID, final OnOperationFinishedEventListener listener){
         // Get the route data
         final Route rawRoute = mWsClient.getRoute(serverID);
         if(rawRoute == null){
             if (listener != null){
                 listener.onOperationFinished(null);
             }
-            return;
         }
 
         // Get route language-dependent data
@@ -279,7 +247,6 @@ public class WebServiceManager {
             if(listener != null){
                 listener.onOperationFinished(rawRoute);
             }
-            return;
         }
 
         // Download KML, if available
@@ -289,21 +256,10 @@ public class WebServiceManager {
             @Override
             public void onDownloadFinished(FileDownloader.DownloadResult result) {
                 // Download succeeded
-                if (result == FileDownloader.DownloadResult.NoErrorsOccurred) {
-                    rawRoute.setKmlDataPath(kmlLocalPath);
-                } else {
-                    rawRoute.setKmlDataPath("");
-                }
+                rawRoute.setKmlData((result == FileDownloader.DownloadResult.NoErrorsOccurred) ? kmlLocalPath : "");
 
                 // Save the data to DB
-                Route previous = DbManager.getInstance(mContext).getRouteService().getRouteByServerID(serverID);
-                if (previous != null) {
-                    rawRoute.setId(previous.getId());
-                    rawRoute.setAreaId(previous.getAreaId());
-                    DbManager.getInstance(mContext).getRouteService().updateRoute(rawRoute);
-                } else {
-                    DbManager.getInstance(mContext).getRouteService().insertRoute(rawRoute);
-                }
+                DbManager.getInstance(mContext).getRouteService().updateRouteByServerId(rawRoute);
 
                 // Inform interested parties
                 if (listener != null) {
@@ -438,11 +394,13 @@ public class WebServiceManager {
     }
 
     private void syncRoutes(){
-
+        ArrayList<Route> routes = DbManager.getInstance(mContext).getRouteService().getAllRoutes();
+        for (Route route : routes){
+            updateRouteAsync(route.getServerID(), null);
+        }
     }
 
     private void syncReflections(boolean includeAudio){
 
     }
-
 }

@@ -79,7 +79,7 @@ public class RouteDescriptionActivity extends Activity {
                     }
                 }
             };
-            WebServiceManager.getInstance(this).getRouteAsync(mRoute.getServerID(), listener);
+            WebServiceManager.getInstance(this).updateRouteAsync(mRoute.getServerID(), listener);
         } else {
             setRouteDescription();
         }

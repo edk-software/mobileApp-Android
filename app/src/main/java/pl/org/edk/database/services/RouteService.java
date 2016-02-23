@@ -8,6 +8,8 @@ import pl.org.edk.database.entities.Station;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by pwawrzynek on 2015-12-16.
@@ -94,6 +96,21 @@ public class RouteService extends DbServiceBase {
         }
     }
 
+    public boolean updateRouteByServerId(Route route){
+        if(route.getServerID() <= 0){
+            throw new InvalidParameterException("Specified Route has ServerId=0!");
+        }
+
+        Route previous = getRouteByServerID(route.getServerID());
+        if (previous != null) {
+            route.setId(previous.getId());
+            route.setAreaId(previous.getAreaId());
+            return updateRoute(route);
+        } else {
+            return insertRoute(route);
+        }
+    }
+
     public boolean updateRouteDesc(RouteDesc routeDesc){
         ArrayList<String> whereColumns = new ArrayList<>();
         whereColumns.add(RouteDesc.COLUMN_NAME_ROUTE_ID);
@@ -115,6 +132,20 @@ public class RouteService extends DbServiceBase {
     // ---------------------------------------
     // Get
     // ---------------------------------------
+    public ArrayList<Route> getAllRoutes() {
+        Cursor cursor = executeQueryGetAll(Route.TABLE_NAME, Route.getFullProjection());
+
+        ArrayList<Route> routes = new ArrayList<>();
+        for(int i=0; i < cursor.getCount(); i++){
+            cursor.moveToPosition(i);
+            Route route = new Route();
+            if(route.readFromCursor(cursor))
+                routes.add(route);
+        }
+
+        return routes;
+    }
+
     public Route getRoute(long routeId){
         Cursor cursor = executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(), Route._ID, String.valueOf(routeId));
 
