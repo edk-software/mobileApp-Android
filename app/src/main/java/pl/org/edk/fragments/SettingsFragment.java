@@ -151,7 +151,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             @Override
             public void onOperationFinished(Object result) {
                 DialogUtil.closeBusyDialog();
-                DialogUtil.showWarningDialog(getActivity().getString(R.string.update_download_finished_message), getActivity(), true);
+                boolean finishActivity = !TempSettings.get(getActivity()).isUserOnTrack();
+                DialogUtil.showWarningDialog(R.string.update_download_finished_message, getActivity(), finishActivity);
             }
         };
         WebServiceManager.getInstance(getActivity()).updateDataAsync(regions, routes, reflections, audio, listener);
