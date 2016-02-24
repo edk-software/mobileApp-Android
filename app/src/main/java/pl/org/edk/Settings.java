@@ -14,6 +14,7 @@ public class Settings extends SettingsBase {
 	public static final int YEAR_ID = R.string.pref_reflectionsYear;
 	public static final int AUDIO_DOWNLOAD_DIALOG_SHOWN = R.string.pref_audioDownloadDialogShown;
 
+    public static final int APP_LANGUAGE = R.string.pref_language;
 	public static final int APP_DIRECTORY_KML = R.string.pref_kml_directory;
 	public static final int APP_DIRECTORY_AUDIO = R.string.pref_audio_directory;
 
@@ -61,13 +62,13 @@ public class Settings extends SettingsBase {
         setString(getStringKey(resId), String.valueOf(value));
     }
 
-
     public void set(int resId, boolean value) {
         SharedPreferences preferences = getSharedPreferences();
         Editor editor = preferences.edit();
         editor.putBoolean(getStringKey(resId), value);
         editor.apply();
     }
+
 
     @Override
     protected SharedPreferences getSharedPreferences0(Context context) {

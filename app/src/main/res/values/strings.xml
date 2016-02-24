@@ -13,6 +13,7 @@
 	<string name="pref_audioDownloadDialogShown">audioDownloadDialogShown</string>
     <string name="pref_kml_directory">KmlDirectory</string>
     <string name="pref_audio_directory">AudioDirectory</string>
+	<string name="pref_language">Language</string>
 	<string name="pref_update_areas">syncAreas</string>
 	<string name="pref_update_routes">syncRoutes</string>
 	<string name="pref_update_reflections">syncReflections</string>
@@ -63,7 +64,6 @@
 	<string name="downloading_message">Trwa pobieranie danych...</string>
 	<string name="description_unavailable">Opis trasy chwilowo niedostępny</string>
     <string name="stations_missing_warning_message">Wystąpił błąd podczas odczytywania współrzędnych niektórych stacji.</string>
-
 
     <string name="accept_challenge">Podejmij wyzwanie</string>
     <string name="change_route">Zmień trasę</string>
@@ -118,6 +118,6 @@
 	</string>
 	<string name="main_menu_get_data_title">Brak danych</string>
 
-	<string name="update_download_finished_message">Zakończono aktualizację danych.</string>
-	<string name="update_in_progress_message">Trwa synchronizacja danych...</string>
+	<string name="update_download_finished_message">Zakończono aktualizację danych (pobieranie plików audio może odbywać się w tle).</string>
+	<string name="update_in_progress_message">Trwa aktualizacja danych...</string>
 </resources>

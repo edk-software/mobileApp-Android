@@ -22,12 +22,11 @@ public final class BootStrap {
 
         DbManager.getInstance(context).init();
         WebServiceManager.getInstance(context).init(R.drawable.edk_icon);
+
+        Settings.get(context).set(Settings.APP_LANGUAGE, "pl");
         Settings.get(context).set(Settings.YEAR_ID, Calendar.getInstance().get(Calendar.YEAR));
 
         initStorage(context);
-
-        // TEMP: Remove DB - just for debug purposes!
-        DbManager.getInstance(context).reset();
 
         mIsInitialized = true;
     }

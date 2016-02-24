@@ -2,6 +2,7 @@ package pl.org.edk.managers;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.*;
@@ -224,7 +225,7 @@ public class WebServiceManager {
      * @param serverID ServerId of the Route to be updated
      * @param listener Operations to be performed, when the download's finished
      */
-    public void updateRouteAsync(final long serverID, final OnOperationFinishedEventListener listener){
+    public void syncRouteAsync(final long serverID, final OnOperationFinishedEventListener listener){
         // Get the route data
         final Route rawRoute = mWsClient.getRoute(serverID);
         if(rawRoute == null){
@@ -264,7 +265,7 @@ public class WebServiceManager {
         rawList.setEdition(Calendar.getInstance().get(Calendar.YEAR));
 
         // Insert it to the DB
-        DbManager.getInstance(mContext).getReflectionService().insertReflectionList(rawList);
+        DbManager.getInstance(mContext).getReflectionService().updateReflectionListByVersion(rawList);
 
         return rawList;
     }
@@ -286,11 +287,11 @@ public class WebServiceManager {
         downloadNext(list, listener);
     }
 
+    // Sync
+
     public boolean isDownloadInProgress(){
         return mDownloadInProgress;
     }
-
-    // Sync
 
     public void updateData(boolean includeAreas, boolean includeLocalRoutes, boolean includeReflections, boolean includeAudio) {
         if (includeAreas){
@@ -363,8 +364,10 @@ public class WebServiceManager {
             // Save the results
             DbManager.getInstance(mContext).getReflectionService().updateReflectionList(list);
 
-            listener.onOperationFinished(list);
             mDownloadInProgress = false;
+            if(listener != null){
+                listener.onOperationFinished(list);
+            }
             return;
         }
 
@@ -404,11 +407,28 @@ public class WebServiceManager {
     private void syncRoutes(){
         ArrayList<Route> routes = DbManager.getInstance(mContext).getRouteService().getAllRoutes();
         for (Route route : routes){
-            updateRouteAsync(route.getServerID(), null);
+            syncRouteAsync(route.getServerID(), null);
         }
     }
 
     private void syncReflections(boolean includeAudio){
+        String defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
+        boolean defaultDownloaded = false;
 
+        // Update existing lists
+        ArrayList<ReflectionList> lists = DbManager.getInstance(mContext).getReflectionService().getReflectionLists();
+        for(ReflectionList list : lists){
+            getReflectionList(list.getLanguage());
+            if(list.getLanguage().equals(defaultLanguage)){
+                defaultDownloaded = true;
+            }
+            if(includeAudio) getReflectionsAudioAsync(list, null);
+        }
+
+        // Download the default one, if not downloaded yet
+        if(!defaultDownloaded){
+            ReflectionList list = getReflectionList(defaultLanguage);
+            if(includeAudio) getReflectionsAudioAsync(list, null);
+        }
     }
 }

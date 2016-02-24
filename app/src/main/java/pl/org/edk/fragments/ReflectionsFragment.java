@@ -434,10 +434,12 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private boolean prepareListData() {
-        mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList("pl", true);
+        String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
+        mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, true);
         // No reflections found
         if (mReflectionList == null || mReflectionList.getReflections().isEmpty()) {
-            mReflectionList = WebServiceManager.getInstance(getActivity()).getReflectionList("pl");
+
+            mReflectionList = WebServiceManager.getInstance(getActivity()).getReflectionList(language);
             // Download failed
             if (mReflectionList == null) {
                 return false;
@@ -466,8 +468,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                                     } else {
                                         message = activity.getString(R.string.reflections_audio_download_failed);
                                     }
-                                    DialogUtil.showDialog(activity.getString(R.string.reflections_text_download_finished),
-                                            message, activity, true, null);
+                                    DialogUtil.showDialog(activity.getString(R.string.reflections_text_download_finished), message, activity, true, null);
                                 }
 
                                 bindAudioService();

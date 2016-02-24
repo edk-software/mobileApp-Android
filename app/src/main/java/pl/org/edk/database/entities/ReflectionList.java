@@ -140,4 +140,18 @@ public class ReflectionList extends DbEntityBase {
 
         return true;
     }
+
+    public Reflection getReflection(int stationIndex){
+        if(reflections == null){
+            return null;
+        }
+
+        for (Reflection reflection : reflections){
+            if(reflection.getStationIndex() == stationIndex){
+                return reflection;
+            }
+        }
+
+        return null;
+    }
 }

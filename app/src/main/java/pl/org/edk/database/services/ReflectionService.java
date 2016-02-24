@@ -60,8 +60,36 @@ public class ReflectionService extends DbServiceBase {
         for (Reflection reflection : reflectionList.getReflections()){
             updateReflection(reflection);
         }
-
         return true;
+    }
+
+    public boolean updateReflectionListByVersion(ReflectionList list) {
+        if(list.getEdition() == 0){
+            throw new InvalidParameterException("Specified ReflectionList has no edition set!");
+        }
+        if(list.getLanguage() == null || list.getLanguage().length() < 2){
+            throw new InvalidParameterException("Specified ReflectionList has no language set!");
+        }
+
+        ReflectionList previous = getReflectionList(list.getLanguage(), list.getEdition(), true);
+        if(previous != null){
+            list.setId(previous.getId());
+
+            // Rewrite Ids of all Reflections in the list
+            for(Reflection reflection : list.getReflections()){
+                reflection.setReflectionList(list);
+                Reflection previousReflection = previous.getReflection(reflection.getStationIndex());
+                if(previousReflection != null){
+                    reflection.setId(previousReflection.getId());
+                    reflection.setAudioLocalPath(previousReflection.getAudioLocalPath());
+                }
+            }
+
+            return updateReflectionList(list);
+        }
+        else {
+            return insertReflectionList(list);
+        }
     }
 
     public boolean updateReflection(Reflection reflection){
