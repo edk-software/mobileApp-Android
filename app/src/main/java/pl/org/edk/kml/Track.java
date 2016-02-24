@@ -27,7 +27,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Track {
 
-    private static final String STACJA = "STACJA";
+    private static final String STATION = "STATION";
+    private static final String STATION_PL = "STACJA";
     private static final String TAG = "EDK";
     private LatLng[] checkpoints = new LatLng[16];
     private List<LatLng> track = new ArrayList<LatLng>();
@@ -180,28 +181,13 @@ public class Track {
         }
 
         String[] parts = splitIntoParts(upperCaseName);
-        if (upperCaseName.contains(STACJA)) {
-            int stationPartIndex = getStationPartIndex(parts);
-            if (stationPartIndex != -1) {
-                String partAfter = stationPartIndex < (parts.length - 1) ? parts[stationPartIndex + 1] : null;
-                stationIndex = tryGetStationIndex(partAfter);
-                if (stationIndex != -1) {
-                    return stationIndex;
-                }
-                String partBefore = stationPartIndex > 0 ? parts[stationPartIndex - 1] : null;
-                stationIndex = tryGetStationIndex(partBefore);
-                if (stationIndex != -1) {
-                    return stationIndex;
-                }
-
-                String lastPart = stationPartIndex != (parts.length - 1) ? parts[parts.length - 1] : null;
-                stationIndex = tryGetStationIndex(lastPart);
-                if (stationIndex != -1) {
-                    return stationIndex;
-                }
+        if (upperCaseName.contains(STATION_PL)) {
+            stationIndex = tryGetStationIndex(parts);
+            if (stationIndex != -1) {
+                return stationIndex;
             }
 
-            int index = upperCaseName.indexOf(STACJA) + STACJA.length();
+            int index = upperCaseName.indexOf(STATION_PL) + STATION_PL.length();
             String afterStation = upperCaseName.substring(index).trim();
             int nextSpace = afterStation.indexOf(' ');
             String stationIndexString = afterStation;
@@ -212,7 +198,6 @@ public class Track {
             if (stationIndex != -1) {
                 return stationIndex;
             }
-
         }
 
         if (introStationNames.contains(upperCaseName.trim())) {
@@ -221,11 +206,39 @@ public class Track {
         if (summaryStationNames.contains(upperCaseName.trim())) {
             return 15;
         }
+        if (upperCaseName.contains(STATION)){
+            stationIndex = tryGetStationIndex(parts);
+            if (stationIndex != -1) {
+                return stationIndex;
+            }
+        }
         if (parts.length > 0) {
             return tryGetStationIndex(parts[0]);
         }
+        return -1;
+    }
 
+    private int tryGetStationIndex(String[] parts) {
+        int stationIndex;
+        int stationPartIndex = getStationPartIndex(parts);
+        if (stationPartIndex != -1) {
+            String partAfter = stationPartIndex < (parts.length - 1) ? parts[stationPartIndex + 1] : null;
+            stationIndex = tryGetStationIndex(partAfter);
+            if (stationIndex != -1) {
+                return stationIndex;
+            }
+            String partBefore = stationPartIndex > 0 ? parts[stationPartIndex - 1] : null;
+            stationIndex = tryGetStationIndex(partBefore);
+            if (stationIndex != -1) {
+                return stationIndex;
+            }
 
+            String lastPart = stationPartIndex != (parts.length - 1) ? parts[parts.length - 1] : null;
+            stationIndex = tryGetStationIndex(lastPart);
+            if (stationIndex != -1) {
+                return stationIndex;
+            }
+        }
         return -1;
     }
 
@@ -265,7 +278,7 @@ public class Track {
     private int getStationPartIndex(String[] parts) {
         for (int i = 0; i < parts.length; i++) {
             String part = parts[i];
-            if (part.equals(STACJA)) {
+            if (part.startsWith(STATION_PL) || part.startsWith(STATION)) {
                 return i;
             }
         }
@@ -377,7 +390,7 @@ public class Track {
         return true;
     }
 
-    public List<Placemark> getIgnoredPlacemarks(){
+    public List<Placemark> getIgnoredPlacemarks() {
         return mIgnoredPlacemarks;
     }
 

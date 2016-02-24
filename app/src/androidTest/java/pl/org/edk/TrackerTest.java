@@ -40,6 +40,7 @@ public class TrackerTest extends InstrumentationTestCase {
                     Route route = (Route) result;
                     if (result != null && route.isDownloaded()) {
                         Log.d("TEST", "route downloaded successfully");
+                        successfulCount[0]++;
 
                         Track track = loadTrack(route);
                         if (track == null) {
@@ -48,7 +49,6 @@ public class TrackerTest extends InstrumentationTestCase {
                             partialTracks.add(track);
                             partialRoutes.add(route);
                         } else{
-                            successfulCount[0]++;
                             Log.i("TEST", "route " + finalRouteId + " loaded successfully");
 
                         }
@@ -109,7 +109,14 @@ public class TrackerTest extends InstrumentationTestCase {
     private Track loadTrack(Route route) {
 
         try {
-            Track track = Track.fromStream(new FileInputStream(route.getKmlDataPath()));
+
+            String kmlDataPath = route.getKmlDataPath();
+            if (kmlDataPath == null || kmlDataPath.isEmpty()){
+                Log.i("TEST", "Path to KML was null or empty");
+                return null;
+            }
+            Log.d("TEST", "Path to KML " + kmlDataPath);
+            Track track = Track.fromStream(new FileInputStream(kmlDataPath));
             return track;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
