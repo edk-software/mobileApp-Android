@@ -65,6 +65,7 @@
                 android:title="@string/settings_update_reflections_audio"
                 android:summary="@string/settings_update_reflections_audio_desc"/>
         <Preference android:title="@string/settings_update_button_text"
+                    android:layout="@layout/red_button_preference"
                     android:key="@string/pref_update_button"/>
 
     </PreferenceCategory>
