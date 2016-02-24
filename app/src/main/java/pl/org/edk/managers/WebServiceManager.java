@@ -10,7 +10,6 @@ import pl.org.edk.webServices.WebServiceAccess;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by pwawrzynek on 2016-02-11.
@@ -232,6 +231,7 @@ public class WebServiceManager {
             if (listener != null){
                 listener.onOperationFinished(null);
             }
+            return;
         }
 
         // Get route language-dependent data
@@ -240,34 +240,15 @@ public class WebServiceManager {
             rawRoute.getDescriptions().add(routeDesc);
         }
 
-        // If KML file is unavailable, leave it be
-        String kmlServerPath = rawRoute.getKmlDataPath();
-        if(kmlServerPath == null || kmlServerPath.length() == 0) {
-            rawRoute.setKmlDataPath("");
-            if(listener != null){
-                listener.onOperationFinished(rawRoute);
-            }
-        }
-
-        // Download KML, if available
-        final String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) + "/route_" + String.valueOf(serverID) + ".kml";
-        FileDownloader manager = new FileDownloader(mContext);
-        manager.setListener(new FileDownloader.OnDownloadEventListener() {
+        // Download KML data
+        downloadKmlForRouteAsync(rawRoute, new OnOperationFinishedEventListener() {
             @Override
-            public void onDownloadFinished(FileDownloader.DownloadResult result) {
-                // Download succeeded
-                rawRoute.setKmlData((result == FileDownloader.DownloadResult.NoErrorsOccurred) ? kmlLocalPath : "");
-
-                // Save the data to DB
-                DbManager.getInstance(mContext).getRouteService().updateRouteByServerId(rawRoute);
-
-                // Inform interested parties
-                if (listener != null) {
+            public void onOperationFinished(Object result) {
+                if(listener != null){
                     listener.onOperationFinished(rawRoute);
                 }
             }
         });
-        manager.downloadFileAsync(kmlServerPath, kmlLocalPath);
     }
 
     // Reflections
@@ -349,6 +330,33 @@ public class WebServiceManager {
     // ---------------------------------------
     // Private methods
     // ---------------------------------------
+    private void downloadKmlForRouteAsync(final Route route, final OnOperationFinishedEventListener listener){
+        final String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) +
+                "/route_" + String.valueOf(route.getServerID()) + ".kml";
+        String kmlServerPath = route.getKmlDataPath();
+        if ((kmlServerPath == null || kmlServerPath.length() == 0) && listener != null) {
+            listener.onOperationFinished(true);
+        }
+
+        FileDownloader manager = new FileDownloader(mContext);
+        manager.setListener(new FileDownloader.OnDownloadEventListener() {
+            @Override
+            public void onDownloadFinished(FileDownloader.DownloadResult result) {
+                // Download succeeded
+                route.setKmlDataPath((result == FileDownloader.DownloadResult.NoErrorsOccurred) ? kmlLocalPath : "");
+
+                // Save the data to DB
+                DbManager.getInstance(mContext).getRouteService().updateRouteByServerId(route);
+
+                // Inform interested parties
+                if (listener != null) {
+                    listener.onOperationFinished(true);
+                }
+            }
+        });
+        manager.downloadFileAsync(kmlServerPath, kmlLocalPath);
+    }
+
     private void downloadNext(final ReflectionList list, final OnOperationFinishedEventListener listener){
         // Downloading finished
         if(mReflectionsToDownload.size() == 0){

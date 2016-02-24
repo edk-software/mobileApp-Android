@@ -50,7 +50,7 @@ public class Route extends DbEntityBase {
     private ArrayList<RouteDesc> descriptions;
     private ArrayList<Station> stations;
     // Additional variables
-    private String kmlData;
+    private transient String kmlData;
 
     // ---------------------------------------
     // Static methods
@@ -147,6 +147,7 @@ public class Route extends DbEntityBase {
     }
     public void setKmlDataPath(String kmlDataPath) {
         this.kmlDataPath = kmlDataPath;
+        this.kmlData = null;
     }
 
     public ArrayList<RouteDesc> getDescriptions() {
@@ -168,9 +169,6 @@ public class Route extends DbEntityBase {
             kmlData = readKml(kmlDataPath);
         }
         return kmlData;
-    }
-    public void setKmlData(String kmlData){
-        this.kmlData = kmlData;
     }
 
     public boolean isDownloaded(){

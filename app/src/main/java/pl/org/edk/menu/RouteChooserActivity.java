@@ -43,20 +43,19 @@ public class RouteChooserActivity extends ChooserActivity {
         return getDisplayItems();
     }
 
-    private void startRouteDescriptionActivity(int pos) {
-        TempSettings.get(RouteChooserActivity.this).set(TempSettings.SELECTED_ROUTE_ID, mRoutes.get(pos).getId());
-        startActivity(new Intent(RouteChooserActivity.this, RouteDescriptionActivity.class));
-    }
-
     @Override
     protected void onItemClick(int pos) {
         startRouteDescriptionActivity(pos);
     }
 
-
     @Override
     protected String getChooserTitle() {
         return getResources().getString(R.string.track_chooser_title);
+    }
+
+    private void startRouteDescriptionActivity(int pos) {
+        TempSettings.get(RouteChooserActivity.this).set(TempSettings.SELECTED_ROUTE_ID, mRoutes.get(pos).getId());
+        startActivity(new Intent(RouteChooserActivity.this, RouteDescriptionActivity.class));
     }
 
     private List<String> getDisplayItems() {
@@ -74,5 +73,4 @@ public class RouteChooserActivity extends ChooserActivity {
         }
         return items;
     }
-
 }

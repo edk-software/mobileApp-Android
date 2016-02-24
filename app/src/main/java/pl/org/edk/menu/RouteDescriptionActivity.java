@@ -20,7 +20,6 @@ import pl.org.edk.util.DialogUtil;
 
 public class RouteDescriptionActivity extends Activity {
 
-
     private Route mRoute;
     private WebView mDescriptionTextView;
 
@@ -29,6 +28,23 @@ public class RouteDescriptionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_description);
 
+        initView();
+
+        mDescriptionTextView = (WebView) findViewById(R.id.descriptionText);
+
+        long routeId = TempSettings.get(this).getLong(TempSettings.SELECTED_ROUTE_ID, -1);
+        mRoute = DbManager.getInstance(this).getRouteService().getRoute(routeId, "pl");
+        if (mRoute == null) {
+            showRouteUnavailableWarning();
+            return;
+        }
+
+        setTitle(mRoute.getName());
+
+        downloadRouteDetailsAsync();
+    }
+
+    private void initView(){
         Button startButton = (Button) findViewById(R.id.startButton);
         startButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -46,23 +62,7 @@ public class RouteDescriptionActivity extends Activity {
                 startActivity(new Intent(RouteDescriptionActivity.this, TerritoryChooserActivity.class));
             }
         });
-
-        mDescriptionTextView = (WebView) findViewById(R.id.descriptionText);
-
-        mRoute = DbManager.getInstance(this).getRouteService()
-                .getRoute(TempSettings.get(this).getLong(TempSettings.SELECTED_ROUTE_ID, -1), "pl");
-
-        if (mRoute == null) {
-            showRouteUnavailableWarning();
-            return;
-        }
-
-        setTitle(mRoute.getName());
-
-        downloadRouteDetailsAsync();
-
     }
-
 
     private void downloadRouteDetailsAsync() {
         if (!mRoute.isDownloaded()) {

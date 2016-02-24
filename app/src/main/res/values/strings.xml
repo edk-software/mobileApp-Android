@@ -118,6 +118,6 @@
 	</string>
 	<string name="main_menu_get_data_title">Brak danych</string>
 
-	<string name="update_download_finished_message">Zakończono aktualizacji danych.</string>
+	<string name="update_download_finished_message">Zakończono aktualizację danych.</string>
 	<string name="update_in_progress_message">Trwa synchronizacja danych...</string>
 </resources>
