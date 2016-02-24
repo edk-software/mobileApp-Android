@@ -16,7 +16,6 @@ import pl.org.edk.TempSettings;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.services.GPSService;
 import pl.org.edk.util.DialogUtil;
-import pl.org.edk.webServices.FileDownloader;
 
 /**
  * Created by darekpap on 2016-01-19.
@@ -147,12 +146,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     private void sync(boolean regions, boolean routes, boolean reflections, boolean audio){
-        DialogUtil.showBusyDialog("Trwa synchronizacja danych...", getActivity());
+        DialogUtil.showBusyDialog(R.string.update_in_progress_message, getActivity());
         WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
             @Override
             public void onOperationFinished(Object result) {
                 DialogUtil.closeBusyDialog();
-                DialogUtil.showWarningDialog("Zakoñczono aktualizacjê danych.", getActivity(), true);
+                DialogUtil.showWarningDialog(getActivity().getString(R.string.update_download_finished_message), getActivity(), true);
             }
         };
         WebServiceManager.getInstance(getActivity()).updateDataAsync(regions, routes, reflections, audio, listener);

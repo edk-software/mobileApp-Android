@@ -27,7 +27,7 @@ public class RouteChooserActivity extends ChooserActivity {
 
         // If nothing found in DB, trigger downloading and wait for the results
         if (mRoutes == null || mRoutes.isEmpty()) {
-            DialogUtil.showBusyDialog(getString(R.string.downloading_message), this);
+            DialogUtil.showBusyDialog(R.string.downloading_message, this);
             WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
                 @Override
                 public void onOperationFinished(Object result) {

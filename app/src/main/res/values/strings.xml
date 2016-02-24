@@ -93,11 +93,11 @@
 	<string name="settings_update_areas">Lista regionów</string>
 	<string name="settings_update_areas_desc">Aktualizuj listę województw i miast, w których odbywa się EDK</string>
 	<string name="settings_update_routes">Trasy</string>
-	<string name="settings_update_routes_desc">Aktualizuj szczegóły ręcznie pobranych wcześniej tras</string>
+	<string name="settings_update_routes_desc">Aktualizuj szczegóły pobranych wcześniej tras</string>
 	<string name="settings_update_reflections">Rozważania</string>
-	<string name="settings_update_reflections_desc">Aktualizuj treść tegorocznych rozważań</string>
+	<string name="settings_update_reflections_desc">Aktualizuj treść rozważań</string>
 	<string name="settings_update_reflections_audio">Rozważania audio</string>
-	<string name="settings_update_reflections_audio_desc">Pobieraj najnowsze pliki audio z nagraniami tegorocznych rozważań</string>
+	<string name="settings_update_reflections_audio_desc">Pobieraj najnowsze pliki audio z nagraniami rozważań</string>
 	<string name="settings_update_button_text">Aktualizuj teraz</string>
 
 	<string name="reflections_audio_download_success">Zakończono pobieranie rozważań audio.</string>
@@ -118,6 +118,6 @@
 	</string>
 	<string name="main_menu_get_data_title">Brak danych</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="update_download_finished_message">Zakończono aktualizacji danych.</string>
+	<string name="update_in_progress_message">Trwa synchronizacja danych...</string>
 </resources>

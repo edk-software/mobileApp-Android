@@ -23,7 +23,7 @@ public class TerritoryChooserActivity extends ChooserActivity {
 
 		// If nothing found in DB, trigger downloading and wait for the results
 		if(mTerritories == null || mTerritories.isEmpty()){
-			DialogUtil.showBusyDialog(getString(R.string.downloading_message), this);
+			DialogUtil.showBusyDialog(R.string.downloading_message, this);
 			WebServiceManager.getInstance(this).getTerritoriesAsync(new WebServiceManager.OnOperationFinishedEventListener() {
 				@Override
 				public void onOperationFinished(Object result) {

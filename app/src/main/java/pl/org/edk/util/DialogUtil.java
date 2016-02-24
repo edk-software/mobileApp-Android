@@ -88,12 +88,12 @@ public class DialogUtil {
 
 	/**
 	 * Display custom pop-up informing that the application is busy
-	 * @param message Information in the content of the pop-up
+	 * @param messageResId Information in the content of the pop-up
 	 * @param activity The activity that calls the pop-up
 	 */
-	public static void showBusyDialog(String message, final Activity activity){
+	public static void showBusyDialog(int messageResId, final Activity activity){
 		String title = activity.getApplicationContext().getString(R.string.busy_dialog_title);
-		showDialog(title, message, activity, false, null);
+		showDialog(title, activity.getString(messageResId), activity, false, null);
 	}
 
 	/**

@@ -27,7 +27,7 @@ public class AreaChooserActivity extends ChooserActivity {
 
 		// If nothing found in DB, trigger downloading and wait for the results
 		if(mAreas == null || mAreas.isEmpty()){
-			DialogUtil.showBusyDialog(getString(R.string.downloading_message), this);
+			DialogUtil.showBusyDialog(R.string.downloading_message, this);
 
 			long territoryId = territory.getServerID();
 			WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {

@@ -66,7 +66,7 @@ public class RouteDescriptionActivity extends Activity {
 
     private void downloadRouteDetailsAsync() {
         if (!mRoute.isDownloaded()) {
-            DialogUtil.showBusyDialog(getString(R.string.downloading_message), this);
+            DialogUtil.showBusyDialog(R.string.downloading_message, this);
             WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
                 @Override
                 public void onOperationFinished(Object result) {
