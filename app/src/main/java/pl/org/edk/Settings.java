@@ -17,6 +17,7 @@ public class Settings extends SettingsBase {
     public static final int APP_LANGUAGE = R.string.pref_language;
 	public static final int APP_DIRECTORY_KML = R.string.pref_kml_directory;
 	public static final int APP_DIRECTORY_AUDIO = R.string.pref_audio_directory;
+    public static final int DO_NOT_SHOW_GPS_DIALOG = R.string.do_not_show_gps_dialog;
 
     private static Settings mInstance = null;
     // ---------------------------------------

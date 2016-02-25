@@ -12,8 +12,9 @@ public final class TempSettings extends SettingsBase{
 	public static final String SELECTED_TERRITORY_ID = "territoryId";
 	public static final String SELECTED_AREA_ID = "areaId";
 	public static final String SELECTED_ROUTE_ID = "routeId";
+    public static final String TRACK_WARNING_SHOWN = "trackWarningShown";
 
-	public static String START_TIME = "StartTime";
+    public static String START_TIME = "StartTime";
 
 	private static final String PREF_KEY = "TempPreferences";
     // ---------------------------------------
@@ -45,6 +46,18 @@ public final class TempSettings extends SettingsBase{
 
     }
 
+    public boolean getBoolean(String key, boolean defaultValue) {
+        String result = getString(key);
+        if (result == null){
+            return defaultValue;
+        }
+        return Boolean.parseBoolean(result);
+    }
+
+    public boolean getBoolean(String key){
+        return getBoolean(key, false);
+    }
+
     public int getInt(String key, int defaultValue) {
         String result = getString(key);
         if (result == null) {
@@ -73,6 +86,9 @@ public final class TempSettings extends SettingsBase{
         return getFloat(key, 0f);
     }
 
+    public void set(String key, boolean value) {
+        setString(key, String.valueOf(value));
+    }
 
     public void set(String key, int value) {
         setString(key, String.valueOf(value));

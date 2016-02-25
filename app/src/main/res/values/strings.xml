@@ -120,4 +120,5 @@
 
 	<string name="update_download_finished_message">Zakończono aktualizację danych (pobieranie plików audio może odbywać się w tle).</string>
 	<string name="update_in_progress_message">Trwa aktualizacja danych...</string>
+	<string name="do_not_show_gps_dialog">doNotShowGpsDialog</string>
 </resources>

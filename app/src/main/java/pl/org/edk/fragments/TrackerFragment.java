@@ -6,9 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.CheckBox;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -17,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import pl.org.edk.R;
 import pl.org.edk.Settings;
+import pl.org.edk.TempSettings;
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.kml.TrackerProvider;
 import pl.org.edk.util.DialogUtil;
@@ -27,8 +32,6 @@ import pl.org.edk.util.DialogUtil;
 public abstract class TrackerFragment extends Fragment implements KMLTracker.TrackListener {
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 0;
     private boolean mTrackerAvailable = true;
-    private boolean mWarningShown = false;
-
 
     @Override
     public void onResume() {
@@ -99,19 +102,20 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
         if (!mTrackerAvailable) {
             return true;
         }
-
+        TempSettings tempSettings = TempSettings.get(getActivity());
         try {
             KMLTracker tracker = getTracker();
-            if (!tracker.isComplete() && !mWarningShown && isFragmentVisible()) {
+            if (!tracker.isComplete() && !tempSettings.getBoolean(TempSettings.TRACK_WARNING_SHOWN) && isFragmentVisible()) {
                 DialogUtil.showWarningDialog(R.string.stations_missing_warning_message, getActivity(), false);
-                mWarningShown = true;
+                tempSettings.set(TempSettings.TRACK_WARNING_SHOWN, true);
             }
             return false;
         } catch (Exception e) {
             mTrackerAvailable = false;
             Log.e("EDK", "Invalid track", e);
-            if (isFragmentVisible()) {
+            if (isFragmentVisible() && !tempSettings.getBoolean(TempSettings.TRACK_WARNING_SHOWN)) {
                 DialogUtil.showWarningDialog(R.string.unrecognized_error_while_reading_track, getActivity(), false);
+                tempSettings.set(TempSettings.TRACK_WARNING_SHOWN, true);
             }
             return true;
         }
@@ -125,17 +129,31 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
     }
 
     private void buildAlertMessageNoGps() {
+        if (Settings.get(getActivity()).getBoolean(Settings.DO_NOT_SHOW_GPS_DIALOG)) {
+            return;
+        }
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater adbInflater = getActivity().getLayoutInflater();
+        View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
+        final CheckBox dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
+        builder.setView(eulaLayout);
+
         builder.setMessage(R.string.GPS_off_warning_message);
         builder.setTitle(R.string.warning_dialog_title);
         builder.setCancelable(false);
         builder.setPositiveButton(R.string.go_to_location_settings, new DialogInterface.OnClickListener() {
             public void onClick(final DialogInterface dialog, final int id) {
+                if (dontShowAgain.isChecked()) {
+                    Settings.get(getActivity()).set(Settings.DO_NOT_SHOW_GPS_DIALOG, true);
+                }
                 startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
         });
         builder.setNegativeButton(R.string.ignore, new DialogInterface.OnClickListener() {
             public void onClick(final DialogInterface dialog, final int id) {
+                if (dontShowAgain.isChecked()) {
+                    Settings.get(getActivity()).set(Settings.DO_NOT_SHOW_GPS_DIALOG, true);
+                }
                 dialog.cancel();
             }
         });
