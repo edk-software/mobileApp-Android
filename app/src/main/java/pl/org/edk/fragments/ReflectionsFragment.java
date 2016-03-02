@@ -166,7 +166,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         // Ask about audio reflections
         Settings settings = Settings.get(getActivity());
         boolean dialogShown = settings.getBoolean(Settings.AUDIO_DOWNLOAD_DIALOG_SHOWN, false);
-        if (!isAudioAvailable() && !dialogShown) {
+        if (!isAudioAvailable() && !WebServiceManager.getInstance(getActivity()).isDownloadInProgress() && !dialogShown) {
             showDownloadDialog();
             settings.set(Settings.AUDIO_DOWNLOAD_DIALOG_SHOWN, true);
         }
