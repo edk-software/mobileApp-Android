@@ -132,6 +132,10 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             Log.d("EDK", "There are only 14 reflections available");
             stationIndex = Math.min(13, Math.max(0, stationIndex - 1));
         }
+        selectStationInternal(stationIndex);
+    }
+
+    private void selectStationInternal(int stationIndex) {
         boolean playerResetNeeded = stationIndex != mCurrentStation;
         openReflections(stationIndex);
         refreshDownloadButton(true);
@@ -297,7 +301,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectStation(mCurrentStation + 1);
+                selectStationInternal(mCurrentStation + 1);
             }
         });
 
@@ -305,7 +309,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mPrevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectStation(mCurrentStation - 1);
+                selectStationInternal(mCurrentStation - 1);
             }
         });
 
