@@ -1,21 +1,21 @@
 package pl.org.edk.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -28,6 +28,7 @@ import pl.org.edk.util.DialogUtil;
 
 /**
  * Created by darekpap on 2016-02-14.
+ *
  */
 public abstract class TrackerFragment extends Fragment implements KMLTracker.TrackListener {
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 0;
@@ -134,6 +135,7 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
         }
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater adbInflater = getActivity().getLayoutInflater();
+        @SuppressLint("InflateParams")
         View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
         final CheckBox dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
         builder.setView(eulaLayout);
@@ -162,14 +164,17 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
     }
 
     private void verifyWhetherServicesAvailable() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+        int resultCode = api.isGooglePlayServicesAvailable(getActivity());
         if (ConnectionResult.SUCCESS == resultCode) {
             return;
         }
-
-        Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(),
-                CONNECTION_FAILURE_RESOLUTION_REQUEST);
-        errorDialog.show();
+        if (api.isUserResolvableError(resultCode)) {
+            api.getErrorDialog(getActivity(), resultCode, CONNECTION_FAILURE_RESOLUTION_REQUEST).show();
+        } else {
+            Toast.makeText(getActivity(), R.string.google_api_unavailable_message, Toast.LENGTH_LONG).show();
+            getActivity().finish();
+        }
     }
 
     protected void changeLocationUpdates(boolean visible) {

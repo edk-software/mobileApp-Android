@@ -35,7 +35,7 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
     private List<LatLng> track;
     private List<LatLng> checkpoints;
     private LatLng currentLoc = null;
-    private List<TrackListener> listeners = new ArrayList<TrackListener>();
+    private List<TrackListener> listeners = new ArrayList<>();
     private int checkpointId = -1;
     private State prevState = null;
     private State currState = State.WaitingForPosition;
@@ -98,7 +98,7 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
         if (!listeners.contains(listener)) {
             listeners.add(listener);
             Log.i(TAG, "Listener added " + listener.getClass().getSimpleName() + ", current list size is " + listeners.size());
-        }else{
+        } else {
             Log.i(TAG, "Listener already registered " + listener.getClass().getSimpleName());
         }
     }
@@ -160,17 +160,17 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
     }
 
     private int getNextValidCheckpointId(int firstCandidateId) {
-        for (int i = firstCandidateId; i<checkpoints.size();i++){
-            if(checkpoints.get(i)!= null){
+        for (int i = firstCandidateId; i < checkpoints.size(); i++) {
+            if (checkpoints.get(i) != null) {
                 return i;
             }
         }
         return -1;
     }
 
-    public boolean isComplete(){
+    public boolean isComplete() {
         for (LatLng pos : checkpoints) {
-            if (pos == null){
+            if (pos == null) {
                 return false;
             }
         }
@@ -190,7 +190,11 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
             return;
         }
         if (mLocationClient.isConnected()) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mLocationClient, locationRequest, this);
+            try {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mLocationClient, locationRequest, this);
+            } catch (SecurityException se) {
+                Log.e(TAG, "Cannot use location api", se);
+            }
             return;
         }
         if (!mLocationClient.isConnecting()) {
@@ -245,14 +249,18 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
      */
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.i(TAG, "Connected to location client");
-        Location location = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
-        if (location != null) {
-            currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
-            mClosestIndex = getClosestIndex(currentLoc);
-        }
-        if (mQueuedRequest != null) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mLocationClient, mQueuedRequest, this);
+        try {
+            Log.i(TAG, "Connected to location client");
+            Location location = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
+            if (location != null) {
+                currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
+                mClosestIndex = getClosestIndex(currentLoc);
+            }
+            if (mQueuedRequest != null) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mLocationClient, mQueuedRequest, this);
+            }
+        } catch (SecurityException se) {
+            Log.e(TAG, "Cannot use location api", se);
         }
         Log.i(TAG, "Location client updates requested");
     }
@@ -284,7 +292,7 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
 
     private int determineCheckpointId() {
         for (LatLng point : checkpoints) {
-            if (point == null){
+            if (point == null) {
                 continue;
             }
             if (distanceBetween(point, currentLoc) < CHECKPOINT_MIN_DIST) {
@@ -361,7 +369,7 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
     }
 
     public enum State {
-        OnTrack, OffTrack, NearCheckpoint, WaitingForPosition;
+        OnTrack, OffTrack, NearCheckpoint, WaitingForPosition
     }
 
     public interface TrackListener {
@@ -380,7 +388,7 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult result) {
+    public void onConnectionFailed(@NonNull ConnectionResult result) {
         Log.w(TAG, "Connection failed");
         Log.w(TAG, result.toString());
 

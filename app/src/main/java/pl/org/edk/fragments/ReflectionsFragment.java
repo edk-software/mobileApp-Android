@@ -35,14 +35,13 @@ import pl.org.edk.util.ExpandableListAdapter;
 
 /**
  * Created by darekpap on 2015-11-30.
+ *
  */
 public class ReflectionsFragment extends Fragment implements OnPlayerStopListener {
     public static final String FRAGMENT_TAG = "reflectionsFragment";
 
     private ExpandableListView expListView;
     private List<String> listDataHeader;
-    private HashMap<String, List<String>> listDataChild;
-    private ExpandableListAdapter listAdapter;
     private int mCurrentStation = -1;
 
     private View mPlayerView;
@@ -71,12 +70,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             } else if (mCurrentStation != -1) {
                 loadPlayer();
             } else {
-                if (mCurrentStation == -1) {
-                    hidePlayer();
-                } else {
-                    showPlayerIfAvailable();
-                    resetSeekBar();
-                }
+                hidePlayer();
             }
         }
 
@@ -498,7 +492,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
         // Create the lists
         listDataHeader = new ArrayList<>(mReflectionList.getReflections().size());
-        listDataChild = new HashMap<>(mReflectionList.getReflections().size());
+        HashMap<String, List<String>> listDataChild = new HashMap<>(mReflectionList.getReflections().size());
 
         for (final Reflection reflection : mReflectionList.getReflections()) {
             String title = reflection.getDisplayName();
@@ -509,7 +503,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
 
         // Prepare the view
-        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+        ExpandableListAdapter listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
         expListView.setGroupIndicator(null);
         expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
