@@ -79,7 +79,7 @@
     <string name="distance_default_value">0 km</string>
     <string name="finish_application">Zakończ</string>
 
-    <string name="settings_location_category">Ustawienia lokalizacji</string>
+    <string name="settings_location_category">Lokalizacja</string>
     <string name="settings_location_tracking_summary">Pozwala na powiadomienie o opuszczeniu trasy. Zwiększa zużycie baterii.</string>
     <string name="settings_location_tracking_title">Sprawdzaj pozycję w tle</string>
     <string name="settings_location_follow_summary">Automatyczne przewijanie mapy do najnowszej pozycji.</string>
