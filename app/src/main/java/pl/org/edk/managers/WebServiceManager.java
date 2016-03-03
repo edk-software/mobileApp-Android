@@ -2,7 +2,6 @@ package pl.org.edk.managers;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.*;
@@ -21,6 +20,7 @@ public class WebServiceManager {
     // Subclasses
     // ---------------------------------------
     public interface OnOperationFinishedEventListener<Type>{
+        // TODO: Add operation type here
         void onOperationFinished(Type result);
     }
 
@@ -35,6 +35,7 @@ public class WebServiceManager {
     private int mNotificationIcon;
     private boolean mDownloadInProgress = false;
     private ArrayList<Reflection> mReflectionsToDownload = new ArrayList<>();
+    private ArrayList<OnOperationFinishedEventListener> mDownloadListeners = new ArrayList<>();
 
     // ---------------------------------------
     // Constructors
@@ -293,6 +294,18 @@ public class WebServiceManager {
         return mDownloadInProgress;
     }
 
+    public void addDownloadListener(OnOperationFinishedEventListener newListener){
+        if(!mDownloadListeners.contains(newListener)){
+            mDownloadListeners.add(newListener);
+        }
+    }
+
+    public void removeDownloadListener(OnOperationFinishedEventListener listener){
+        if(!mDownloadListeners.contains(listener)){
+            mDownloadListeners.remove(listener);
+        }
+    }
+
     public void updateData(boolean includeAreas, boolean includeLocalRoutes, boolean includeReflections, boolean includeAudio) {
         if (includeAreas){
             syncAreas();
@@ -367,6 +380,9 @@ public class WebServiceManager {
             mDownloadInProgress = false;
             if(listener != null){
                 listener.onOperationFinished(list);
+            }
+            for(OnOperationFinishedEventListener downloadListener : mDownloadListeners){
+                downloadListener.onOperationFinished(list);
             }
             return;
         }
