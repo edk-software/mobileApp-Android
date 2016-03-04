@@ -1,8 +1,5 @@
 package pl.org.edk.kml;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,12 +11,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.Builder;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class KMLTracker implements LocationListener, OnConnectionFailedListener, ConnectionCallbacks {
     public static final int DISTANCE_TRAVELED_INDEX = 0;
@@ -32,6 +30,8 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
     private static final float ACCEPTED_ACCURACY = 50;
     private static final double MIN_REF_DISTANCE = 200;
     private final double trackLength;
+    private final List<Double> mStationsDistancesTraveled;
+    private final List<Integer> mStationIndexes;
     private List<LatLng> track;
     private List<LatLng> checkpoints;
     private LatLng currentLoc = null;
@@ -57,7 +57,41 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
         mContext = context;
         this.track = track.getTrackPoints();
         this.checkpoints = track.getCheckpoints();
+        mStationIndexes = findStationIndexes();
+        mStationsDistancesTraveled = calculateDistancesForStations();
         this.trackLength = trackDistanceBetween(0, this.track.size() - 1);
+    }
+
+    private List<Integer> findStationIndexes() {
+        ArrayList<Integer> indexes = new ArrayList<>();
+        for (LatLng checkpoint : checkpoints) {
+            indexes.add(track.indexOf(checkpoint));
+        }
+        return indexes;
+
+    }
+
+    private List<Double> calculateDistancesForStations() {
+        if (!isComplete()) {
+            return null;
+        }
+        ArrayList<Double> distances = new ArrayList<>();
+        int previous = 0;
+        for (int stationIndex = 0; stationIndex < mStationIndexes.size(); stationIndex++) {
+            Integer trackPointIndex = mStationIndexes.get(stationIndex);
+
+            Double previousDist = stationIndex == 0 ? 0.0 : distances.get(stationIndex - 1);
+            if (trackPointIndex == -1) {
+                distances.add(0.0 + previousDist);
+                continue;
+            }
+            distances.add(calcTrackDistanceBetween(previous, trackPointIndex) + previousDist);
+            previous = trackPointIndex;
+
+        }
+
+        return distances;
+
     }
 
     private boolean isAfter(LatLng checkpoint, int index) {
@@ -80,14 +114,28 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
         return false;
     }
 
+
+
     private int getClosestIndex(LatLng checkpoint) {
+
         double dist = Double.MAX_VALUE;
+        int closeEnoughDist = 20;
+        int locationsToCheckAfterCloseFound = 10;
+
+        boolean closeEnoughFound = false;
+
         int index = 0;
         for (int i = 0; i < track.size(); i++) {
+            if ((closeEnoughFound && i - index > locationsToCheckAfterCloseFound)) {
+                return index;
+            }
             LatLng point = track.get(i);
             double currDist = distanceBetween(point, checkpoint);
             if (currDist < dist) {
                 dist = currDist;
+                if (dist < closeEnoughDist) {
+                    closeEnoughFound = true;
+                }
                 index = i;
             }
         }
@@ -333,6 +381,36 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
     }
 
     private double trackDistanceBetween(int startIndex, int endIndex) {
+        int lastBeforeStart = 0;
+        int lastBeforeEnd = 0;
+
+        for (int i = 0; i < mStationIndexes.size(); i++) {
+            Integer index = mStationIndexes.get(i);
+            if (index == -1) {
+                continue;
+            }
+            if (startIndex > index) {
+                lastBeforeStart = i;
+            }
+            if (endIndex > index) {
+                lastBeforeEnd = i;
+            }
+        }
+        if (lastBeforeEnd <= lastBeforeStart + 1){
+            return calcTrackDistanceBetween(startIndex, endIndex);
+        }
+
+        if (lastBeforeEnd < 0 || lastBeforeEnd >= mStationsDistancesTraveled.size() || lastBeforeStart < 0 || lastBeforeStart >= mStationsDistancesTraveled.size()){
+            //backup to make sure we don't throw exception, shouldn't happen:)
+            Log.w(TAG, "Unexpected values when finding distance between track points. Fallback to naive calculation");
+            return calcTrackDistanceBetween(startIndex, endIndex);
+        }
+
+        double distBetweenStations = mStationsDistancesTraveled.get(lastBeforeEnd) - mStationsDistancesTraveled.get(lastBeforeStart + 1);
+        return calcTrackDistanceBetween(startIndex, mStationIndexes.get(lastBeforeStart +1)) + distBetweenStations + calcTrackDistanceBetween(mStationIndexes.get(lastBeforeEnd), endIndex);
+    }
+
+    private double calcTrackDistanceBetween(int startIndex, int endIndex) {
         double length = 0.0;
         for (int i = startIndex + 1; i <= endIndex; i++) {
             length += distanceBetween(i - 1, i);
