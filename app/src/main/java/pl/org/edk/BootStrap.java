@@ -26,9 +26,6 @@ public final class BootStrap {
         Settings.get(context).set(Settings.APP_LANGUAGE, "pl");
         Settings.get(context).set(Settings.YEAR_ID, Calendar.getInstance().get(Calendar.YEAR));
 
-        // TEMP
-        DbManager.getInstance(context).reset();
-
         initStorage(context);
 
         mIsInitialized = true;
