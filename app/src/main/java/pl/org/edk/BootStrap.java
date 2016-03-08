@@ -21,7 +21,7 @@ public final class BootStrap {
             return;
 
         DbManager.getInstance(context).init();
-        WebServiceManager.getInstance(context).init(R.drawable.edk_icon);
+        WebServiceManager.getInstance(context).init(R.mipmap.ic_launcher);
 
         Settings.get(context).set(Settings.APP_LANGUAGE, "pl");
         Settings.get(context).set(Settings.YEAR_ID, Calendar.getInstance().get(Calendar.YEAR));

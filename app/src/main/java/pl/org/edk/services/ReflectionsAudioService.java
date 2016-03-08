@@ -122,7 +122,7 @@ public class ReflectionsAudioService extends Service implements
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setContentTitle(mReflection.getDisplayName())
-                .setSmallIcon(R.drawable.edk_icon)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pIntent)
                 .setPriority(NotificationCompat.PRIORITY_MAX);
         Intent intent2 = new Intent(this, ReflectionsAudioService.class);
