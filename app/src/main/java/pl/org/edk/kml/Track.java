@@ -245,7 +245,7 @@ public class Track {
     @NonNull
     private String[] splitIntoParts(String upperCaseName) {
         String withFixedSpaces = replaceNonBreakingSpaceWithNormal(upperCaseName);
-        String[] parts = withFixedSpaces.split(" |,|\\.|_|-");
+        String[] parts = withFixedSpaces.split(" |,|\\.|_|-|–");
         List<String> partsList = new ArrayList<>();
         for (int i = 0; i < parts.length; i++) {
             String trimmed = parts[i].trim();

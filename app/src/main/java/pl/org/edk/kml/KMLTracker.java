@@ -73,7 +73,13 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
 
     private List<Double> calculateDistancesForStations() {
         if (!isComplete()) {
-            return null;
+            ArrayList<Double> distances = new ArrayList<>();
+            for (int i = 0; i < mStationIndexes.size(); i++) {
+                distances.add(0.0);
+            }
+            return distances;
+
+
         }
         ArrayList<Double> distances = new ArrayList<>();
         int previous = 0;
@@ -173,14 +179,14 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
 
     public double[] getDistanceInfo() {
         if (currentLoc == null) {
-            double distanceToNext = trackDistanceBetween(0, track.indexOf(checkpoints.get(0)));
+            double distanceToNext = trackDistanceBetween(0, mStationIndexes.get(0));
 
             return new double[]{0, trackLength, distanceToNext};
         }
 
         double traveled = trackDistanceBetween(0, mClosestIndex);
         int nextCheckpointId = getNextCheckpointId();
-        double distanceToNext = nextCheckpointId == -1 ? 0 : trackDistanceBetween(mClosestIndex, track.indexOf(checkpoints.get(nextCheckpointId)));
+        double distanceToNext = nextCheckpointId == -1 ? 0 : trackDistanceBetween(mClosestIndex, mStationIndexes.get(nextCheckpointId));
         return new double[]{traveled, trackLength - traveled, distanceToNext};
     }
 
@@ -198,9 +204,8 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
         if (currentLoc == null) {
             return 0;
         }
-        for (int id = 0; id < checkpoints.size(); id++) {
-            LatLng checkpoint = checkpoints.get(id);
-            if (mClosestIndex < track.indexOf(checkpoint)) {
+        for (int id = 0; id < mStationIndexes.size(); id++) {
+            if (mClosestIndex < mStationIndexes.get(id)) {
                 return id;
             }
         }
@@ -396,18 +401,18 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
                 lastBeforeEnd = i;
             }
         }
-        if (lastBeforeEnd <= lastBeforeStart + 1){
+        if (lastBeforeEnd <= lastBeforeStart + 1) {
             return calcTrackDistanceBetween(startIndex, endIndex);
         }
 
-        if (lastBeforeEnd < 0 || lastBeforeEnd >= mStationsDistancesTraveled.size() || lastBeforeStart < 0 || lastBeforeStart >= mStationsDistancesTraveled.size()){
+        if (lastBeforeEnd < 0 || lastBeforeEnd >= mStationsDistancesTraveled.size() || lastBeforeStart < 0 || lastBeforeStart >= mStationsDistancesTraveled.size()) {
             //backup to make sure we don't throw exception, shouldn't happen:)
             Log.w(TAG, "Unexpected values when finding distance between track points. Fallback to naive calculation");
             return calcTrackDistanceBetween(startIndex, endIndex);
         }
 
         double distBetweenStations = mStationsDistancesTraveled.get(lastBeforeEnd) - mStationsDistancesTraveled.get(lastBeforeStart + 1);
-        return calcTrackDistanceBetween(startIndex, mStationIndexes.get(lastBeforeStart +1)) + distBetweenStations + calcTrackDistanceBetween(mStationIndexes.get(lastBeforeEnd), endIndex);
+        return calcTrackDistanceBetween(startIndex, mStationIndexes.get(lastBeforeStart + 1)) + distBetweenStations + calcTrackDistanceBetween(mStationIndexes.get(lastBeforeEnd), endIndex);
     }
 
     private double calcTrackDistanceBetween(int startIndex, int endIndex) {
