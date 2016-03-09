@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
@@ -66,15 +67,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(Settings.IS_BACKGROUND_TRACKING_ON))&& TempSettings.get(getActivity()).isUserOnTrack()) {
+        FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        if (key.equals(getString(Settings.IS_BACKGROUND_TRACKING_ON)) && TempSettings.get(activity).isUserOnTrack()) {
             boolean trackingOn = sharedPreferences.getBoolean(key, false);
-            Intent serviceIntent = new Intent(getActivity(), GPSService.class);
+            Intent serviceIntent = new Intent(activity, GPSService.class);
 
             if (trackingOn) {
-                getActivity().startService(serviceIntent);
+                activity.startService(serviceIntent);
 
             } else {
-                getActivity().stopService(serviceIntent);
+                activity.stopService(serviceIntent);
             }
         }
         if (isVisible() && isMenuVisible()) {
@@ -104,15 +109,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
     }
 
-    private void initView(){
-        final CheckBoxPreference reflectionsCheck = (CheckBoxPreference)findPreference(getString(R.string.pref_update_reflections));
-        final CheckBoxPreference reflectionsAudioCheck = (CheckBoxPreference)findPreference(getString(R.string.pref_update_reflections_audio));
+    private void initView() {
+        final CheckBoxPreference reflectionsCheck = (CheckBoxPreference) findPreference(getString(R.string.pref_update_reflections));
+        final CheckBoxPreference reflectionsAudioCheck = (CheckBoxPreference) findPreference(getString(R.string.pref_update_reflections_audio));
 
         reflectionsCheck.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                boolean newValue = (boolean)o;
-                if(!newValue){
+                boolean newValue = (boolean) o;
+                if (!newValue) {
                     reflectionsAudioCheck.setChecked(false);
                 }
                 return true;
@@ -121,8 +126,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         reflectionsAudioCheck.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                boolean newValue = (boolean)o;
-                if(newValue){
+                boolean newValue = (boolean) o;
+                if (newValue) {
                     reflectionsCheck.setChecked(true);
                 }
                 return true;
@@ -145,14 +150,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         });
     }
 
-    private void sync(boolean regions, boolean routes, boolean reflections, boolean audio){
+    private void sync(boolean regions, boolean routes, boolean reflections, boolean audio) {
         DialogUtil.showBusyDialog(R.string.update_in_progress_message, getActivity());
         WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
             @Override
             public void onOperationFinished(Object result) {
                 DialogUtil.closeBusyDialog();
-                boolean finishActivity = !TempSettings.get(getActivity()).isUserOnTrack();
-                DialogUtil.showWarningDialog(R.string.update_download_finished_message, getActivity(), finishActivity);
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    boolean finishActivity = !TempSettings.get(activity).isUserOnTrack();
+                    DialogUtil.showWarningDialog(R.string.update_download_finished_message, activity, finishActivity);
+                }
             }
         };
         WebServiceManager.getInstance(getActivity()).updateDataAsync(regions, routes, reflections, audio, listener);

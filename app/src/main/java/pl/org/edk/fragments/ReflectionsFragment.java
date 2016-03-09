@@ -35,7 +35,6 @@ import pl.org.edk.util.ExpandableListAdapter;
 
 /**
  * Created by darekpap on 2015-11-30.
- *
  */
 public class ReflectionsFragment extends Fragment implements OnPlayerStopListener, WebServiceManager.OnOperationFinishedEventListener {
     public static final String FRAGMENT_TAG = "reflectionsFragment";
@@ -126,7 +125,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         expListView = (ExpandableListView) view.findViewById(R.id.expandableList);
 
         // If downloading is in progress, refresh, when it's finished
-        if(WebServiceManager.getInstance(getActivity()).isDownloadInProgress()){
+        if (WebServiceManager.getInstance(getActivity()).isDownloadInProgress()) {
             WebServiceManager.getInstance(getActivity()).addDownloadListener(this);
         }
 
@@ -192,28 +191,29 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     public void onOperationFinished(Object result) {
         FragmentActivity activity = getActivity();
 
-        // Inform about the result
-        if (activity != null) {
-            ReflectionList downloadedList = (ReflectionList) result;
+        if (activity == null) {
+            return;
+        }
+        ReflectionList downloadedList = (ReflectionList) result;
 
-            // Check if we even care for these version of reflections
-            if(downloadedList.getId() != mReflectionList.getId()){
-                return;
-            }
-
-            // Display info and refresh, if necessary
-            String message;
-            if (downloadedList.hasAudio()) {
-                mReflectionList = downloadedList;
-                message = activity.getString(R.string.reflections_audio_download_success);
-            } else {
-                message = activity.getString(R.string.reflections_audio_download_failed);
-            }
-            DialogUtil.showDialog(activity.getString(R.string.reflections_text_download_finished), message, activity, true, null);
+        // Check if we even care for these version of reflections
+        if (downloadedList.getId() != mReflectionList.getId()) {
+            return;
         }
 
+        // Display info and refresh, if necessary
+        String message;
+        if (downloadedList.hasAudio()) {
+            mReflectionList = downloadedList;
+            message = activity.getString(R.string.reflections_audio_download_success);
+        } else {
+            message = activity.getString(R.string.reflections_audio_download_failed);
+        }
+        DialogUtil.showDialog(activity.getString(R.string.reflections_text_download_finished), message, activity, true, null);
         bindAudioService();
         refreshDownloadButton(false);
+
+
     }
 
     public void selectStation(int stationIndex) {
@@ -360,7 +360,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mDownloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(WebServiceManager.getInstance(getActivity()).isDownloadInProgress()){
+                if (WebServiceManager.getInstance(getActivity()).isDownloadInProgress()) {
                     return;
                 }
 
@@ -375,14 +375,18 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     private void refreshDownloadButton(boolean forceHide) {
         if (forceHide || isAudioAvailable()) {
             mDownloadButton.setVisibility(View.GONE);
+            return;
         }
-        else if(WebServiceManager.getInstance(getActivity()).isDownloadInProgress()){
-            mDownloadButton.setVisibility(View.VISIBLE);
-            mDownloadButton.setText(getActivity().getString(R.string.reflections_audio_download_in_progress));
+        FragmentActivity activity = getActivity();
+        if (activity == null){
+            return;
         }
-        else {
+        if (WebServiceManager.getInstance(activity).isDownloadInProgress()) {
             mDownloadButton.setVisibility(View.VISIBLE);
-            mDownloadButton.setText(getActivity().getString(R.string.reflections_audio_download_button_text));
+            mDownloadButton.setText(activity.getString(R.string.reflections_audio_download_in_progress));
+        } else {
+            mDownloadButton.setVisibility(View.VISIBLE);
+            mDownloadButton.setText(activity.getString(R.string.reflections_audio_download_button_text));
         }
     }
 
@@ -391,10 +395,11 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private void bindAudioService() {
-        if (!mServiceBound) {
-            Intent playIntent = new Intent(getActivity(), ReflectionsAudioService.class);
-            getActivity().bindService(playIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-            getActivity().startService(playIntent);
+        FragmentActivity activity = getActivity();
+        if (!mServiceBound && activity != null) {
+            Intent playIntent = new Intent(activity, ReflectionsAudioService.class);
+            activity.bindService(playIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+            activity.startService(playIntent);
         }
     }
 
@@ -484,15 +489,15 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         String dialogText = getActivity().getString(R.string.reflections_audio_download_dialog_message);
 
         DialogUtil.showYesNoDialog(dialogTitle, dialogText, getActivity(), new DialogUtil.OnSelectedEventListener() {
-                    @Override
-                    public void onAccepted() {
-                        WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, ReflectionsFragment.this);
-                        refreshDownloadButton(true);
-                    }
+            @Override
+            public void onAccepted() {
+                WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, ReflectionsFragment.this);
+                refreshDownloadButton(true);
+            }
 
-                    @Override
-                    public void onRejected() { /* Just close */ }
-                });
+            @Override
+            public void onRejected() { /* Just close */ }
+        });
     }
 
     private void refreshViewItems() {
