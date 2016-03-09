@@ -1,26 +1,28 @@
 package pl.org.edk.menu;
 
-import pl.org.edk.*;
-import pl.org.edk.database.DbManager;
-import pl.org.edk.database.entities.Route;
-import pl.org.edk.managers.WebServiceManager;
-import pl.org.edk.services.GPSService;
-
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+
+import pl.org.edk.BootStrap;
+import pl.org.edk.R;
+import pl.org.edk.Settings;
+import pl.org.edk.TempSettings;
+import pl.org.edk.database.DbManager;
 import pl.org.edk.util.DialogUtil;
-import pl.org.edk.webServices.FileDownloader;
-
-import java.util.concurrent.ExecutionException;
-
 public class MainMenuActivity extends Activity {
-	// ---------------------------------------
+    // ---------------------------------------
 	// Subclasses
 	// ---------------------------------------
 	private final class TrackButtonListener implements OnClickListener {
@@ -61,8 +63,12 @@ public class MainMenuActivity extends Activity {
 	private ImageButton considerationsImageButton;
 	private ImageButton settingsImageButton;
 	private ImageButton infoImageButton;
+    private boolean mWarningDialogShown;
 
-	// ---------------------------------------
+    private static final int ACCESS_GPS_AND_WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 3;
+
+
+    // ---------------------------------------
 	// Protected methods
 	// ---------------------------------------
 	@Override
@@ -88,7 +94,7 @@ public class MainMenuActivity extends Activity {
 		checkDB();
 	}
 
-	// ---------------------------------------
+    // ---------------------------------------
 	// Private methods
 	// ---------------------------------------
 	private void initUI(){
@@ -118,16 +124,16 @@ public class MainMenuActivity extends Activity {
 	private void checkDB(){
 		if(DbManager.getInstance(this).getTerritoryService().getTerritories().size() == 0){
 			DialogUtil.showYesNoDialog(getString(R.string.main_menu_get_data_title),
-					getString(R.string.main_menu_get_data_message),
-					this, new DialogUtil.OnSelectedEventListener() {
-				@Override
-				public void onAccepted() {
-					openSettings();
-				}
+                    getString(R.string.main_menu_get_data_message),
+                    this, new DialogUtil.OnSelectedEventListener() {
+                        @Override
+                        public void onAccepted() {
+                            openSettings();
+                        }
 
-				@Override
-				public void onRejected() { /* Just proceed */ }
-			});
+                        @Override
+                        public void onRejected() { /* Just proceed */ }
+                    });
 		}
 	}
 
@@ -135,4 +141,73 @@ public class MainMenuActivity extends Activity {
 		Intent i = new Intent(MainMenuActivity.this, SettingsActivity.class);
 		MainMenuActivity.this.startActivity(i);
 	}
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkPermissions();
+    }
+
+    private void checkPermissions() {
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION};
+        if (areAllGranted(permissions)) {
+            return;
+        }
+        if (mWarningDialogShown){
+            finish();
+            return;
+        }
+        ActivityCompat.requestPermissions(this, permissions, ACCESS_GPS_AND_WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+    }
+
+    private boolean areAllGranted(String[] permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != ACCESS_GPS_AND_WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            Log.w(getClass().getSimpleName(), "Unrecognized request code");
+            return;
+        }
+        if (anyDenied(grantResults)){
+            if (mWarningDialogShown){
+                finish();
+                return;
+            }
+            DialogUtil.showDialog(getString(R.string.no_permission_title), getString(R.string.no_permission_message), this, true, new DialogUtil.OnCloseEventListener() {
+                @Override
+                public void onClose() {
+                    startAppSettingsActivity();
+                }
+            });
+            mWarningDialogShown = true;
+        }
+    }
+
+    private void startAppSettingsActivity() {
+        Intent intent = new Intent();
+        intent.setAction(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", MainMenuActivity.this.getPackageName(), null);
+        intent.setData(uri);
+        MainMenuActivity.this.startActivity(intent);
+    }
+
+    private boolean anyDenied(int[] grantResults) {
+        if (grantResults.length == 0){
+            return true;
+        }
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

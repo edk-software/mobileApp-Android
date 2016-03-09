@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "pl.org.edk"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 8
         versionName "3.1"
     }
