@@ -8,7 +8,6 @@ import pl.org.edk.util.JsonHelper;
 import pl.org.edk.util.NumConverter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.*;
@@ -26,6 +25,9 @@ public class WebServiceAccess {
     private static final String METHOD_GET_REFLECTIONS = "get-reflections.php";
     private static final String METHOD_CHECK_REFLECTIONS = "check-reflections.php";
 
+    private static final int TIME_PERIOD = 60000;
+    private static final int REQUEST_LIMIT = 30;
+
     // ---------------------------------------
     // Class members
     // ---------------------------------------
@@ -33,6 +35,7 @@ public class WebServiceAccess {
     private static WebServiceAccess mInstance;
 
     private final HttpManager mRestManager;
+    private RequestLogger mRequestLogger;
 
     // ---------------------------------------
     // Constructors
@@ -40,6 +43,7 @@ public class WebServiceAccess {
     public WebServiceAccess(Context context){
         this.mContext = context.getApplicationContext();
         mRestManager = new HttpManager("http://panel.edk.org.pl");
+        mRequestLogger = new RequestLogger(TIME_PERIOD, REQUEST_LIMIT);
     }
 
     // ---------------------------------------
@@ -58,7 +62,7 @@ public class WebServiceAccess {
             territory.setId(0);
         }
 
-        LogManager.LogInfo("WebServiceAccess.getTerritories success - " + territories.size() + " items downloaded");
+        LogManager.logInfo("WebServiceAccess.getTerritories success - " + territories.size() + " items downloaded");
         return territories;
     }
 
@@ -75,7 +79,7 @@ public class WebServiceAccess {
             area.setId(0);
         }
 
-        LogManager.LogInfo("WebServiceAccess.getAreas success - " + areas.size() + " items downloaded");
+        LogManager.logInfo("WebServiceAccess.getAreas success - " + areas.size() + " items downloaded");
         return areas;
     }
 
@@ -90,7 +94,7 @@ public class WebServiceAccess {
         route.setServerID(route.getId());
         route.setId(0);
 
-        LogManager.LogInfo("WebServiceAccess.getRoute success.");
+        LogManager.logInfo("WebServiceAccess.getRoute success.");
         return route;
     }
 
@@ -108,7 +112,7 @@ public class WebServiceAccess {
         routeDesc.setLanguage("pl"); // TEMP
         routeDesc.setRouteID(0);
 
-        LogManager.LogInfo("WebServiceAccess.getRouteDesc success.");
+        LogManager.logInfo("WebServiceAccess.getRouteDesc success.");
         return routeDesc;
     }
 
@@ -125,7 +129,7 @@ public class WebServiceAccess {
             route.setId(0);
         }
 
-        LogManager.LogInfo("WebServiceAccess.getRoutesByTerritory success - " + routes.size() + " items downloaded");
+        LogManager.logInfo("WebServiceAccess.getRoutesByTerritory success - " + routes.size() + " items downloaded");
         return routes;
     }
 
@@ -142,7 +146,7 @@ public class WebServiceAccess {
             route.setId(0);
         }
 
-        LogManager.LogInfo("WebServiceAccess.getRoutesByArea success - " + routes.size() + " items downloaded");
+        LogManager.logInfo("WebServiceAccess.getRoutesByArea success - " + routes.size() + " items downloaded");
         return routes;
     }
 
@@ -160,7 +164,7 @@ public class WebServiceAccess {
 
         // TODO: Request that WS return releaseDate and version
 
-        LogManager.LogInfo("WebServiceAccess.getReflections success - " + reflections.size() + " items downloaded");
+        LogManager.logInfo("WebServiceAccess.getReflections success - " + reflections.size() + " items downloaded");
         return list;
     }
 
@@ -177,6 +181,11 @@ public class WebServiceAccess {
     // Private methods
     // ---------------------------------------
     private String callMethod(final String methodName, final HashMap<String, String> parameters){
+        if(!mRequestLogger.validateMethod(methodName)){
+            LogManager.logError(methodName + " banned (over " + REQUEST_LIMIT + "during  the last " + TIME_PERIOD + "ms.");
+            return "";
+        }
+
         String response;
         ExecutorService executor = Executors.newSingleThreadExecutor();
         try {
@@ -186,9 +195,10 @@ public class WebServiceAccess {
                     return mRestManager.callMethod(methodName, parameters);
                 }
             }).get();
+            mRequestLogger.addResponse(methodName, response);
             return response;
         } catch (Exception e) {
-            LogManager.LogError("WebServiceAccess - calling method " + methodName + " failed: " + e.getMessage());
+            LogManager.logError("WebServiceAccess - calling method " + methodName + " failed: " + e.getMessage());
             return null;
         } finally {
             executor.shutdown();

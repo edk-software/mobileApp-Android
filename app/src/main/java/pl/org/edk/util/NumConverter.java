@@ -67,7 +67,7 @@ public class NumConverter {
 		try {
 			return DATE_CONVERTER.parse(string, new ParsePosition(0));
 		}catch (Exception e){
-			LogManager.LogError("Date conversion error: " + e.getMessage());
+			LogManager.logError("Date conversion error: " + e.getMessage());
 			return null;
 		}
 	}
@@ -76,7 +76,7 @@ public class NumConverter {
 		try {
 			return DATE_CONVERTER.format(date);
 		}catch (Exception e){
-			LogManager.LogError("Date conversion error: " + e.getMessage());
+			LogManager.logError("Date conversion error: " + e.getMessage());
 			return null;
 		}
 	}
