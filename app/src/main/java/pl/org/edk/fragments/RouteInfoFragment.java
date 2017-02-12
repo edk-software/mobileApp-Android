@@ -21,6 +21,7 @@ import pl.org.edk.R;
 import pl.org.edk.TempSettings;
 import pl.org.edk.kml.KMLTracker;
 import pl.org.edk.services.GPSService;
+import pl.org.edk.services.ReflectionsAudioService;
 import pl.org.edk.util.DialogUtil;
 
 /**
@@ -96,6 +97,7 @@ public class RouteInfoFragment extends TrackerFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         getActivity().stopService(new Intent(getActivity(), GPSService.class));
+                        getActivity().stopService(new Intent(getActivity(), ReflectionsAudioService.class));
                         Intent intent = new Intent(getActivity(), EndActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 | Intent.FLAG_ACTIVITY_NEW_TASK);
