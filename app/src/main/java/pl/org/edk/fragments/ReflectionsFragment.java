@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import java.util.*;
 
@@ -265,8 +266,13 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                         mAudioService.setReflection(mReflectionList.getReflections().get(mCurrentStation));
                     }
                     mAudioService.play();
-                    mPlayButton.setImageResource(R.drawable.pause);
-                    updateSeekBarTime.run();
+                    if (mAudioService.isPrepareAsyncOK()) {
+                        mPlayButton.setImageResource(R.drawable.pause);
+                        updateSeekBarTime.run();
+                    } else {
+                        Toast.makeText(getContext(),getString(R.string.file_access_error),Toast.LENGTH_LONG).show();
+                        Log.e("EDK", "Media player method prepareAsync() called in invalid state");
+                    }
                 }
             }
         });

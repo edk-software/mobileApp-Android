@@ -35,6 +35,8 @@ public class ReflectionsAudioService extends Service implements
     private boolean mIsPaused;
     private int mBindCount = 0;
 
+    private boolean isPrepareAsync;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -184,7 +186,19 @@ public class ReflectionsAudioService extends Service implements
             Log.e("MUSIC SERVICE", "Error setting data source", e);
         }
 
-        mPlayer.prepareAsync();
+        try {
+            isPrepareAsync = true;
+            mPlayer.prepareAsync();
+        } catch (IllegalStateException e) {
+            Log.e("MUSIC SERVICE", "Error prepareAsync", e);
+            e.printStackTrace();
+            isPrepareAsync = false;
+        }
+    }
+
+    //metoda wskazuje czy przy wywolaniu prepareAsync wystapil wyjatek
+    public boolean isPrepareAsyncOK(){
+        return isPrepareAsync;
     }
 
     //set the song

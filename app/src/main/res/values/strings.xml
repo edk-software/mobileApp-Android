@@ -124,4 +124,7 @@
 	<string name="google_api_unavailable_message">Google API jest niedostępne</string>
 	<string name="no_permission_title">Brak uprawnień</string>
 	<string name="no_permission_message">Aplikacja nie może działać bez akceptacji wszystkich uprawnień. Aby móc z niej korzystać zmień ustawienia</string>
+
+	<string name="file_access_error">Nie można odtworzyć pliku audio - błąd dostępu.</string>
+
 </resources>
