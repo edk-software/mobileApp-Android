@@ -111,7 +111,7 @@ public class DialogUtil {
 		builder.setTitle(title);
 		builder.setCancelable(false);
 		builder.setMessage(message);
-		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener(){
+		builder.setPositiveButton(activity.getApplicationContext().getString(R.string.ok), new DialogInterface.OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if (listener != null) {
@@ -119,7 +119,7 @@ public class DialogUtil {
 				}
 			}
 		});
-		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener(){
+		builder.setNegativeButton(activity.getApplicationContext().getString(R.string.cancel), new DialogInterface.OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if (listener != null) {

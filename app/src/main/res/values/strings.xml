@@ -39,6 +39,8 @@
 	<string name="end_dialog_message">Czy na pewno chcesz zakończyć pracę aplikacji?</string>
 	<string name="no">Nie</string>
 	<string name="yes">Tak</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Anuluj</string>
 
 	<string name="waiting_for_position_message">Określanie Twojej pozycji</string>
 	<string name="stop_listening">Zatrzymaj</string>

@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import pl.org.edk.BootStrap;
+import pl.org.edk.MainActivity;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.TempSettings;
@@ -65,6 +66,9 @@ public class MainMenuActivity extends Activity {
 	private ImageButton infoImageButton;
     private boolean mWarningDialogShown;
 
+    private long mStartTime;
+    private static final int SHOW_MAP_HOURS_FROM_START = 24;
+
     private static final int ACCESS_GPS_AND_WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 3;
 
 
@@ -76,13 +80,16 @@ public class MainMenuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
 
-        if (TempSettings.get(this).isUserOnTrack() && Settings.get(this).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
+        if (TempSettings.get(this).isUserOnTrack()) { // && Settings.get(this).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
             //TODO ask the user whether to go to map or sth
 //			Intent serviceIntent = new Intent(this, GPSService.class);
 //			startService(serviceIntent);
-//			Intent intent = new Intent(this, MainActivity.class);
-//			startActivity(intent);
-		} else {
+            mStartTime = TempSettings.get(this).getLong(TempSettings.START_TIME, System.currentTimeMillis());
+            if (System.currentTimeMillis() - mStartTime < SHOW_MAP_HOURS_FROM_START * 3600000) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
+        } else {
 			TempSettings.clear(this);
 		}
 
