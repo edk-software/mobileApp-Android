@@ -491,10 +491,8 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private void showDownloadDialog() {
-        String dialogTitle = getActivity().getString(R.string.reflections_audio_download_dialog_title);
-        String dialogText = getActivity().getString(R.string.reflections_audio_download_dialog_message);
-
-        DialogUtil.showYesNoDialog(dialogTitle, dialogText, getActivity(), new DialogUtil.OnSelectedEventListener() {
+        DialogUtil.showYesNoDialog(R.string.reflections_audio_download_dialog_title, R.string.reflections_audio_download_dialog_message,
+                getActivity(), new DialogUtil.OnSelectedEventListener() {
             @Override
             public void onAccepted() {
                 WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, ReflectionsFragment.this);

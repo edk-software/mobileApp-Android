@@ -13,17 +13,21 @@ import pl.org.edk.util.DialogUtil;
 
 import android.content.Intent;
 
-
 public class RouteChooserActivity extends ChooserActivity {
 
     private List<Route> mRoutes;
 
     @Override
     protected List<String> getItems() {
+        // Check which editions to display
+        boolean showArchiveRoutes = Settings.get(this).getBoolean(Settings.SHOW_ARCHIVE_ROUTES);
+        int minEdition = 0;
+        if(!showArchiveRoutes)
+            minEdition = Settings.get(this).getInt(Settings.CURRENT_EDITION);
+
         // Get routes from DB
-        Area area = DbManager.getInstance(this).getTerritoryService().getArea(
-                TempSettings.get(this).getLong(TempSettings.SELECTED_AREA_ID, -1));
-        mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(area.getId(), false);
+        Area area = DbManager.getInstance(this).getTerritoryService().getArea(TempSettings.get(this).getLong(TempSettings.SELECTED_AREA_ID, -1));
+        mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(area.getId(), minEdition, false);
 
         // If nothing found in DB, trigger downloading and wait for the results
         if (mRoutes == null || mRoutes.isEmpty()) {

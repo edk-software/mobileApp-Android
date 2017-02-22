@@ -19,6 +19,8 @@ public class WebServiceAccess {
     // ---------------------------------------
     // Constants
     // ---------------------------------------
+    private static final String SERVER_ADDRESS = "http://panel.edk.org.pl";
+
     private static final String METHOD_GET_TERRITORIES = "get-territories.php";
     private static final String METHOD_GET_AREAS = "get-areas.php";
     private static final String METHOD_GET_ROUTES = "get-routes.php";
@@ -42,7 +44,7 @@ public class WebServiceAccess {
     // ---------------------------------------
     public WebServiceAccess(Context context){
         this.mContext = context.getApplicationContext();
-        mRestManager = new HttpManager("http://panel.edk.org.pl");
+        mRestManager = new HttpManager(SERVER_ADDRESS);
         mRequestLogger = new RequestLogger(TIME_PERIOD, REQUEST_LIMIT);
     }
 

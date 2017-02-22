@@ -24,7 +24,8 @@ public final class BootStrap {
         WebServiceManager.getInstance(context).init(R.mipmap.ic_launcher);
 
         Settings.get(context).set(Settings.APP_LANGUAGE, "pl");
-        Settings.get(context).set(Settings.YEAR_ID, Calendar.getInstance().get(Calendar.YEAR));
+        Settings.get(context).set(Settings.CURRENT_EDITION, Calendar.getInstance().get(Calendar.YEAR));
+        Settings.get(context).set(Settings.REFLECTIONS_EDITION, Calendar.getInstance().get(Calendar.YEAR));
 
         initStorage(context);
 
