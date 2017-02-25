@@ -53,7 +53,7 @@
             android:theme="@style/MyMaterialTheme"/>
         <activity
             android:name=".menu.EDKInfoActivity"
-            android:label="O EDK"
+            android:label="@string/about_edk_activity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".EndActivity"

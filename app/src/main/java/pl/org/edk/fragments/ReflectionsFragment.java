@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -29,6 +30,7 @@ import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;
 import pl.org.edk.managers.WebServiceManager;
+import pl.org.edk.menu.MainMenuActivity;
 import pl.org.edk.services.ReflectionsAudioService;
 import pl.org.edk.services.ReflectionsAudioService.OnPlayerStopListener;
 import pl.org.edk.util.DialogUtil;
@@ -265,13 +267,26 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                         Log.i("EDK", "Audio service reflection was null when clicked play");
                         mAudioService.setReflection(mReflectionList.getReflections().get(mCurrentStation));
                     }
-                    mAudioService.play();
-                    if (mAudioService.isPrepareAsyncOK()) {
-                        mPlayButton.setImageResource(R.drawable.pause);
-                        updateSeekBarTime.run();
+                    if (Settings.CAN_USE_STORAGE) {
+                        mAudioService.play();
+                        if (mAudioService.isPrepareAsyncOK()) {
+                            mPlayButton.setImageResource(R.drawable.pause);
+                            updateSeekBarTime.run();
+                        } else {
+                            Toast.makeText(getContext(),getString(R.string.file_access_error),Toast.LENGTH_LONG).show();
+                            Log.e("EDK", "Media player method prepareAsync() called in invalid state");
+                        }
                     } else {
-                        Toast.makeText(getContext(),getString(R.string.file_access_error),Toast.LENGTH_LONG).show();
-                        Log.e("EDK", "Media player method prepareAsync() called in invalid state");
+                        DialogUtil.showYesNoDialog(R.string.no_permission_title, R.string.no_storage_permission_message_yesno, getActivity(), new DialogUtil.OnSelectedEventListener() {
+                            @Override
+                            public void onAccepted() {
+                                startAppSettingsActivity();
+                            }
+                            @Override
+                            public void onRejected() {
+                                //no action for now
+                            }
+                        });
                     }
                 }
             }
@@ -497,13 +512,34 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         DialogUtil.showYesNoDialog(dialogTitle, dialogText, getActivity(), new DialogUtil.OnSelectedEventListener() {
             @Override
             public void onAccepted() {
-                WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, ReflectionsFragment.this);
-                refreshDownloadButton(true);
+                if (Settings.CAN_USE_STORAGE) {
+                    WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, ReflectionsFragment.this);
+                    refreshDownloadButton(true);
+                } else {
+                    DialogUtil.showYesNoDialog(R.string.no_permission_title, R.string.no_storage_permission_message_yesno, getActivity(), new DialogUtil.OnSelectedEventListener() {
+                        @Override
+                        public void onAccepted() {
+                            startAppSettingsActivity();
+                        }
+                        @Override
+                        public void onRejected() {
+                            //no action for now
+                        }
+                    });
+                }
             }
 
             @Override
             public void onRejected() { /* Just close */ }
         });
+    }
+
+    private void startAppSettingsActivity() {
+        Intent intent = new Intent();
+        intent.setAction(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+        intent.setData(uri);
+        getActivity().startActivity(intent);
     }
 
     private void refreshViewItems() {

@@ -19,6 +19,14 @@ public class Settings extends SettingsBase {
 	public static final int APP_DIRECTORY_AUDIO = R.string.pref_audio_directory;
     public static final int DO_NOT_SHOW_GPS_DIALOG = R.string.do_not_show_gps_dialog;
 
+    public static final int ROTATE_MAP_TO_WALK_DIRECTION = R.string.pref_rotate_map_to_walk_dir; // should map be oriented to travel direction or to north
+
+    // Variables
+
+    public static boolean CAN_USE_STORAGE = false; // if app has permission WRITE_EXTERNAL_STORAGE
+    public static boolean CAN_USE_GPS = false; // if app has permission ACCESS_FINE_LOCATION
+    public static boolean DO_NOT_SHOW_AGAIN_GPS_PERMISSIONS_DIALOG = false; // should the 'no GPS permissions' dialog be still shown
+
     private static Settings mInstance = null;
     // ---------------------------------------
 	// Singleton
