@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EndActivity"
-    android:background="@drawable/end_screen"
-    android:id="@+id/endLayout">
+    android:background="@drawable/end_screen">
 
     <TextView
         android:layout_width="wrap_content"
