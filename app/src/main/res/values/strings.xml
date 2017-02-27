@@ -4,7 +4,7 @@
 
         Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin sodales ipsum orci, ut ornare purus congue molestie. Curabitur eu faucibus nisi, ultricies tempor orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus ut lobortis augue. Curabitur lobortis malesuada aliquet. Donec quis turpis vel enim fermentum dictum ac vitae nunc. Aliquam erat volutpat. Quisque rutrum in orci eu varius. Sed et quam sit amet ligula feugiat malesuada sed sit amet enim. Fusce ullamcorper feugiat commodo. Donec aliquam arcu quis nulla dictum commodo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </string>
 	<string name="map_loading">Trwa ładowanie mapy...</string>
-	<string name="about_edk">Ekstremalna Droga Krzyzowa to forma duchowości, która dla wielu staje się sposobem na życie. Prawdziwe Spotkanie z Nim pośrodku Zmagania sprawia, że nie chce się już żyć normalnie, tylko ekstremalnie, czyli w pełni.\n\nEkstremalna Droga Krzyżowa jest proponowaną formą duchowości.\n\nNie jest to pielgrzymka.\nEDK polega na pokonaniem w nocy wybranej trasy, medytowaniu rozważań i zmaganiu się z własnymi słabościami.\nMa charakter indywidualny, podczas przejścia wybraną trasą, w razie jakichkolwiek nieprzewidzianych zdarzeń, jesteś zdany wyłącznie na własne siły.\n\nWiecej informacji znajdziesz na naszej stronie:</string>
+	<string name="about_edk">Ekstremalna Droga Krzyzowa to forma duchowości, która dla wielu staje się sposobem na życie. Prawdziwe Spotkanie z Nim pośrodku Zmagania sprawia, że nie chce się już żyć normalnie, tylko ekstremalnie, czyli w pełni.\n\nEkstremalna Droga Krzyżowa jest proponowaną formą duchowości.\n\nNie jest to pielgrzymka.\nEDK polega na pokonaniu w nocy wybranej trasy, medytowaniu rozważań i zmaganiu się z własnymi słabościami.\nMa charakter indywidualny, podczas przejścia wybraną trasą, w razie jakichkolwiek nieprzewidzianych zdarzeń, jesteś zdany wyłącznie na własne siły.\n\nWiecej informacji znajdziesz na naszej stronie:</string>
 	<string name="about_app">Aplikacja pomaga uczestnikom Ekstremalnej Drogi Krzyżowej przeżyć ją w pełni.\n\nZamieszczone przy każdej stacji wskazówki oraz nawigacja GPS pozwolą skupić się na pokonywaniu własnych słabości, bez konieczności przejmowania się szczegółami.\n\nEDK to jednak przede wszystkim forma duchowości. Medytacja załączonych rozważań pozwoli na jeszcze bliższe Spotkanie z Nim.\n\nAutorem aplikacji jest Paweł Wawrzynek. Jeżeli masz jakiekolwiek sugestie, napisz!</string>
 
 	<string name="pref_followLocationOnMap">FollowLocationOnMap</string>
@@ -23,6 +23,7 @@
 	<string name="pref_do_not_show_gps_dialog">doNotShowGpsDialog</string>
 	<string name="pref_show_archive_routes">showArchiveRoutes</string>
 	<string name="pref_archiveRoutesDialogShown">archiveRoutesDialogShown</string>
+	<string name="pref_rotate_map_to_walk_dir">rotateMapToWalkDirection</string>
 
     <string name="app_name">EDK</string>
     <string name="routes">Trasy</string>
@@ -94,12 +95,14 @@
     <string name="settings_location_tracking_title">Sprawdzaj pozycję w tle</string>
     <string name="settings_location_follow_summary">Automatyczne przewijanie mapy do najnowszej pozycji.</string>
     <string name="settings_location_follow_title">Wyśrodkuj mapę na aktualnej pozycji</string>
+	<string name="settings_location_rotate_map_title">Orientuj mapę do kierunku marszu</string>
+	<string name="settings_location_rotate_map_summary">Obraca mapę tak, by góra pokrywała się z kierunkiem marszu. Działa przy włączonym wyśrodkowaniu mapy.</string>
 
 	<string name="settings_routes_category">Trasy</string>
 	<string name="settings_routes_useArchive_title">Wyświetlaj archiwalne</string>
 	<string name="settings_routes_useArchive_summary">Pobieraj trasy z poprzednich edycji</string>
 
-	<string name="settings_reflections_category">Rozważania</string>
+    <string name="settings_reflections_category">Rozważania</string>
     <string name="settings_reflections_year_select_dialog_title">Wybierz rocznik rozważań:</string>
     <string name="settings_reflections_year_title">Rocznik rozważań</string>
 
@@ -133,10 +136,18 @@
 
 	<string name="update_download_finished_message">Zakończono aktualizację danych (pobieranie plików audio może odbywać się w tle).</string>
 	<string name="update_in_progress_message">Trwa aktualizacja danych...</string>
+	<string name="do_not_show_gps_dialog">doNotShowGpsDialog</string>
 	<string name="google_api_unavailable_message">Google API jest niedostępne</string>
 	<string name="no_permission_title">Brak uprawnień</string>
 	<string name="no_permission_message">Aplikacja nie może działać bez akceptacji wszystkich uprawnień. Aby móc z niej korzystać zmień ustawienia</string>
 
 	<string name="file_access_error">Nie można odtworzyć pliku audio - błąd dostępu.</string>
+	<string name="no_permission_message_yesno">Aplikacja nie może działać bez akceptacji wszystkich uprawnień. Czy chcesz przejść do ustawień aby zmienić uprawnienia?</string>
+	<string name="no_storage_permission_message_yesno">Aplikacja nie ma uprawnień do zapisu do pamięci urządzenia. Uprawnienie to jest konieczne do korzystania z rozważań audio. Czy chcesz przejść do ustawień aby zmienić uprawnienia?</string>
+	<string name="no_gps_permission_message_yesno">Aplikacja nie ma uprawnień do korzystania z GPS. Uprawnienie to jest konieczne do korzystania z map. Czy chcesz przejść do ustawień aby zmienić uprawnienia?</string>
+
+	<string name="about_edk_activity">O EDK</string>
+
+
 
 </resources>

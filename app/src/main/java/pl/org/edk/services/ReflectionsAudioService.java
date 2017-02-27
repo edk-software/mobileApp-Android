@@ -196,7 +196,7 @@ public class ReflectionsAudioService extends Service implements
         }
     }
 
-    //metoda wskazuje czy przy wywolaniu prepareAsync wystapil wyjatek
+    //method shows if at call to prepareAsync() an exception has been thrown
     public boolean isPrepareAsyncOK(){
         return isPrepareAsync;
     }

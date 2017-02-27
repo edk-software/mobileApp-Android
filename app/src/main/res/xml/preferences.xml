@@ -14,6 +14,10 @@
             android:key="@string/pref_followLocationOnMap"
             android:summary="@string/settings_location_follow_summary"
             android:title="@string/settings_location_follow_title" />
+        <CheckBoxPreference
+            android:key="@string/pref_rotate_map_to_walk_dir"
+            android:summary="@string/settings_location_rotate_map_summary"
+            android:title="@string/settings_location_rotate_map_title" />
 
     </PreferenceCategory>
 
