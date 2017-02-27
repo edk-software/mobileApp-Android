@@ -2,6 +2,7 @@ package pl.org.edk.database;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import pl.org.edk.database.entities.DbEntityBase;
 import pl.org.edk.database.entities.Route;
 import pl.org.edk.database.entities.RouteDesc;
 import pl.org.edk.database.entities.Station;
@@ -37,20 +38,8 @@ public class DbUpgrader {
     }
 
     private boolean UpgradeTo2(SQLiteDatabase db) {
-        // Remove KML files
-        // TODO: Remove the old KML files to limit the used disk space
-
-        // Remove affected tables
-        db.execSQL(Route.getDeleteEntries());
-        db.execSQL(RouteDesc.getDeleteEntries());
-        db.execSQL(Station.getDeleteEntries());
-        db.execSQL(StationDesc.getDeleteEntries());
-
-        // Re-add them
-        db.execSQL(Route.getCreateEntries());
-        db.execSQL(RouteDesc.getCreateEntries());
-        db.execSQL(Station.getCreateEntries());
-        db.execSQL(StationDesc.getCreateEntries());
+        for(String query : Route.getUpdateTwo())
+            db.execSQL(query);
 
         return true;
     }

@@ -85,6 +85,15 @@ public class Route extends DbEntityBase {
         return projection;
     }
 
+    public static String[] getUpdateTwo(){
+        String[] queries = new String[2];
+        queries[0] = "ALTER TABLE " + Route.TABLE_NAME + " ADD " +
+                Route.COLUMN_NAME_EDITION + DbEntityBase.INTEGER_TYPE;
+        queries[1] = "UPDATE " + Route.TABLE_NAME + " SET " +
+                Route.COLUMN_NAME_EDITION + "=2016;";
+        return queries;
+    }
+
     // ---------------------------------------
     // Base class methods
     // ---------------------------------------
