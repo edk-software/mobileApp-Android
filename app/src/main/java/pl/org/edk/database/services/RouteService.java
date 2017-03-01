@@ -230,7 +230,7 @@ public class RouteService extends DbServiceBase {
         return routeDesc.readFromCursor(cursor) ? routeDesc : null;
     }
 
-    public ArrayList<Route> getRoutesForArea(long areaId, boolean includeStations){
+    public ArrayList<Route> getRoutesForArea(long areaId, long minEdition, boolean includeStations){
         Cursor cursor = executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(),
                 Route.COLUMN_NAME_AREA_ID, String.valueOf(areaId));
 
@@ -238,7 +238,7 @@ public class RouteService extends DbServiceBase {
         for(int i=0; i < cursor.getCount(); i++){
             cursor.moveToPosition(i);
             Route route = new Route();
-            if(route.readFromCursor(cursor))
+            if(route.readFromCursor(cursor) && route.getEdition() >= minEdition)
                 routes.add(route);
         }
 

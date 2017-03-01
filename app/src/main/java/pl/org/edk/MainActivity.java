@@ -1,17 +1,21 @@
 package pl.org.edk;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +70,14 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
         Intent intent = getIntent();
         processIntent(intent);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Settings.CAN_USE_STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        Settings.CAN_USE_GPS = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        //Toast.makeText(getApplicationContext(),"main start storage: "+Settings.CAN_USE_STORAGE,Toast.LENGTH_SHORT).show();
     }
 
     private void processIntent(Intent intent) {

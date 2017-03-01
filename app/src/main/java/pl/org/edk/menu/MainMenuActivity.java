@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import pl.org.edk.BootStrap;
 import pl.org.edk.MainActivity;
@@ -66,7 +67,6 @@ public class MainMenuActivity extends Activity {
 	private ImageButton infoImageButton;
     private boolean mWarningDialogShown;
 
-    private long mStartTime;
     private static final int SHOW_MAP_HOURS_FROM_START = 24;
 
     private static final int ACCESS_GPS_AND_WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 3;
@@ -84,7 +84,7 @@ public class MainMenuActivity extends Activity {
             //TODO ask the user whether to go to map or sth
 //			Intent serviceIntent = new Intent(this, GPSService.class);
 //			startService(serviceIntent);
-            mStartTime = TempSettings.get(this).getLong(TempSettings.START_TIME, System.currentTimeMillis());
+            long mStartTime = TempSettings.get(this).getLong(TempSettings.START_TIME, System.currentTimeMillis());
             if (System.currentTimeMillis() - mStartTime < SHOW_MAP_HOURS_FROM_START * 3600000) {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -182,15 +182,31 @@ public class MainMenuActivity extends Activity {
             Log.w(getClass().getSimpleName(), "Unrecognized request code");
             return;
         }
+        if(grantResults.length != 0){
+            Settings.CAN_USE_STORAGE = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            Settings.CAN_USE_GPS = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+        }
+        //Toast.makeText(getApplicationContext(),"MainMenuAct can use storage: "+Settings.CAN_USE_STORAGE,Toast.LENGTH_SHORT).show();
         if (anyDenied(grantResults)){
             if (mWarningDialogShown){
                 finish();
                 return;
             }
-            DialogUtil.showDialog(getString(R.string.no_permission_title), getString(R.string.no_permission_message), this, true, new DialogUtil.OnCloseEventListener() {
+            /*DialogUtil.showDialog(getString(R.string.no_permission_title), getString(R.string.no_permission_message), this, true, new DialogUtil.OnCloseEventListener() {
                 @Override
                 public void onClose() {
                     startAppSettingsActivity();
+                }
+            });*/
+            DialogUtil.showYesNoDialog(R.string.no_permission_title, R.string.no_permission_message_yesno, this, new DialogUtil.OnSelectedEventListener() {
+                @Override
+                public void onAccepted() {
+                    startAppSettingsActivity();
+                }
+
+                @Override
+                public void onRejected() {
+                    //no action for now
                 }
             });
             mWarningDialogShown = true;

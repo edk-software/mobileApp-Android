@@ -9,16 +9,18 @@ import pl.org.edk.database.entities.*;
  * Created by pwawrzynek on 2015-12-15.
  */
 public class DbHelper extends SQLiteOpenHelper {
-    public static final int DB_VERSION = 1;
+    private DbUpgrader dbUpgrader;
+
+    public static final int DB_VERSION = 2;
     public static final String DB_FILE_NAME = "Edk.db";
 
     public DbHelper(Context context){
         super(context, DB_FILE_NAME, null, DB_VERSION);
+        dbUpgrader = new DbUpgrader(this);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        /* NOTE: Create all tables here */
         db.execSQL(Area.getCreateEntries());
         db.execSQL(Reflection.getCreateEntries());
         db.execSQL(ReflectionList.getCreateEntries());
@@ -31,17 +33,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        /* NOTE: Delete all tables here */
-        db.execSQL(Area.getDeleteEntries());
-        db.execSQL(Reflection.getDeleteEntries());
-        db.execSQL(ReflectionList.getDeleteEntries());
-        db.execSQL(Route.getDeleteEntries());
-        db.execSQL(RouteDesc.getDeleteEntries());
-        db.execSQL(Station.getDeleteEntries());
-        db.execSQL(StationDesc.getDeleteEntries());
-        db.execSQL(Territory.getDeleteEntries());
-
-        onCreate(db);
+        dbUpgrader.Upgrade(db, oldVersion, newVersion);
     }
 
     @Override

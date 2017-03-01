@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 
 /**
- * Created by Admin on 2016-01-31.
+ * Created by pwawrzynek on 2016-01-31.
  */
 public class JsonHelper {
     public static <T> T deserializeFromJson(String jsonString, Type objectType){

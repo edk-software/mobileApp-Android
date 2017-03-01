@@ -5,8 +5,10 @@ import android.content.Intent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import pl.org.edk.R;
+import pl.org.edk.Settings;
 import pl.org.edk.TempSettings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Territory;
@@ -18,6 +20,9 @@ public class TerritoryChooserActivity extends ChooserActivity {
 	private List<Territory> mTerritories;
 
 	protected List<String> getItems() {
+		// Ask which routes to display, if needed
+		displayArchiveRoutesQuestion();
+
 		// Get territories from DB
         mTerritories = DbManager.getInstance(this).getTerritoryService().getTerritories();
 
@@ -63,6 +68,24 @@ public class TerritoryChooserActivity extends ChooserActivity {
 		else {
 			DialogUtil.showWarningDialog(getString(R.string.no_territories_found), this, true);
 			return Collections.emptyList();
+		}
+	}
+
+	private void displayArchiveRoutesQuestion(){
+		if(Settings.get(this).getBoolean(Settings.ARCHIVE_ROUTES_DIALOG_SHOWN) == false){
+			DialogUtil.showYesNoDialog(R.string.popup_archiveRoutes_title, R.string.popup_archiveRoutes_message,
+					this, new DialogUtil.OnSelectedEventListener() {
+						@Override
+						public void onAccepted() {
+							Settings.get(TerritoryChooserActivity.this).set(Settings.SHOW_ARCHIVE_ROUTES, true);
+						}
+
+						@Override
+						public void onRejected() {
+							Settings.get(TerritoryChooserActivity.this).set(Settings.SHOW_ARCHIVE_ROUTES, false);
+						}
+					});
+			Settings.get(this).set(Settings.ARCHIVE_ROUTES_DIALOG_SHOWN, true);
 		}
 	}
 }

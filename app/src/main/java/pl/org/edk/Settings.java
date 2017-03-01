@@ -9,15 +9,27 @@ public class Settings extends SettingsBase {
 	// ---------------------------------------
 	// Constants
 	// ---------------------------------------
-	public static final int IS_BACKGROUND_TRACKING_ON = R.string.pref_backgroundTrackingOn;
-    public static final int FOLLOW_LOCATION_ON_MAP = R.string.pref_followLocationOnMap;
-	public static final int YEAR_ID = R.string.pref_reflectionsYear;
-	public static final int AUDIO_DOWNLOAD_DIALOG_SHOWN = R.string.pref_audioDownloadDialogShown;
-
     public static final int APP_LANGUAGE = R.string.pref_language;
+    public static final int CURRENT_EDITION = R.string.pref_currentEdition;
+    public static final int REFLECTIONS_EDITION = R.string.pref_reflectionsEdition;
 	public static final int APP_DIRECTORY_KML = R.string.pref_kml_directory;
 	public static final int APP_DIRECTORY_AUDIO = R.string.pref_audio_directory;
-    public static final int DO_NOT_SHOW_GPS_DIALOG = R.string.do_not_show_gps_dialog;
+
+    public static final int IS_BACKGROUND_TRACKING_ON = R.string.pref_backgroundTrackingOn;
+    public static final int FOLLOW_LOCATION_ON_MAP = R.string.pref_followLocationOnMap;
+    public static final int SHOW_ARCHIVE_ROUTES = R.string.pref_show_archive_routes;
+
+    public static final int DO_NOT_SHOW_GPS_DIALOG = R.string.pref_do_not_show_gps_dialog;
+    public static final int AUDIO_DOWNLOAD_DIALOG_SHOWN = R.string.pref_audioDownloadDialogShown;
+    public static final int ARCHIVE_ROUTES_DIALOG_SHOWN = R.string.pref_archiveRoutesDialogShown;
+
+    public static final int ROTATE_MAP_TO_WALK_DIRECTION = R.string.pref_rotate_map_to_walk_dir; // should map be oriented to travel direction or to north
+
+    // Variables
+
+    public static boolean CAN_USE_STORAGE = false; // if app has permission WRITE_EXTERNAL_STORAGE
+    public static boolean CAN_USE_GPS = false; // if app has permission ACCESS_FINE_LOCATION
+    public static boolean DO_NOT_SHOW_AGAIN_GPS_PERMISSIONS_DIALOG = false; // should the 'no GPS permissions' dialog be still shown
 
     private static Settings mInstance = null;
     // ---------------------------------------
@@ -57,6 +69,15 @@ public class Settings extends SettingsBase {
 		return getBoolean(resId, false);
 	}
 
+    public int getInt(int resId, int defaultValue){
+        SharedPreferences preferences = getSharedPreferences();
+        return preferences.getInt(getStringKey(resId), defaultValue);
+    }
+
+    public int getInt(int resId){
+        return getInt(resId, 0);
+    }
+
 	// Setters
 
     public <T> void set(int resId, T  value){
@@ -69,7 +90,6 @@ public class Settings extends SettingsBase {
         editor.putBoolean(getStringKey(resId), value);
         editor.apply();
     }
-
 
     @Override
     protected SharedPreferences getSharedPreferences0(Context context) {

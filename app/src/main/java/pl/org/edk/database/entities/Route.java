@@ -22,7 +22,8 @@ public class Route extends DbEntityBase {
     public static final String COLUMN_NAME_AREA_ID = "AreaID";
     public static final String COLUMN_NAME_RELEASE_DATE = "ReleaseDate";
     public static final String COLUMN_NAME_DISPLAY_NAME = "Name";
-    public static final String COLUMN_NAME_DISPLAY_KML_DATA_PATH = "KmlDataPath";
+    public static final String COLUMN_NAME_KML_DATA_PATH = "KmlDataPath";
+    public static final String COLUMN_NAME_EDITION = "Edition";
 
     // ---------------------------------------
     // Constructors
@@ -46,6 +47,7 @@ public class Route extends DbEntityBase {
     private String releaseDate;
     private String name;
     private String kmlDataPath;
+    private long edition;
     // External tables
     private ArrayList<RouteDesc> descriptions;
     private ArrayList<Station> stations;
@@ -62,7 +64,8 @@ public class Route extends DbEntityBase {
                 COLUMN_NAME_AREA_ID + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_RELEASE_DATE + TEXT_TYPE + COMMA +
                 COLUMN_NAME_DISPLAY_NAME + TEXT_TYPE + COMMA +
-                COLUMN_NAME_DISPLAY_KML_DATA_PATH + TEXT_TYPE + ");";
+                COLUMN_NAME_KML_DATA_PATH + TEXT_TYPE + COMMA +
+                COLUMN_NAME_EDITION + INTEGER_TYPE + ");";
     }
 
     public static String getDeleteEntries() {
@@ -76,7 +79,8 @@ public class Route extends DbEntityBase {
                 COLUMN_NAME_AREA_ID,
                 COLUMN_NAME_RELEASE_DATE,
                 COLUMN_NAME_DISPLAY_NAME,
-                COLUMN_NAME_DISPLAY_KML_DATA_PATH
+                COLUMN_NAME_KML_DATA_PATH,
+                COLUMN_NAME_EDITION
         };
         return projection;
     }
@@ -93,7 +97,8 @@ public class Route extends DbEntityBase {
         values.put(COLUMN_NAME_AREA_ID, areaId);
         values.put(COLUMN_NAME_RELEASE_DATE, releaseDate);
         values.put(COLUMN_NAME_DISPLAY_NAME, name);
-        values.put(COLUMN_NAME_DISPLAY_KML_DATA_PATH, kmlDataPath);
+        values.put(COLUMN_NAME_KML_DATA_PATH, kmlDataPath);
+        values.put(COLUMN_NAME_EDITION, edition);
 
         return values;
     }
@@ -106,7 +111,8 @@ public class Route extends DbEntityBase {
             this.areaId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_AREA_ID));
             this.releaseDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_RELEASE_DATE));
             this.name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_NAME));
-            this.kmlDataPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DISPLAY_KML_DATA_PATH));
+            this.kmlDataPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_KML_DATA_PATH));
+            this.edition = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_EDITION));
             return true;
         }catch (Exception ex){
             return false;
@@ -169,6 +175,13 @@ public class Route extends DbEntityBase {
             kmlData = readKml(kmlDataPath);
         }
         return kmlData;
+    }
+
+    public long getEdition() {
+        return edition;
+    }
+    public void setEdition(long edition) {
+        this.edition = edition;
     }
 
     public boolean isDownloaded(){
