@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -12,13 +16,16 @@ import android.widget.Button;
 
 import pl.org.edk.MainActivity;
 import pl.org.edk.R;
+import pl.org.edk.Settings;
 import pl.org.edk.TempSettings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Route;
+import pl.org.edk.fragments.MapFragment;
+import pl.org.edk.fragments.ViewRouteFragment;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.util.DialogUtil;
 
-public class RouteDescriptionActivity extends Activity {
+public class RouteDescriptionActivity extends FragmentActivity implements MapFragment.OnStationSelectListener {
 
     private Route mRoute;
     private WebView mDescriptionTextView;
@@ -60,6 +67,16 @@ public class RouteDescriptionActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(RouteDescriptionActivity.this, TerritoryChooserActivity.class));
+            }
+        });
+
+        Button viewRoute = (Button) findViewById(R.id.viewRouteButton);
+        viewRoute.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment viewRouteFragment = ViewRouteFragment.newInstance(Settings.get(getApplicationContext()).getBoolean(Settings.FOLLOW_LOCATION_ON_MAP));
+                FragmentManager fm = getSupportFragmentManager();
+                fm.beginTransaction().add(R.id.container,viewRouteFragment,"view").addToBackStack("view").commit();
             }
         });
     }
@@ -121,4 +138,7 @@ public class RouteDescriptionActivity extends Activity {
     }
 
 
+    @Override
+    public void onStationSelect(int stationIndex) {
+    }
 }

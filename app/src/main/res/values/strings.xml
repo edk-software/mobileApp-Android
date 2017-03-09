@@ -148,6 +148,12 @@
 
 	<string name="about_edk_activity">O EDK</string>
 
+	<string name="view_route">Zobacz trasę, zdecyduj później</string>
+	<string name="view_route_back">Powrót</string>
+	<string name="view_route_choose">Wybieram tę trasę</string>
+
+
+
 
 
 </resources>
