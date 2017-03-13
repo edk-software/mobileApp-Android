@@ -1,15 +1,25 @@
 package pl.org.edk.fragments;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,6 +40,7 @@ import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.TempSettings;
 import pl.org.edk.kml.KMLTracker;
+import pl.org.edk.util.DialogUtil;
 import pl.org.edk.util.NumConverter;
 
 /**
@@ -57,6 +68,8 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
     private List<Marker> markers = new ArrayList<>();
 
     private static final String TAG = "EDK";
+
+    private LatLng lastUserPosition = null;
 
     @Override
     public void onAttach(Context context) {
@@ -213,9 +226,61 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
             return;
         }
         if (mMap != null && shouldFollowLocation()) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(location), 2000, null);
+            if (!Settings.get(getActivity()).getBoolean(Settings.ROTATE_MAP_TO_WALK_DIRECTION)) { // map oriented to north
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(location), 2000, null);
+
+            } else { // map oriented to walk direction
+
+                if(lastUserPosition == null){
+                    lastUserPosition = getTracker().getLastLoc();
+                }
+                float currentBearing = getBearing(lastUserPosition,location);
+
+                CameraPosition cameraPosition = new CameraPosition.Builder(mMap.getCameraPosition())
+                        .target(location)      // Sets the center of the map
+                        .zoom(lastCameraZoom)                   // Sets the zoom
+                        .bearing(currentBearing)                // Sets the orientation of the camera
+                        //.tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                        .build();                   // Creates a CameraPosition from the builder
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),500,null);
+                //Toast.makeText(getContext(),"bearing "+currentBearing,Toast.LENGTH_SHORT).show();
+                lastUserPosition = location;
+
+            }
         }
 
+    }
+
+    /**
+     * Method for calculating bearing (walk direction) between two locations. North = 0, East = 90 deg
+     * @param prevLocation - previous location
+     * @param currentLocation - current location
+     * @return walk bearing in degrees. If both locations are equal, returns 0.
+     */
+    public float getBearing(LatLng prevLocation, LatLng currentLocation){
+        double output;
+        double dX = currentLocation.latitude - prevLocation.latitude;
+        double dY = currentLocation.longitude - prevLocation.longitude;
+        try {
+            if(dY == 0){
+                return (dX >= 0) ? 0 : 180;
+            }
+            if(dX == 0){
+                return (dY >= 0) ? 90 : 270;
+            }
+            output = Math.atan(dY/dX) * 180 / Math.PI;
+            if(dX < 0){
+                return (float)(output+180);
+            }
+            if(dY < 0){
+                return (float)(output+360);
+            }
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     private boolean shouldFollowLocation() {
@@ -228,7 +293,25 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         Log.i(TAG, "Map initialization");
         Log.i(TAG, "isVisible() " + isVisible() + " isMenuVisible()" + isMenuVisible());
 
-        mMap.setMyLocationEnabled(isFragmentVisible());
+        Settings.CAN_USE_GPS = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        if (Settings.CAN_USE_GPS) {
+
+            mMap.setMyLocationEnabled(isFragmentVisible());
+
+        } else {
+
+            buildAlertMessageNoGpsPermissions();
+            /*DialogUtil.showYesNoDialog(R.string.no_permission_title, R.string.no_gps_permission_message_yesno, getActivity(), new DialogUtil.OnSelectedEventListener() {
+                @Override
+                public void onAccepted() {
+                    startAppSettingsActivity();
+                }
+                @Override
+                public void onRejected() {
+                    //no action for now
+                }
+            });*/
+        }
 
         UiSettings settings = mMap.getUiSettings();
         settings.setCompassEnabled(true);
@@ -279,12 +362,57 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         if (mMap == null) {
             return;
         }
-        mMap.setMyLocationEnabled(visible);
+        Settings.CAN_USE_GPS = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        if (Settings.CAN_USE_GPS) {
+            mMap.setMyLocationEnabled(isFragmentVisible());
+        }
     }
 
     @NonNull
     @Override
     protected LocationRequest getLocationRequest() {
         return LocationRequest.create().setPriority(LocationRequest.PRIORITY_NO_POWER).setInterval(1000);
+    }
+
+    private void startAppSettingsActivity() {
+        Intent intent = new Intent();
+        intent.setAction(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+        intent.setData(uri);
+        getActivity().startActivity(intent);
+    }
+
+    private void buildAlertMessageNoGpsPermissions() {
+        if (Settings.DO_NOT_SHOW_AGAIN_GPS_PERMISSIONS_DIALOG) {
+            return;
+        }
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater adbInflater = getActivity().getLayoutInflater();
+        @SuppressLint("InflateParams")
+        View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
+        final CheckBox dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
+        builder.setView(eulaLayout);
+
+        builder.setMessage(R.string.no_gps_permission_message_yesno);
+        builder.setTitle(R.string.no_permission_title);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, final int id) {
+                if (dontShowAgain.isChecked()) {
+                    Settings.DO_NOT_SHOW_AGAIN_GPS_PERMISSIONS_DIALOG = true;
+                }
+                startAppSettingsActivity();
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, final int id) {
+                if (dontShowAgain.isChecked()) {
+                    Settings.DO_NOT_SHOW_AGAIN_GPS_PERMISSIONS_DIALOG = true;
+                }
+                dialog.cancel();
+            }
+        });
+        final AlertDialog dialog = builder.show();
+        DialogUtil.addRedTitleDivider(getActivity(), dialog);
     }
 }
