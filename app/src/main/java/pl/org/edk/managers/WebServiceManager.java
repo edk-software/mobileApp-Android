@@ -2,6 +2,7 @@ package pl.org.edk.managers;
 
 import android.content.Context;
 import android.os.AsyncTask;
+
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.*;
@@ -10,6 +11,7 @@ import pl.org.edk.webServices.WebServiceAccess;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by pwawrzynek on 2016-02-11.
@@ -19,7 +21,7 @@ public class WebServiceManager {
     // ---------------------------------------
     // Subclasses
     // ---------------------------------------
-    public interface OnOperationFinishedEventListener<Type>{
+    public interface OnOperationFinishedEventListener<Type> {
         // TODO: Add operation type here
         void onOperationFinished(Type result);
     }
@@ -40,42 +42,42 @@ public class WebServiceManager {
     // ---------------------------------------
     // Constructors
     // ---------------------------------------
-    private WebServiceManager(Context context){
+    private WebServiceManager(Context context) {
         this.mContext = context;
         mWsClient = new WebServiceAccess(context);
     }
 
-    private static synchronized WebServiceManager get(Context applicationContext){
-        if(mInstance == null)
+    private static synchronized WebServiceManager get(Context applicationContext) {
+        if (mInstance == null)
             mInstance = new WebServiceManager(applicationContext);
         return mInstance;
     }
 
-    public static synchronized WebServiceManager getInstance(Context context){
+    public static synchronized WebServiceManager getInstance(Context context) {
         return get(context.getApplicationContext());
     }
 
     // ---------------------------------------
     // Public methods
     // ---------------------------------------
-    public void init(int notificationIcon){
+    public void init(int notificationIcon) {
         this.mNotificationIcon = notificationIcon;
     }
 
     // Territories
 
-    public ArrayList<Territory> getTerritories(){
+    public ArrayList<Territory> getTerritories() {
         ArrayList<Territory> rawTerritories = mWsClient.getTerritories();
-        if(rawTerritories == null)
+        if (rawTerritories == null)
             return null;
 
-        for(Territory territory : rawTerritories){
+        for (Territory territory : rawTerritories) {
             DbManager.getInstance(mContext).getTerritoryService().updateTerritoryWithAreasByServerId(territory);
         }
         return rawTerritories;
     }
 
-    public void getTerritoriesAsync(final OnOperationFinishedEventListener listener){
+    public void getTerritoriesAsync(final OnOperationFinishedEventListener listener) {
         AsyncTask<Integer, Integer, ArrayList<Territory>> downloadTask = new AsyncTask<Integer, Integer, ArrayList<Territory>>() {
             @Override
             protected ArrayList<Territory> doInBackground(Integer... params) {
@@ -86,7 +88,7 @@ public class WebServiceManager {
             protected void onPostExecute(ArrayList<Territory> territories) {
                 super.onPostExecute(territories);
 
-                if (listener != null){
+                if (listener != null) {
                     listener.onOperationFinished(territories);
                 }
             }
@@ -96,14 +98,14 @@ public class WebServiceManager {
 
     // Areas
 
-    public ArrayList<Area> getAreas(){
+    public ArrayList<Area> getAreas() {
         ArrayList<Area> rawAreas = mWsClient.getAreas();
-        if(rawAreas == null)
+        if (rawAreas == null)
             return null;
 
-        for(Area area : rawAreas) {
+        for (Area area : rawAreas) {
             Territory territory = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(area.getTerritoryId());
-            if(territory != null){
+            if (territory != null) {
                 area.setTerritoryId(territory.getId());
                 DbManager.getInstance(mContext).getTerritoryService().updateAreaByServerId(area);
             }
@@ -112,7 +114,7 @@ public class WebServiceManager {
         return rawAreas;
     }
 
-    public void getAreasAsync(final OnOperationFinishedEventListener listener){
+    public void getAreasAsync(final OnOperationFinishedEventListener listener) {
         AsyncTask<Long, Integer, ArrayList<Area>> downloadTask = new AsyncTask<Long, Integer, ArrayList<Area>>() {
             @Override
             protected ArrayList<Area> doInBackground(Long... params) {
@@ -123,7 +125,7 @@ public class WebServiceManager {
             protected void onPostExecute(ArrayList<Area> areas) {
                 super.onPostExecute(areas);
 
-                if (listener != null){
+                if (listener != null) {
                     listener.onOperationFinished(areas);
                 }
             }
@@ -131,23 +133,23 @@ public class WebServiceManager {
         downloadTask.execute();
     }
 
-    public ArrayList<Area> getAreas(long territoryServerId){
+    public ArrayList<Area> getAreas(long territoryServerId) {
         // TODO: Request a WS method returning areas only for a single territory
 
         ArrayList<Area> rawAreas = mWsClient.getAreas();
-        if(rawAreas == null)
+        if (rawAreas == null)
             return null;
 
         ArrayList<Area> areas = new ArrayList<>();
-        for(Area area : rawAreas) {
+        for (Area area : rawAreas) {
             // Ignore areas for different territory
-            if(area.getTerritoryId() != territoryServerId) {
+            if (area.getTerritoryId() != territoryServerId) {
                 continue;
             }
 
             Area previous = DbManager.getInstance(mContext).getTerritoryService().getAreaByServerId(area.getServerID());
             // The area doesn't exist in DB - add it
-            if(previous == null) {
+            if (previous == null) {
                 Territory territory = DbManager.getInstance(mContext).getTerritoryService().getTerritoryByServerId(area.getTerritoryId());
                 if (territory != null) {
                     area.setTerritoryId(territory.getId());
@@ -163,7 +165,7 @@ public class WebServiceManager {
         return areas;
     }
 
-    public void getAreasAsync(long territoryServerId, final OnOperationFinishedEventListener listener){
+    public void getAreasAsync(long territoryServerId, final OnOperationFinishedEventListener listener) {
         AsyncTask<Long, Integer, ArrayList<Area>> downloadTask = new AsyncTask<Long, Integer, ArrayList<Area>>() {
             @Override
             protected ArrayList<Area> doInBackground(Long... params) {
@@ -174,7 +176,7 @@ public class WebServiceManager {
             protected void onPostExecute(ArrayList<Area> areas) {
                 super.onPostExecute(areas);
 
-                if (listener != null){
+                if (listener != null) {
                     listener.onOperationFinished(areas);
                 }
             }
@@ -184,17 +186,17 @@ public class WebServiceManager {
 
     // Routes
 
-    public ArrayList<Route> getRoutesByArea(long areaServerId){
+    public ArrayList<Route> getRoutesByArea(long areaServerId) {
         ArrayList<Route> rawRoutes = mWsClient.getRoutesByArea(areaServerId);
-        if(rawRoutes == null)
+        if (rawRoutes == null)
             return null;
 
         Area area = DbManager.getInstance(mContext).getTerritoryService().getAreaByServerId(areaServerId);
-        if(area == null){
+        if (area == null) {
             // TODO: Fetch a single area (WS doesn't provide that data now)
         }
 
-        for(Route route : rawRoutes){
+        for (Route route : rawRoutes) {
             route.setAreaId(area.getId());
             DbManager.getInstance(mContext).getRouteService().updateRoute(route);
         }
@@ -202,7 +204,7 @@ public class WebServiceManager {
         return rawRoutes;
     }
 
-    public void getRoutesByAreaAsync(long areaServerId, final OnOperationFinishedEventListener listener){
+    public void getRoutesByAreaAsync(long areaServerId, final OnOperationFinishedEventListener listener) {
         AsyncTask<Long, Integer, ArrayList<Route>> downloadTask = new AsyncTask<Long, Integer, ArrayList<Route>>() {
             @Override
             protected ArrayList<Route> doInBackground(Long... params) {
@@ -213,7 +215,7 @@ public class WebServiceManager {
             protected void onPostExecute(ArrayList<Route> routes) {
                 super.onPostExecute(routes);
 
-                if (listener != null){
+                if (listener != null) {
                     listener.onOperationFinished(routes);
                 }
             }
@@ -223,14 +225,15 @@ public class WebServiceManager {
 
     /**
      * Download the latest version of the Route, its KML data and RouteDesc (pl) from WS and update it in the local DB
+     *
      * @param serverID ServerId of the Route to be updated
      * @param listener Operations to be performed, when the download's finished
      */
-    public void syncRouteAsync(final long serverID, final OnOperationFinishedEventListener listener){
+    public void syncRouteAsync(final long serverID, final OnOperationFinishedEventListener listener) {
         // Get the route data
         final Route rawRoute = mWsClient.getRoute(serverID);
-        if(rawRoute == null){
-            if (listener != null){
+        if (rawRoute == null) {
+            if (listener != null) {
                 listener.onOperationFinished(null);
             }
             return;
@@ -238,7 +241,7 @@ public class WebServiceManager {
 
         // Get route language-dependent data
         RouteDesc routeDesc = mWsClient.getRouteDesc(serverID);
-        if(routeDesc != null){
+        if (routeDesc != null) {
             rawRoute.getDescriptions().add(routeDesc);
         }
 
@@ -246,7 +249,7 @@ public class WebServiceManager {
         downloadKmlForRouteAsync(rawRoute, new OnOperationFinishedEventListener() {
             @Override
             public void onOperationFinished(Object result) {
-                if(listener != null){
+                if (listener != null) {
                     listener.onOperationFinished(rawRoute);
                 }
             }
@@ -255,31 +258,61 @@ public class WebServiceManager {
 
     // Reflections
 
-    public ReflectionList getReflectionList(String language){
-        ReflectionList rawList = mWsClient.getReflectionList(language);
-        if(rawList == null){
-            return null;
+    public boolean syncReflections(boolean includeAudio) {
+        // TODO: Upload more than the default language
+        String defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
+
+        // Get the WS list
+        ArrayList<ReflectionList> wsLists = mWsClient.getReflectionLists(defaultLanguage);
+        if (wsLists == null)
+            return false;
+
+        for (ReflectionList wsList : wsLists) {
+            try {
+                ReflectionList dbList = DbManager.getInstance(mContext)
+                        .getReflectionService()
+                        .getReflectionList(defaultLanguage, wsList.getEdition(), false);
+
+                // This list doesn't exist locally
+                if (dbList == null) {
+                    dbList = mWsClient.getReflectionList(wsList.getLanguage(), wsList.getEdition());
+                    if (dbList == null) {
+                        continue;
+                    }
+
+                    dbList.setReleaseDate(wsList.getReleaseDate());
+                    DbManager.getInstance(mContext).getReflectionService().insertReflectionList(dbList);
+                    if (includeAudio) {
+                        getReflectionsAudioAsync(dbList, null);
+                    }
+                    continue;
+                }
+
+                // This list is outdated
+                if (dbList.getReleaseDate().before(wsList.getReleaseDate())) {
+                    updateReflectionList(dbList.getLanguage(), dbList.getEdition(), wsList.getReleaseDate(), includeAudio);
+                    continue;
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: Do something about it
+                continue;
+            }
         }
 
-        // Insert missing data (not returned by WS)
-        rawList.setReleaseDate(Calendar.getInstance().getTime());
-        rawList.setEdition(Calendar.getInstance().get(Calendar.YEAR));
-
-        // Insert it to the DB
-        DbManager.getInstance(mContext).getReflectionService().updateReflectionListByVersion(rawList);
-
-        return rawList;
+        return true;
     }
 
-    public void getReflectionsAudioAsync(ReflectionList list, final OnOperationFinishedEventListener listener){
-        if(mDownloadInProgress){
+    public void getReflectionsAudioAsync(ReflectionList list, final OnOperationFinishedEventListener listener) {
+        if (mDownloadInProgress) {
             return;
         }
 
         // Prepare a list of Reflections that need to be downloaded
         mReflectionsToDownload = new ArrayList<>();
-        for(Reflection reflection : list.getReflections()) {
-            if(reflection.getAudioServerPath() != null && reflection.getAudioServerPath().length() > 0) {
+        for (Reflection reflection : list.getReflections()) {
+            if (reflection.getAudioServerPath() != null && reflection.getAudioServerPath().length() > 0) {
                 mReflectionsToDownload.add(reflection);
             }
         }
@@ -290,38 +323,38 @@ public class WebServiceManager {
 
     // Sync
 
-    public boolean isDownloadInProgress(){
+    public boolean isDownloadInProgress() {
         return mDownloadInProgress;
     }
 
-    public void addDownloadListener(OnOperationFinishedEventListener newListener){
-        if(!mDownloadListeners.contains(newListener)){
+    public void addDownloadListener(OnOperationFinishedEventListener newListener) {
+        if (!mDownloadListeners.contains(newListener)) {
             mDownloadListeners.add(newListener);
         }
     }
 
-    public void removeDownloadListener(OnOperationFinishedEventListener listener){
-        if(!mDownloadListeners.contains(listener)){
+    public void removeDownloadListener(OnOperationFinishedEventListener listener) {
+        if (!mDownloadListeners.contains(listener)) {
             mDownloadListeners.remove(listener);
         }
     }
 
     public void updateData(boolean includeAreas, boolean includeLocalRoutes, boolean includeReflections, boolean includeAudio) {
-        if (includeAreas){
+        if (includeAreas) {
             syncAreas();
         }
 
-        if (includeLocalRoutes){
+        if (includeLocalRoutes) {
             syncRoutes();
         }
 
-        if (includeReflections){
+        if (includeReflections) {
             syncReflections(includeAudio);
         }
     }
 
     public void updateDataAsync(boolean includeAreas, boolean includeLocalRoutes, boolean includeReflections, boolean includeAudio,
-                                final OnOperationFinishedEventListener listener){
+                                final OnOperationFinishedEventListener listener) {
         AsyncTask<Boolean, Integer, Boolean> downloadTask = new AsyncTask<Boolean, Integer, Boolean>() {
             @Override
             protected Boolean doInBackground(Boolean... params) {
@@ -333,7 +366,7 @@ public class WebServiceManager {
             protected void onPostExecute(Boolean result) {
                 super.onPostExecute(result);
 
-                if (listener != null){
+                if (listener != null) {
                     listener.onOperationFinished(result);
                 }
             }
@@ -344,7 +377,7 @@ public class WebServiceManager {
     // ---------------------------------------
     // Private methods
     // ---------------------------------------
-    private void downloadKmlForRouteAsync(final Route route, final OnOperationFinishedEventListener listener){
+    private void downloadKmlForRouteAsync(final Route route, final OnOperationFinishedEventListener listener) {
         final String kmlLocalPath = Settings.get(mContext).get(Settings.APP_DIRECTORY_KML) +
                 "/route_" + String.valueOf(route.getServerID()) + ".kml";
         String kmlServerPath = route.getKmlDataPath();
@@ -371,17 +404,17 @@ public class WebServiceManager {
         manager.downloadFileAsync(kmlServerPath, kmlLocalPath);
     }
 
-    private void downloadNext(final ReflectionList list, final OnOperationFinishedEventListener listener){
+    private void downloadNext(final ReflectionList list, final OnOperationFinishedEventListener listener) {
         // Downloading finished
-        if(mReflectionsToDownload.size() == 0){
+        if (mReflectionsToDownload.size() == 0) {
             // Save the results
             DbManager.getInstance(mContext).getReflectionService().updateReflectionList(list);
 
             mDownloadInProgress = false;
-            if(listener != null){
+            if (listener != null) {
                 listener.onOperationFinished(list);
             }
-            for(OnOperationFinishedEventListener downloadListener : mDownloadListeners){
+            for (OnOperationFinishedEventListener downloadListener : mDownloadListeners) {
                 downloadListener.onOperationFinished(list);
             }
             return;
@@ -406,7 +439,7 @@ public class WebServiceManager {
                 mReflectionsToDownload.remove(nextReflection);
 
                 // Download succeeded
-                if(result == FileDownloader.DownloadResult.NoErrorsOccurred){
+                if (result == FileDownloader.DownloadResult.NoErrorsOccurred) {
                     nextReflection.setAudioLocalPath(localPath);
                 }
                 downloadNext(list, listener);
@@ -415,36 +448,27 @@ public class WebServiceManager {
         manager.downloadFileAsync(serverPath, localPath);
     }
 
-    private void syncAreas(){
+    private void syncAreas() {
         getTerritories();
         getAreas();
     }
 
-    private void syncRoutes(){
+    private void syncRoutes() {
         ArrayList<Route> routes = DbManager.getInstance(mContext).getRouteService().getAllRoutes();
-        for (Route route : routes){
+        for (Route route : routes) {
             syncRouteAsync(route.getServerID(), null);
         }
     }
 
-    private void syncReflections(boolean includeAudio){
-        String defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
-        boolean defaultDownloaded = false;
+    private void updateReflectionList(String language, int edition, Date releaseDate, boolean includeAudio){
+        ReflectionList fullList = mWsClient.getReflectionList(language, edition);
+        if(fullList == null)
+            return;
 
-        // Update existing lists
-        ArrayList<ReflectionList> lists = DbManager.getInstance(mContext).getReflectionService().getReflectionLists();
-        for(ReflectionList list : lists){
-            getReflectionList(list.getLanguage());
-            if(list.getLanguage().equals(defaultLanguage)){
-                defaultDownloaded = true;
-            }
-            if(includeAudio) getReflectionsAudioAsync(list, null);
-        }
-
-        // Download the default one, if not downloaded yet
-        if(!defaultDownloaded){
-            ReflectionList list = getReflectionList(defaultLanguage);
-            if(includeAudio) getReflectionsAudioAsync(list, null);
+        fullList.setReleaseDate(releaseDate);
+        DbManager.getInstance(mContext).getReflectionService().updateReflectionListByVersion(fullList);
+        if (includeAudio){
+            getReflectionsAudioAsync(fullList, null);
         }
     }
 }

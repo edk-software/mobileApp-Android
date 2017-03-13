@@ -121,6 +121,28 @@ public class ReflectionService extends DbServiceBase {
         return lists;
     }
 
+    public ArrayList<ReflectionList> getReflectionLists(String language, boolean includeItems){
+        Cursor cursor = executeQueryWhere(ReflectionList.TABLE_NAME, ReflectionList.getFullProjection(),
+                                            ReflectionList.COLUMN_NAME_LANGUAGE, language);
+
+        // No Routes with this id found
+        if(cursor.getCount() == 0)
+            return null;
+
+        ArrayList<ReflectionList> lists = new ArrayList<>();
+        for(int i = 0; i < cursor.getCount(); i++){
+            cursor.moveToPosition(i);
+            ReflectionList nextList = new ReflectionList();
+            if(nextList.readFromCursor(cursor)){
+                // Fetch the items
+                if(includeItems)
+                    nextList.setReflections(getReflections(nextList.getId()));
+                lists.add(nextList);
+            }
+        }
+        return lists;
+    }
+
     public ReflectionList getReflectionList(String language, int edition, boolean includeItems){
         ArrayList<String> whereColumns = new ArrayList<>(2);
         whereColumns.add(ReflectionList.COLUMN_NAME_LANGUAGE);

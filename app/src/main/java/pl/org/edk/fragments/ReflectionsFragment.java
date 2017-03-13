@@ -30,7 +30,6 @@ import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;
 import pl.org.edk.managers.WebServiceManager;
-import pl.org.edk.menu.MainMenuActivity;
 import pl.org.edk.services.ReflectionsAudioService;
 import pl.org.edk.services.ReflectionsAudioService.OnPlayerStopListener;
 import pl.org.edk.util.DialogUtil;
@@ -492,15 +491,16 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private boolean prepareListData() {
+        WebServiceManager.getInstance(getActivity()).syncReflections(false);
+
         String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
         mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, true);
         // No reflections found
         if (mReflectionList == null || mReflectionList.getReflections().isEmpty()) {
-            mReflectionList = WebServiceManager.getInstance(getActivity()).getReflectionList(language);
             // Download failed
-            if (mReflectionList == null) {
+            if(!WebServiceManager.getInstance(getActivity()).syncReflections(false))
                 return false;
-            }
+            mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, true);
         }
         return true;
     }

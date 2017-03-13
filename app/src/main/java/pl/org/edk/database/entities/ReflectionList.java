@@ -2,6 +2,7 @@ package pl.org.edk.database.entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+
 import pl.org.edk.util.NumConverter;
 
 import java.util.ArrayList;
