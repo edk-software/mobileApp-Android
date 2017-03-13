@@ -106,7 +106,7 @@ public class FileDownloader {
 
                 // Download the file
                 input = connection.getInputStream();
-                output = new FileOutputStream(sUrl[1]);
+                output =  new FileOutputStream(sUrl[1]);
 
                 byte data[] = new byte[4096];
                 long total = 0;

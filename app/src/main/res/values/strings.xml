@@ -20,6 +20,7 @@
 	<string name="pref_update_reflections">syncReflections</string>
 	<string name="pref_update_reflections_audio">syncReflectionsAudio</string>
 	<string name="pref_update_button">syncButton</string>
+	<string name="pref_cleanup_button">cleanupButton</string>
 	<string name="pref_do_not_show_gps_dialog">doNotShowGpsDialog</string>
 	<string name="pref_show_archive_routes">showArchiveRoutes</string>
 	<string name="pref_archiveRoutesDialogShown">archiveRoutesDialogShown</string>
@@ -113,6 +114,9 @@
 	<string name="settings_update_reflections_audio">Rozważania audio</string>
 	<string name="settings_update_reflections_audio_desc">Pobieraj najnowsze pliki audio z nagraniami rozważań</string>
 	<string name="settings_update_button_text">Aktualizuj teraz</string>
+
+	<string name="settings_maintenance_category">Utrzymanie</string>
+	<string name="settings_maintenance_cleanup">Usuń pliki</string>
 
 	<string name="reflections_audio_download_success">Zakończono pobieranie rozważań audio.</string>
 	<string name="reflections_audio_download_failed">Nie udało się pobrać rozważań audio. Spróbuj ponownie poźniej.</string>

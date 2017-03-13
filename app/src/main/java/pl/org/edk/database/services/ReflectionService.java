@@ -4,6 +4,7 @@ import android.database.Cursor;
 import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;
 
+import java.io.File;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -160,5 +161,43 @@ public class ReflectionService extends DbServiceBase {
         }
 
         return reflections;
+    }
+
+    // ---------------------------------------
+    // Remove
+    // ---------------------------------------
+    public int removeReflectionFiles(){
+        int removedCount = 0;
+        ArrayList<ReflectionList> lists = getReflectionLists();
+        for(ReflectionList list : lists)
+            removedCount = removeReflectionFiles(list);
+
+        return removedCount;
+    }
+
+    public int removeReflectionFiles(String language, int edition) {
+        ReflectionList list = getReflectionList(language, edition, true);
+        return removeReflectionFiles(list);
+    }
+
+    public int removeReflectionFiles(ReflectionList list){
+        if(list == null)
+            return 0;
+
+        int removedCount = 0;
+        for (Reflection reflection : list.getReflections()) {
+            String path = reflection.getAudioLocalPath();
+            if(path == null)
+                continue;
+            if(removeFile(path))
+                removedCount++;
+        }
+
+        return removedCount;
+    }
+
+    private boolean removeFile(String path) {
+        File file = new File(path);
+        return file.delete();
     }
 }

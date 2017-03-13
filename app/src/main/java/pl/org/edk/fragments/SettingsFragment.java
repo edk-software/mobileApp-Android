@@ -11,6 +11,8 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
+import java.util.ArrayList;
+
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.TempSettings;
@@ -148,6 +150,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 return true;
             }
         });
+
+        // Clean-up button
+        Preference cleanupButton = findPreference(getString(R.string.pref_cleanup_button));
+        cleanupButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                ArrayList<Integer> editions = new ArrayList<Integer>();
+                editions.add(2016);
+                cleanup(editions);
+                return true;
+            }
+        });
     }
 
     private void sync(boolean regions, boolean routes, boolean reflections, boolean audio) {
@@ -164,5 +178,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             }
         };
         WebServiceManager.getInstance(getActivity()).updateDataAsync(regions, routes, reflections, audio, listener);
+    }
+
+    private void cleanup(ArrayList<Integer> editions) {
     }
 }
