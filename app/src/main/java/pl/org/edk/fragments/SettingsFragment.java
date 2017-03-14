@@ -1,13 +1,17 @@
 package pl.org.edk.fragments;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
@@ -47,6 +51,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onResume() {
         super.onResume();
+
+        Settings.CAN_USE_GPS = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        PreferenceCategory category = (PreferenceCategory) findPreference(getString(R.string.pref_cat_location));
+        category.setEnabled(Settings.CAN_USE_GPS);
+
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         if (isVisible() && isMenuVisible()) {
             refreshPreferenceView();
