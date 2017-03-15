@@ -97,8 +97,6 @@ public class MainMenuActivity extends Activity {
 		BootStrap.initialize(getApplicationContext());
 
 		initUI();
-
-		checkDB();
 	}
 
     // ---------------------------------------
@@ -126,22 +124,6 @@ public class MainMenuActivity extends Activity {
 
 		infoButton.setOnClickListener(new InfoButtonListener());
 		infoImageButton.setOnClickListener(new InfoButtonListener());
-	}
-
-	private void checkDB(){
-		if(DbManager.getInstance(this).getTerritoryService().getTerritories().size() == 0){
-			DialogUtil.showYesNoDialog(getString(R.string.main_menu_get_data_title),
-                    getString(R.string.main_menu_get_data_message),
-                    this, new DialogUtil.OnSelectedEventListener() {
-                        @Override
-                        public void onAccepted() {
-                            openSettings();
-                        }
-
-                        @Override
-                        public void onRejected() { /* Just proceed */ }
-                    });
-		}
 	}
 
 	private void openSettings(){

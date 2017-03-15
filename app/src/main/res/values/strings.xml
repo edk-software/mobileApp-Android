@@ -134,10 +134,6 @@
 	<string name="reflections_audio_download_button_text">Pobierz rozważania audio</string>
 	<string name="reflections_audio_download_in_progress">Trwa pobieranie audio</string>
 	<string name="reflections_text_download_finished">Pobieranie zakończone</string>
-	<string name="main_menu_get_data_message">Do korzystania z aplikacji konieczne jest pobranie danych z serwera. Czy
-		chcesz to teraz zrobić? (W przeciwnym wypadku dane pobierane będą na bieżąco, poczas korzystania z aplikacji)
-	</string>
-	<string name="main_menu_get_data_title">Brak danych</string>
 
 	<string name="update_download_finished_message">Zakończono aktualizację danych (pobieranie plików audio może odbywać się w tle).</string>
 	<string name="update_in_progress_message">Trwa aktualizacja danych...</string>
