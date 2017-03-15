@@ -193,12 +193,12 @@ public class WebServiceManager {
 
         Area area = DbManager.getInstance(mContext).getTerritoryService().getAreaByServerId(areaServerId);
         if (area == null) {
-            // TODO: Fetch a single area (WS doesn't provide that data now)
+            return null;
         }
 
         for (Route route : rawRoutes) {
             route.setAreaId(area.getId());
-            DbManager.getInstance(mContext).getRouteService().updateRoute(route);
+            DbManager.getInstance(mContext).getRouteService().updateRouteByServerId(route);
         }
 
         return rawRoutes;

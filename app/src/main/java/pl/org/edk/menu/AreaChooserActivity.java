@@ -68,7 +68,7 @@ public class AreaChooserActivity extends ChooserActivity {
 		}
 		// Display pop-up, if nothing found
 		else {
-			DialogUtil.showWarningDialog(getString(R.string.no_info_about_tracks_in_region), this, true);
+			DialogUtil.showWarningDialog(getString(R.string.no_info_about_routes_in_area), this, true);
 			return Collections.emptyList();
 		}
 	}

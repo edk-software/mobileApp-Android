@@ -116,7 +116,8 @@ public class WebServiceAccess {
         // Deserialize and rewrite the serverIDs
         RouteDesc routeDesc = JsonHelper.deserializeFromJson(response, new TypeToken<RouteDesc>() {
         }.getType());
-        routeDesc.setLanguage("pl"); // TEMP
+        // TODO: Add support for multiple route languages
+        routeDesc.setLanguage("pl");
         routeDesc.setRouteID(0);
 
         LogManager.logInfo("WebServiceAccess.getRouteDesc success.");

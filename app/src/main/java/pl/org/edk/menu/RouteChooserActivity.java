@@ -8,43 +8,47 @@ import pl.org.edk.*;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Area;
 import pl.org.edk.database.entities.Route;
+import pl.org.edk.database.services.RouteService;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.util.DialogUtil;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 public class RouteChooserActivity extends ChooserActivity {
 
+    private DbManager mDbManager;
+    private Settings mSettings;
     private List<Route> mRoutes;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        mDbManager = DbManager.getInstance(this);
+        mSettings = Settings.get(this);
+
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     protected List<String> getItems() {
-        // Check which editions to display
-        boolean showArchiveRoutes = Settings.get(this).getBoolean(Settings.SHOW_ARCHIVE_ROUTES);
-        int minEdition = 0;
-        if(!showArchiveRoutes)
-            minEdition = Settings.get(this).getInt(Settings.CURRENT_EDITION);
+        // Check which routes to display
+        long areaId = TempSettings.get(this).getLong(TempSettings.SELECTED_AREA_ID, -1);
+        final Area area = mDbManager.getTerritoryService().getArea(areaId);
 
-        // Get routes from DB
-        Area area = DbManager.getInstance(this).getTerritoryService().getArea(TempSettings.get(this).getLong(TempSettings.SELECTED_AREA_ID, -1));
-        mRoutes = DbManager.getInstance(this).getRouteService().getRoutesForArea(area.getId(), minEdition, false);
+        // Trigger downloading and wait for the results
+        DialogUtil.showBusyDialog(R.string.downloading_message, this);
+        WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
+            @Override
+            public void onOperationFinished(Object result) {
+                DialogUtil.closeBusyDialog();
 
-        // If nothing found in DB, trigger downloading and wait for the results
-        if (mRoutes == null || mRoutes.isEmpty()) {
-            DialogUtil.showBusyDialog(R.string.downloading_message, this);
-            WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
-                @Override
-                public void onOperationFinished(Object result) {
-                    DialogUtil.closeBusyDialog();
-                    mRoutes = (ArrayList<Route>) result;
-                    refresh(getDisplayItems());
-                }
-            };
-            WebServiceManager.getInstance(this).getRoutesByAreaAsync(area.getServerID(), listener);
-            return Collections.emptyList();
-        }
-
-        return getDisplayItems();
+                boolean showArchiveRoutes = mSettings.getBoolean(Settings.SHOW_ARCHIVE_ROUTES);
+                mRoutes = mDbManager.getRouteService().getRoutesForArea(area.getId(), !showArchiveRoutes, false);
+                refresh(getDisplayItems());
+            }
+        };
+        WebServiceManager.getInstance(this).getRoutesByAreaAsync(area.getServerID(), listener);
+        return Collections.emptyList();
     }
 
     @Override
@@ -63,12 +67,16 @@ public class RouteChooserActivity extends ChooserActivity {
     }
 
     private List<String> getDisplayItems() {
+        // Display pop-up, if no routes were found
         if (mRoutes.isEmpty()) {
-            DialogUtil.showWarningDialog(getString(R.string.no_info_about_tracks_in_region), this, true);
+            DialogUtil.showWarningDialog(getString(R.string.no_info_about_routes_in_area), this, true);
             return Collections.emptyList();
         }
+
+        // Navigate forward, if there's only one item to display
         if (mRoutes.size() == 1) {
             startRouteDescriptionActivity(0);
+            return Collections.emptyList();
         }
 
         ArrayList<String> items = new ArrayList<>();

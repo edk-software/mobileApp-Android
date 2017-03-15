@@ -61,7 +61,7 @@
 	<string name="download_dialog_message">Trwa pobieranie danych</string>
 	<string name="unrecognized_error_while_reading_track">Wystapił nieoczekiwany błąd przy próbie wczytania trasy</string>
 	<string name="no_territories_found">Nie można znaleźć żadnych rejonów. Połącz się z internetem i spróbuj ponownie</string>
-	<string name="no_info_about_tracks_in_region">Informacje o trasach w wybranym rejonie są niedostępne</string>
+	<string name="no_info_about_routes_in_area">Informacje o trasach w wybranym rejonie są niedostępne</string>
 	<string name="instruction_how_to_end_app">Naciśnij klawisz powrotu, aby wyjść</string>
 	<string name="track_chooser_title">Wybierz trasę:</string>
 	<string name="city_chooser_title">Wybierz miasto:</string>
