@@ -272,7 +272,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                             mPlayButton.setImageResource(R.drawable.pause);
                             updateSeekBarTime.run();
                         } else {
-                            Toast.makeText(getContext(),getString(R.string.file_access_error),Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), getString(R.string.file_access_error), Toast.LENGTH_LONG).show();
                             Log.e("EDK", "Media player method prepareAsync() called in invalid state");
                         }
                     } else {
@@ -281,6 +281,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                             public void onAccepted() {
                                 startAppSettingsActivity();
                             }
+
                             @Override
                             public void onRejected() {
                                 //no action for now
@@ -398,7 +399,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             return;
         }
         FragmentActivity activity = getActivity();
-        if (activity == null){
+        if (activity == null) {
             return;
         }
         if (WebServiceManager.getInstance(activity).isDownloadInProgress()) {
@@ -491,16 +492,19 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private boolean prepareListData() {
-        WebServiceManager.getInstance(getActivity()).syncReflections(false);
-
+        // Get the data from local DB
         String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
-        mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, true);
+        Integer edition = Settings.get(getActivity()).getInt(Settings.REFLECTIONS_EDITION);
+        mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, edition, true);
+
         // No reflections found
         if (mReflectionList == null || mReflectionList.getReflections().isEmpty()) {
-            // Download failed
-            if(!WebServiceManager.getInstance(getActivity()).syncReflections(false))
+            // Update the local data and try again
+            WebServiceManager.getInstance(getActivity()).syncReflections(false);
+            mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, edition, true);
+            if(mReflectionList == null)
                 return false;
-            mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, true);
+
         }
         return true;
     }
@@ -508,28 +512,29 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     private void showDownloadDialog() {
         DialogUtil.showYesNoDialog(R.string.reflections_audio_download_dialog_title, R.string.reflections_audio_download_dialog_message,
                 getActivity(), new DialogUtil.OnSelectedEventListener() {
-            @Override
-            public void onAccepted() {
-                if (Settings.CAN_USE_STORAGE) {
-                    WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, ReflectionsFragment.this);
-                    refreshDownloadButton(true);
-                } else {
-                    DialogUtil.showYesNoDialog(R.string.no_permission_title, R.string.no_storage_permission_message_yesno, getActivity(), new DialogUtil.OnSelectedEventListener() {
-                        @Override
-                        public void onAccepted() {
-                            startAppSettingsActivity();
-                        }
-                        @Override
-                        public void onRejected() {
-                            //no action for now
-                        }
-                    });
-                }
-            }
+                    @Override
+                    public void onAccepted() {
+                        if (Settings.CAN_USE_STORAGE) {
+                            WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, ReflectionsFragment.this);
+                            refreshDownloadButton(true);
+                        } else {
+                            DialogUtil.showYesNoDialog(R.string.no_permission_title, R.string.no_storage_permission_message_yesno, getActivity(), new DialogUtil.OnSelectedEventListener() {
+                                @Override
+                                public void onAccepted() {
+                                    startAppSettingsActivity();
+                                }
 
-            @Override
-            public void onRejected() { /* Just close */ }
-        });
+                                @Override
+                                public void onRejected() {
+                                    //no action for now
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onRejected() { /* Just close */ }
+                });
     }
 
     private void startAppSettingsActivity() {

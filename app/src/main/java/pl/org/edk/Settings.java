@@ -5,15 +5,17 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.support.v7.preference.PreferenceManager;
 
+import java.util.Calendar;
+
 public class Settings extends SettingsBase {
-	// ---------------------------------------
-	// Constants
-	// ---------------------------------------
+    // ---------------------------------------
+    // Constants
+    // ---------------------------------------
     public static final int APP_LANGUAGE = R.string.pref_language;
     public static final int CURRENT_EDITION = R.string.pref_currentEdition;
     public static final int REFLECTIONS_EDITION = R.string.pref_reflectionsEdition;
-	public static final int APP_DIRECTORY_KML = R.string.pref_kml_directory;
-	public static final int APP_DIRECTORY_AUDIO = R.string.pref_audio_directory;
+    public static final int APP_DIRECTORY_KML = R.string.pref_kml_directory;
+    public static final int APP_DIRECTORY_AUDIO = R.string.pref_audio_directory;
 
     public static final int IS_BACKGROUND_TRACKING_ON = R.string.pref_backgroundTrackingOn;
     public static final int FOLLOW_LOCATION_ON_MAP = R.string.pref_followLocationOnMap;
@@ -32,55 +34,70 @@ public class Settings extends SettingsBase {
     public static boolean DO_NOT_SHOW_AGAIN_GPS_PERMISSIONS_DIALOG = false; // should the 'no GPS permissions' dialog be still shown
 
     private static Settings mInstance = null;
+
     // ---------------------------------------
-	// Singleton
-	// ---------------------------------------
-	protected Settings(Context context) {
+    // Singleton
+    // ---------------------------------------
+    protected Settings(Context context) {
         super(context);
     }
 
-	public static synchronized Settings get(Context context) {
-		return get0(context.getApplicationContext());
-	}
+    public static synchronized Settings get(Context context) {
+        return get0(context.getApplicationContext());
+    }
 
-	private static synchronized Settings get0(Context applicationContext) {
-		if (mInstance == null) {
-			mInstance = new Settings(applicationContext);
-		}
-		return mInstance;
-	}
+    private static synchronized Settings get0(Context applicationContext) {
+        if (mInstance == null) {
+            mInstance = new Settings(applicationContext);
+        }
+        return mInstance;
+    }
 
-	// ---------------------------------------
-	// Public methods
-	// ---------------------------------------
+    // ---------------------------------------
+    // Public methods
+    // ---------------------------------------
+
+    public void init() {
+        // TEMP: Constant values
+        set(Settings.APP_LANGUAGE, "pl");
+        set(Settings.CURRENT_EDITION, Calendar.getInstance().get(Calendar.YEAR));
+
+        // Add default values
+        if (getInt(Settings.REFLECTIONS_EDITION) == 0)
+            set(Settings.REFLECTIONS_EDITION, Calendar.getInstance().get(Calendar.YEAR));
+    }
 
     // Getters
 
-    public String get(int resId){
+    public String get(int resId) {
         return getString(getStringKey(resId));
     }
 
     public boolean getBoolean(int resId, boolean defaultValue) {
         SharedPreferences preferences = getSharedPreferences();
         return preferences.getBoolean(getStringKey(resId), defaultValue);
-	}
-
-	public boolean getBoolean(int resId) {
-		return getBoolean(resId, false);
-	}
-
-    public int getInt(int resId, int defaultValue){
-        SharedPreferences preferences = getSharedPreferences();
-        return preferences.getInt(getStringKey(resId), defaultValue);
     }
 
-    public int getInt(int resId){
+    public boolean getBoolean(int resId) {
+        return getBoolean(resId, false);
+    }
+
+    public int getInt(int resId, int defaultValue) {
+        try{
+            String stringValue = get(resId);
+            return Integer.parseInt(stringValue);
+        }catch (Exception ex){
+            return defaultValue;
+        }
+    }
+
+    public int getInt(int resId) {
         return getInt(resId, 0);
     }
 
-	// Setters
+    // Setters
 
-    public <T> void set(int resId, T  value){
+    public <T> void set(int resId, T value) {
         setString(getStringKey(resId), String.valueOf(value));
     }
 
@@ -89,6 +106,10 @@ public class Settings extends SettingsBase {
         Editor editor = preferences.edit();
         editor.putBoolean(getStringKey(resId), value);
         editor.apply();
+    }
+
+    public void set(int resId, int value) {
+        set(resId, String.valueOf(value));
     }
 
     @Override

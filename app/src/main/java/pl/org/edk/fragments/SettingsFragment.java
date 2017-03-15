@@ -12,10 +12,13 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.TempSettings;
+import pl.org.edk.database.DbManager;
+import pl.org.edk.database.entities.ReflectionList;
 import pl.org.edk.managers.WebServiceManager;
 import pl.org.edk.services.GPSService;
 import pl.org.edk.util.DialogUtil;
@@ -112,6 +115,41 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     private void initView() {
+        initReflectionSection();
+        initUpdateSection();
+    }
+
+    private void initReflectionSection(){
+        ListPreference reflectionsYear = (ListPreference) findPreference(getString(R.string.pref_reflectionsEdition));
+        reflectionsYear.setDefaultValue(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+
+        // Get years available on the server
+        ArrayList<Integer> editions = WebServiceManager.getInstance(getContext()).getReflectionEditions();
+
+        // If failed, check the local ones
+        if(editions == null){
+            String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
+            ArrayList<ReflectionList> dbLists = DbManager.getInstance(getActivity()).getReflectionService().getReflectionLists(language, false);
+            if(dbLists == null)
+                return;
+
+            editions = new ArrayList<>();
+            for(ReflectionList dbList : dbLists){
+                editions.add(dbList.getEdition());
+            }
+        }
+
+        // Add the fetched items to the list
+        CharSequence[] editionItems = new CharSequence[editions.size()];
+        for(int i = 0; i < editions.size(); i++){
+            editionItems[i] = String.valueOf(editions.get(i));
+        }
+        reflectionsYear.setEntries(editionItems);
+        reflectionsYear.setEntryValues(editionItems);
+    }
+
+    private void initUpdateSection(){
+        // Update reflections checkboxes
         final CheckBoxPreference reflectionsCheck = (CheckBoxPreference) findPreference(getString(R.string.pref_update_reflections));
         final CheckBoxPreference reflectionsAudioCheck = (CheckBoxPreference) findPreference(getString(R.string.pref_update_reflections_audio));
 

@@ -8,6 +8,10 @@ public class LogManager {
         System.out.println("INFO - " + infoMessage);
     }
 
+    public static void logWarn(String warnMessage){
+        System.out.println("WARN - " + warnMessage);
+    }
+
     public static void logError(String errorMessage){
         System.out.println("ERROR - " + errorMessage);
     }

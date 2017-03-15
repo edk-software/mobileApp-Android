@@ -277,6 +277,7 @@ public class WebServiceManager {
                 if (dbList == null) {
                     dbList = mWsClient.getReflectionList(wsList.getLanguage(), wsList.getEdition());
                     if (dbList == null) {
+                        LogManager.logError("Failed to download reflections for " + wsList.getEdition());
                         continue;
                     }
 
@@ -296,12 +297,27 @@ public class WebServiceManager {
             }
             catch (Exception ex)
             {
-                // TODO: Do something about it
+                LogManager.logError("Exception during sync of "+ wsList.getEdition() + " reflections: " + ex.getMessage());
                 continue;
             }
         }
 
         return true;
+    }
+
+    public ArrayList<Integer> getReflectionEditions(){
+        // TODO: Upload more than the default language
+        String defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
+
+        // Get the WS list
+        ArrayList<ReflectionList> wsLists = mWsClient.getReflectionLists(defaultLanguage);
+        if (wsLists == null)
+            return null;
+
+        ArrayList<Integer> editions = new ArrayList<>();
+        for(ReflectionList list : wsLists)
+            editions.add(list.getEdition());
+        return editions;
     }
 
     public void getReflectionsAudioAsync(ReflectionList list, final OnOperationFinishedEventListener listener) {
