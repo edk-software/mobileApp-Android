@@ -4,6 +4,7 @@
 
     <PreferenceCategory
         android:layout="@layout/red_preference_category"
+        android:key="@string/pref_cat_location"
         android:title="@string/settings_location_category">
 
         <CheckBoxPreference
