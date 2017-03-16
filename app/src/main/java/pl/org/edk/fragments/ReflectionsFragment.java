@@ -205,7 +205,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
         // Display info and refresh, if necessary
         String message;
-        if (downloadedList.hasAudio()) {
+        if (downloadedList.hasAllAudio()) {
             mReflectionList = downloadedList;
             message = activity.getString(R.string.reflections_audio_download_success);
         } else {
@@ -412,7 +412,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private boolean isAudioAvailable() {
-        return mReflectionList != null && mReflectionList.hasAudio();
+        return mReflectionList != null && mReflectionList.hasAllAudio();
     }
 
     private void bindAudioService() {
