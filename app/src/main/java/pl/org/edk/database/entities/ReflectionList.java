@@ -32,7 +32,7 @@ public class ReflectionList extends DbEntityBase {
     // ---------------------------------------
     // Constructors
     // ---------------------------------------
-    public ReflectionList(){
+    public ReflectionList() {
         reflections = new ArrayList<>();
     }
 
@@ -43,7 +43,7 @@ public class ReflectionList extends DbEntityBase {
         return "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
                 COLUMN_NAME_SERVER_ID + INTEGER_TYPE + COMMA +
-                COLUMN_NAME_LANGUAGE+ TEXT_TYPE + COMMA +
+                COLUMN_NAME_LANGUAGE + TEXT_TYPE + COMMA +
                 COLUMN_NAME_EDITION + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_RELEASE_DATE + TEXT_TYPE + ");";
     }
@@ -52,7 +52,7 @@ public class ReflectionList extends DbEntityBase {
         return "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static String[] getFullProjection(){
+    public static String[] getFullProjection() {
         String[] projection = {
                 _ID,
                 COLUMN_NAME_SERVER_ID,
@@ -87,13 +87,13 @@ public class ReflectionList extends DbEntityBase {
             this.edition = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_EDITION));
             this.releaseDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_RELEASE_DATE));
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return false;
         }
     }
 
     @Override
-    public String getTableName(){
+    public String getTableName() {
         return TABLE_NAME;
     }
 
@@ -103,6 +103,7 @@ public class ReflectionList extends DbEntityBase {
     public String getLanguage() {
         return language;
     }
+
     public void setLanguage(String language) {
         this.language = language;
     }
@@ -110,31 +111,48 @@ public class ReflectionList extends DbEntityBase {
     public int getEdition() {
         return edition;
     }
+
     public void setEdition(int edition) {
         this.edition = edition;
     }
 
-    public Date getReleaseDate(){
+    public Date getReleaseDate() {
         return NumConverter.stringToDate(this.releaseDate);
     }
-    public void setReleaseDate(Date date){
+
+    public void setReleaseDate(Date date) {
         this.releaseDate = NumConverter.dateToString(date);
     }
 
     public ArrayList<Reflection> getReflections() {
         return reflections;
     }
+
     public void setReflections(ArrayList<Reflection> reflections) {
         this.reflections = reflections;
     }
 
-    public boolean hasAudio(){
-        if(reflections == null || reflections.size() == 0){
+    public boolean hasAnyAudio() {
+        if (reflections == null || reflections.size() == 0) {
             return false;
         }
 
-        for(Reflection reflection : reflections){
-            if (reflection.getAudioLocalPath() == null || reflection.getAudioLocalPath().length() == 0) {
+        for (Reflection reflection : reflections) {
+            if (reflection.hasAudio()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean hasAllAudio() {
+        if (reflections == null || reflections.size() == 0) {
+            return false;
+        }
+
+        for (Reflection reflection : reflections) {
+            if (!reflection.hasAudio()) {
                 return false;
             }
         }
@@ -142,13 +160,13 @@ public class ReflectionList extends DbEntityBase {
         return true;
     }
 
-    public Reflection getReflection(int stationIndex){
-        if(reflections == null){
+    public Reflection getReflection(int stationIndex) {
+        if (reflections == null) {
             return null;
         }
 
-        for (Reflection reflection : reflections){
-            if(reflection.getStationIndex() == stationIndex){
+        for (Reflection reflection : reflections) {
+            if (reflection.getStationIndex() == stationIndex) {
                 return reflection;
             }
         }

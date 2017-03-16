@@ -152,4 +152,8 @@ public class Reflection extends DbEntityBase {
         this.reflectionList = reflectionList;
         this.listId = reflectionList.getId();
     }
+
+    public boolean hasAudio(){
+        return (audioLocalPath == null || audioLocalPath.length() == 0);
+    }
 }

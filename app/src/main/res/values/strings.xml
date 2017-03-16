@@ -123,6 +123,7 @@
 	<string name="settings_maintenance_cleanup">Usuń pliki</string>
 
 	<string name="reflections_audio_download_success">Zakończono pobieranie rozważań audio.</string>
+	<string name="reflections_audio_download_missing">Części plików nie udało się pobrać. Spróbuj zaktualizować później.</string>
 	<string name="reflections_audio_download_failed">Nie udało się pobrać rozważań audio. Spróbuj ponownie poźniej.</string>
 	<string name="reflections_audio_download_dialog_title">Pobieranie rozważań</string>
 	<string name="reflections_audio_download_dialog_message">Dostępne są rozważania w formie audio. Czy mają zostać
