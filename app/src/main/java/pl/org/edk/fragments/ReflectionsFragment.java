@@ -34,6 +34,7 @@ import pl.org.edk.services.ReflectionsAudioService;
 import pl.org.edk.services.ReflectionsAudioService.OnPlayerStopListener;
 import pl.org.edk.util.DialogUtil;
 import pl.org.edk.util.ExpandableListAdapter;
+import pl.org.edk.util.NumConverter;
 
 /**
  * Created by darekpap on 2015-11-30.
@@ -558,8 +559,14 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         listDataHeader = new ArrayList<>(mReflectionList.getReflections().size());
         HashMap<String, List<String>> listDataChild = new HashMap<>(mReflectionList.getReflections().size());
 
-        for (final Reflection reflection : mReflectionList.getReflections()) {
+        ArrayList<Reflection> reflections = mReflectionList.getReflections();
+        for (int i = 0; i < reflections.size(); i++) {
+            final Reflection reflection = reflections.get(i);
+            String stationIndex = NumConverter.toRoman(i);
             String title = reflection.getDisplayName();
+            if (stationIndex != null){
+                title = stationIndex + " " + title;
+            }
             listDataHeader.add(reflection.getStationIndex(), title);
             listDataChild.put(title, new ArrayList<String>() {{
                 add(reflection.getContent());

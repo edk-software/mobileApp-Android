@@ -30,7 +30,6 @@ public class NumConverter {
 		arabic2roman.put(12, "XII");
 		arabic2roman.put(13, "XIII");
 		arabic2roman.put(14, "XIV");
-		arabic2roman.put(15, "XV");
 
 		roman2arabic.put("I", 1);
 		roman2arabic.put("II", 2);
@@ -46,7 +45,6 @@ public class NumConverter {
 		roman2arabic.put("XII", 12);
 		roman2arabic.put("XIII", 13);
 		roman2arabic.put("XIV", 14);
-		roman2arabic.put("XV", 15);
 	}
 	
 	public static int toArabic(String roman) {
