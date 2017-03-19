@@ -14,7 +14,8 @@ public class NumConverter {
 	// Arabic -> roman =====================================================
 	private static Map<Integer, String> arabic2roman = new HashMap<Integer, String>();
 	private static Map<String, Integer> roman2arabic = new HashMap<String, Integer>();
-	
+	private static Map<String, Integer> literal2arabic = new HashMap<String, Integer>();
+
 	static{
 		arabic2roman.put(1, "I");
 		arabic2roman.put(2, "II");
@@ -45,10 +46,28 @@ public class NumConverter {
 		roman2arabic.put("XII", 12);
 		roman2arabic.put("XIII", 13);
 		roman2arabic.put("XIV", 14);
+
+		literal2arabic.put("PIERWSZA", 1);
+		literal2arabic.put("DRUGA", 2);
+		literal2arabic.put("TRZECIA", 3);
+		literal2arabic.put("CZWARTA", 4);
+		literal2arabic.put("PIĄTA", 5);
+		literal2arabic.put("SZÓSTA", 6);
+		literal2arabic.put("SIÓDMA", 7);
+		literal2arabic.put("ÓSMA", 8);
+		literal2arabic.put("DZIEWIĄTA", 9);
+		literal2arabic.put("DZIESIĄTA", 10);
+		literal2arabic.put("JEDENASTA", 11);
+		literal2arabic.put("DWUNASTA", 12);
+		literal2arabic.put("TRZYNASTA", 13);
+		literal2arabic.put("CZTERNASTA", 14);
 	}
 	
 	public static int toArabic(String roman) {
 		Integer result = roman2arabic.get(roman);
+		if (result == null){
+			result = literal2arabic.get(roman);
+		}
 		return result == null ? 0 : result;
 	}
 	
