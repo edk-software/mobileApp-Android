@@ -438,7 +438,7 @@ public class WebServiceManager {
 
         mDownloadInProgress = true;
         String localPathBase = Settings.get(mContext).get(Settings.APP_DIRECTORY_AUDIO) + "/reflection_" +
-                list.getEdition() + "_";
+                list.getLanguage() + "_" + list.getEdition() + "_";
 
         final Reflection nextReflection = mReflectionsToDownload.get(0);
         String serverPath = nextReflection.getAudioServerPath();
