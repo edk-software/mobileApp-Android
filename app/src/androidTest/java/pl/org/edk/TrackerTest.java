@@ -28,10 +28,12 @@ public class TrackerTest extends InstrumentationTestCase {
 
         final List<Route> unloadedRoutes = new ArrayList<>();
         final List<Track> partialTracks = new ArrayList<>();
+        final List<Track> reversedTracks = new ArrayList<>();
         final List<Route> partialRoutes = new ArrayList<>();
+        final List<Route> reversedRoutes = new ArrayList<>();
 
         final int[] successfulCount = {0};
-        for (int routeId = 0; routeId < 300; routeId++) {
+        for (int routeId =0; routeId < 2000; routeId++) {
             final int finalRouteId = routeId;
             WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
                 @Override
@@ -48,7 +50,10 @@ public class TrackerTest extends InstrumentationTestCase {
                         } else if (!track.isProperlyInitialized()) {
                             partialTracks.add(track);
                             partialRoutes.add(route);
-                        } else{
+                        } else if (track.GetStatus() == Track.Status.Reversed){
+                            reversedTracks.add(track);
+                            reversedRoutes.add(route);
+                        }else{
                             Log.i("TEST", "route " + finalRouteId + " loaded successfully");
 
                         }
@@ -78,16 +83,29 @@ public class TrackerTest extends InstrumentationTestCase {
 
         if (!partialTracks.isEmpty()){
             sb.append(getLineSeparator());
-            sb.append("Problems occurred when reading "+ partialTracks.size()+ " routes out of " + successfulCount[0]);
+            sb.append(String.format("Problems occurred when reading %d routes out of " + successfulCount[0], partialTracks.size()));
             sb.append(getLineSeparator());
         }
         for (int i = 0; i < partialTracks.size(); i++) {
-            Track track = partialTracks.get(i);
-            Route route = partialRoutes.get(i);
+            Track track1 = partialTracks.get(i);
+            Route route1 = partialRoutes.get(i);
             sb.append("Problems loading route ");
-            sb.append(getRouteInfo(route));
+            sb.append(getRouteInfo(route1));
             sb.append(getLineSeparator());
-            sb.append(createErrorMessage(track));
+            sb.append(createErrorMessage(track1));
+            sb.append(getLineSeparator());
+
+        }
+        if (!reversedTracks.isEmpty()){
+            sb.append(getLineSeparator());
+            sb.append(String.format("%d routes reversed out of " + successfulCount[0], reversedTracks.size()));
+            sb.append(getLineSeparator());
+        }
+        for (int i = 0; i < reversedTracks.size(); i++) {
+            Track track = reversedTracks.get(i);
+            Route route = reversedRoutes.get(i);
+            sb.append("Reversed route ");
+            sb.append(getRouteInfo(route));
             sb.append(getLineSeparator());
 
         }
@@ -120,6 +138,8 @@ public class TrackerTest extends InstrumentationTestCase {
             return track;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException ae){
+            ae.printStackTrace();
         }
         return null;
     }

@@ -36,6 +36,7 @@ public class Track {
     private static HashSet<String> introStationNames = new HashSet<>();
     private static HashSet<String> summaryStationNames = new HashSet<>();
     private List<Placemark> mIgnoredPlacemarks = new ArrayList<>();
+    private boolean mReversed = false;
 
     public Track(Placemarks placemarks) {
         createTrack(placemarks.getTrackPlacemarks());
@@ -151,7 +152,10 @@ public class Track {
         // }
 
         if (checkpoints[14] != null && track.indexOf(checkpoints[14]) < track.indexOf(checkpoints[1])) {
-            Collections.reverse(track);
+            if (checkpoints[13] != null && track.indexOf(checkpoints[13]) < track.indexOf(checkpoints[2])){
+                Collections.reverse(track);
+                mReversed = true;
+            }
         }
 
         if (checkpoints[0] == null) {
@@ -389,6 +393,20 @@ public class Track {
             }
         }
         return true;
+    }
+
+    public Status GetStatus(){
+        if (mReversed){
+            return Status.Reversed;
+        }
+        if (!isProperlyInitialized()){
+            return Status.StationsMissing;
+        }
+        return Status.Ok;
+    }
+
+    public enum Status{
+        Ok, StationsMissing, Reversed
     }
 
     public List<Placemark> getIgnoredPlacemarks() {
