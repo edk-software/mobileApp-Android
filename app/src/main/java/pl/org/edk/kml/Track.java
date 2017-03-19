@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Track {
 
     private static final String STATION = "STATION";
+    private static final String STATION_SHORT = "ST";
     private static final String STATION_PL = "STACJA";
     private static final String TAG = "EDK";
     private LatLng[] checkpoints = new LatLng[16];
@@ -206,7 +207,7 @@ public class Track {
         if (summaryStationNames.contains(upperCaseName.trim())) {
             return 15;
         }
-        if (upperCaseName.contains(STATION)){
+        if (upperCaseName.contains(STATION) || upperCaseName.contains(STATION_SHORT)){
             stationIndex = tryGetStationIndex(parts);
             if (stationIndex != -1) {
                 return stationIndex;
@@ -245,7 +246,7 @@ public class Track {
     @NonNull
     private String[] splitIntoParts(String upperCaseName) {
         String withFixedSpaces = replaceNonBreakingSpaceWithNormal(upperCaseName);
-        String[] parts = withFixedSpaces.split(" |,|\\.|_|-|–");
+        String[] parts = withFixedSpaces.split(" |,|\\.|_|-|–|:");
         List<String> partsList = new ArrayList<>();
         for (int i = 0; i < parts.length; i++) {
             String trimmed = parts[i].trim();
@@ -278,7 +279,7 @@ public class Track {
     private int getStationPartIndex(String[] parts) {
         for (int i = 0; i < parts.length; i++) {
             String part = parts[i];
-            if (part.startsWith(STATION_PL) || part.startsWith(STATION)) {
+            if (part.startsWith(STATION_PL) || part.startsWith(STATION) || part.startsWith(STATION_SHORT)) {
                 return i;
             }
         }
