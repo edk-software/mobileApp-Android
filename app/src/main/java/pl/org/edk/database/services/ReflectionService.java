@@ -108,6 +108,10 @@ public class ReflectionService extends DbServiceBase {
     // Get
     // ---------------------------------------
     public ArrayList<ReflectionList> getReflectionLists(){
+        return getReflectionLists(false);
+    }
+
+    public ArrayList<ReflectionList> getReflectionLists(boolean includeItems){
         Cursor cursor = executeQueryGetAll(ReflectionList.TABLE_NAME, ReflectionList.getFullProjection());
 
         ArrayList<ReflectionList> lists = new ArrayList<>();
@@ -115,6 +119,9 @@ public class ReflectionService extends DbServiceBase {
             cursor.moveToPosition(i);
             ReflectionList nextList = new ReflectionList();
             if(nextList.readFromCursor(cursor)){
+                // Fetch the items
+                if(includeItems)
+                    nextList.setReflections(getReflections(nextList.getId()));
                 lists.add(nextList);
             }
         }

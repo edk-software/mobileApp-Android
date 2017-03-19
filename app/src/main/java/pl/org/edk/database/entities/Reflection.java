@@ -154,6 +154,6 @@ public class Reflection extends DbEntityBase {
     }
 
     public boolean hasAudio(){
-        return (audioLocalPath == null || audioLocalPath.length() == 0);
+        return (audioLocalPath != null && audioLocalPath.length() > 0);
     }
 }

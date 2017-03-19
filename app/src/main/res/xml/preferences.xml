@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        android:layout="@layout/red_preference_category"
         android:key="@string/pref_cat_location"
+        android:layout="@layout/red_preference_category"
         android:title="@string/settings_location_category">
 
         <CheckBoxPreference
@@ -45,31 +45,32 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:layout="@layout/red_preference_category"
-            android:title="@string/settings_update_category">
+        android:layout="@layout/red_preference_category"
+        android:title="@string/settings_update_category">
 
         <CheckBoxPreference
-                android:key="@string/pref_update_areas"
-                android:title="@string/settings_update_areas"
-                android:summary="@string/settings_update_areas_desc"
-                app:defaultValue="true"/>
+            android:key="@string/pref_update_areas"
+            android:summary="@string/settings_update_areas_desc"
+            android:title="@string/settings_update_areas"
+            app:defaultValue="true" />
         <CheckBoxPreference
-                android:key="@string/pref_update_routes"
-                android:title="@string/settings_update_routes"
-                android:summary="@string/settings_update_routes_desc"
-                app:defaultValue="true"/>
+            android:key="@string/pref_update_routes"
+            android:summary="@string/settings_update_routes_desc"
+            android:title="@string/settings_update_routes"
+            app:defaultValue="true" />
         <CheckBoxPreference
-                android:key="@string/pref_update_reflections"
-                android:title="@string/settings_update_reflections"
-                android:summary="@string/settings_update_reflections_desc"
-                app:defaultValue="true"/>
+            android:key="@string/pref_update_reflections"
+            android:summary="@string/settings_update_reflections_desc"
+            android:title="@string/settings_update_reflections"
+            app:defaultValue="true" />
         <CheckBoxPreference
-                android:key="@string/pref_update_reflections_audio"
-                android:title="@string/settings_update_reflections_audio"
-                android:summary="@string/settings_update_reflections_audio_desc"/>
-        <Preference android:title="@string/settings_update_button_text"
-                    android:layout="@layout/red_button_preference"
-                    android:key="@string/pref_update_button"/>
+            android:key="@string/pref_update_reflections_audio"
+            android:summary="@string/settings_update_reflections_audio_desc"
+            android:title="@string/settings_update_reflections_audio" />
+        <Preference
+            android:key="@string/pref_update_button"
+            android:layout="@layout/red_button_preference"
+            android:title="@string/settings_update_button_text" />
 
     </PreferenceCategory>
 
@@ -77,9 +78,10 @@
         android:layout="@layout/red_preference_category"
         android:title="@string/settings_maintenance_category">
 
-        <Preference android:title="@string/settings_maintenance_cleanup"
+        <Preference
+            android:key="@string/pref_cleanup_button"
             android:layout="@layout/red_button_preference"
-            android:key="@string/pref_cleanup_button"/>
+            android:title="@string/settings_maintenance_cleanup" />
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:key="@string/pref_cleanup_reflections"
+        android:layout="@layout/red_preference_category"
+        android:title="@string/settings_reflections_category">
+    </PreferenceCategory>
+
+    <Preference
+        android:key="@string/pref_cleanup_button"
+        android:layout="@layout/red_button_preference"
+        android:title="@string/settings_maintenance_cleanup" />
+</PreferenceScreen>

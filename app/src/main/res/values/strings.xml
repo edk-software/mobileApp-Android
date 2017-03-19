@@ -26,6 +26,7 @@
 	<string name="pref_archiveRoutesDialogShown">archiveRoutesDialogShown</string>
 	<string name="pref_rotate_map_to_walk_dir">rotateMapToWalkDirection</string>
 	<string name="pref_cat_location">prefCategoryLocation</string>
+	<string name="pref_cleanup_reflections">prefCleanupReflections</string>
 
     <string name="app_name">EDK</string>
     <string name="routes">Trasy</string>

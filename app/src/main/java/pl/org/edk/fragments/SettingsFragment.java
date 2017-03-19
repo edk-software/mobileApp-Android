@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
@@ -203,9 +205,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         cleanupButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                ArrayList<Integer> editions = new ArrayList<Integer>();
-                editions.add(2016);
-                cleanup(editions);
+                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(CleanupFragment.FRAGMENT_TAG);
+                if (fragment == null) {
+                    fragment = new CleanupFragment();
+                }
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(android.R.id.content, fragment, CleanupFragment.FRAGMENT_TAG).addToBackStack(CleanupFragment.FRAGMENT_TAG).commit();
                 return true;
             }
         });
@@ -225,8 +230,5 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             }
         };
         WebServiceManager.getInstance(getActivity()).updateDataAsync(regions, routes, reflections, audio, listener);
-    }
-
-    private void cleanup(ArrayList<Integer> editions) {
     }
 }

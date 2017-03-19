@@ -133,31 +133,11 @@ public class ReflectionList extends DbEntityBase {
     }
 
     public boolean hasAnyAudio() {
-        if (reflections == null || reflections.size() == 0) {
-            return false;
-        }
-
-        for (Reflection reflection : reflections) {
-            if (reflection.hasAudio()) {
-                return true;
-            }
-        }
-
-        return false;
+        return getFilesCount() > 0;
     }
 
     public boolean hasAllAudio() {
-        if (reflections == null || reflections.size() == 0) {
-            return false;
-        }
-
-        for (Reflection reflection : reflections) {
-            if (!reflection.hasAudio()) {
-                return false;
-            }
-        }
-
-        return true;
+        return getFilesCount() == reflections.size();
     }
 
     public Reflection getReflection(int stationIndex) {
@@ -172,5 +152,19 @@ public class ReflectionList extends DbEntityBase {
         }
 
         return null;
+    }
+
+    public int getFilesCount() {
+        if (reflections == null || reflections.size() == 0) {
+            return 0;
+        }
+
+        int count = 0;
+        for (Reflection reflection : reflections) {
+            if (reflection.hasAudio()) {
+                count++;
+            }
+        }
+        return count;
     }
 }
