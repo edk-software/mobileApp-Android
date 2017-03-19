@@ -1,5 +1,6 @@
 package pl.org.edk.menu;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -48,6 +50,10 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
 
         setTitle(mRoute.getName());
 
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         downloadRouteDetailsAsync();
     }
 
@@ -140,5 +146,16 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
 
     @Override
     public void onStationSelect(int stationIndex) {
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
