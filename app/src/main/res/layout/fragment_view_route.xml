@@ -27,9 +27,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/red_border_button"
-            android:padding="8dp"
-            android:layout_margin="2dp"
+            android:background="@drawable/red_full_button"
+            android:layout_marginRight="1dp"
             android:text="@string/view_route_back"
             android:textColor="@color/white_on_black"
             android:id="@+id/view_route_back"/>
@@ -37,10 +36,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/red_border_button"
-            android:padding="8dp"
-            android:layout_margin="2dp"
-            android:text="@string/view_route_choose"
+            android:background="@drawable/red_full_button"
+            android:layout_marginLeft="1dp"
+            android:text="@string/accept_challenge"
             android:textColor="@color/white_on_black"
             android:id="@+id/view_route_choose"/>
     </LinearLayout>
