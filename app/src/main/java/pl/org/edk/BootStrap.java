@@ -23,9 +23,14 @@ public final class BootStrap {
         DbManager.getInstance(context).init();
         WebServiceManager.getInstance(context).init(R.mipmap.ic_launcher);
 
-        Settings.get(context).set(Settings.APP_LANGUAGE, "pl");
-        Settings.get(context).set(Settings.CURRENT_EDITION, Calendar.getInstance().get(Calendar.YEAR));
-        Settings.get(context).set(Settings.REFLECTIONS_EDITION, Calendar.getInstance().get(Calendar.YEAR));
+        Settings settings = Settings.get(context);
+        settings.set(Settings.APP_LANGUAGE, "pl");
+        settings.set(Settings.CURRENT_EDITION, Calendar.getInstance().get(Calendar.YEAR));
+        settings.set(Settings.REFLECTIONS_EDITION, Calendar.getInstance().get(Calendar.YEAR));
+        boolean follow = settings.getBoolean(Settings.FOLLOW_LOCATION_ON_MAP, true);
+        if(follow){
+            settings.set(Settings.FOLLOW_LOCATION_ON_MAP, true);
+        }
 
         initStorage(context);
 
