@@ -14,12 +14,14 @@ public class KMLHandler extends DefaultHandler {
 	private static final String NAME = "name";
 	private static final String PLACEMARK = "Placemark";
 	private static final String COORDINATES = "coordinates";
+	private static final String GX_COORD = "gx:coord";
 	private Placemark currentPlacemark = null;
 	private List<Placemark> placemarks = new ArrayList<Placemark>();
 	private List<Placemark> singlePlacemarks = new ArrayList<Placemark>();
 
 	private StringBuilder nameSb = null;
 	private StringBuilder coordinatesSb = null;
+	private StringBuilder coordSb = null;
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -29,6 +31,8 @@ public class KMLHandler extends DefaultHandler {
 			nameSb = new StringBuilder();
 		} else if (qName.equals(COORDINATES)) {
 			coordinatesSb = new StringBuilder();
+		} else if (qName.equals(GX_COORD)){
+			coordSb = new StringBuilder();
 		}
 	}
 
@@ -42,6 +46,11 @@ public class KMLHandler extends DefaultHandler {
 		if (currentPlacemark != null && coordinatesSb != null) {
 			for (int i = start; i < start + length; i++) {
 				coordinatesSb.append(ch[i]);
+			}
+		}
+		if (currentPlacemark != null && coordSb != null) {
+			for (int i = start; i < start + length; i++) {
+				coordSb.append(ch[i]);
 			}
 		}
 
@@ -62,6 +71,9 @@ public class KMLHandler extends DefaultHandler {
 		} else if (qName.equals(COORDINATES) && currentPlacemark != null && coordinatesSb != null) {
 			currentPlacemark.addAll(readAllPoints(coordinatesSb.toString()));
 			coordinatesSb = null;
+		} else if (qName.equals(GX_COORD)){
+			currentPlacemark.add(readPoint(coordSb.toString(), " "));
+			coordSb = null;
 		}
 	}
 
@@ -81,7 +93,11 @@ public class KMLHandler extends DefaultHandler {
 	}
 
 	private LatLng readPoint(String coordinates) {
-		String[] split = coordinates.split(",");
+		return readPoint(coordinates, ",");
+	}
+
+	private LatLng readPoint(String coordinates, String separator) {
+		String[] split = coordinates.split(separator);
 		if (split.length < 2) {
 			return null;
 		}
