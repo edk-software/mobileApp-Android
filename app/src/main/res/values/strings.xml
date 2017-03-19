@@ -148,11 +148,5 @@
 
 	<string name="about_edk_activity">O EDK</string>
 
-	<string name="view_route">Podgląd</string>
-	<string name="view_route_back">Powrót</string>
-
-
-
-
-
+	<string name="view_route">Podgląd trasy</string>
 </resources>

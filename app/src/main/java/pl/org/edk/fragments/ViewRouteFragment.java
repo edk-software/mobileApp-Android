@@ -44,14 +44,6 @@ public class ViewRouteFragment extends MapFragment {
             Settings.get(getContext()).set(Settings.FOLLOW_LOCATION_ON_MAP,false);
         }
 
-        Button backButton = (Button)view.findViewById(R.id.view_route_back);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-
         Button chooseButton = (Button)view.findViewById(R.id.view_route_choose);
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +63,6 @@ public class ViewRouteFragment extends MapFragment {
         }
 
         mapFragment.getMapAsync(this);
-
         return view;
     }
 

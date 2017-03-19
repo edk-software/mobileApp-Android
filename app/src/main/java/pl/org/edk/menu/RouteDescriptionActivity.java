@@ -68,14 +68,6 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
             }
         });
 
-        Button changeButton = (Button) findViewById(R.id.changeButton);
-        changeButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(RouteDescriptionActivity.this, TerritoryChooserActivity.class));
-            }
-        });
-
         Button viewRoute = (Button) findViewById(R.id.viewRouteButton);
         viewRoute.setOnClickListener(new OnClickListener() {
             @Override

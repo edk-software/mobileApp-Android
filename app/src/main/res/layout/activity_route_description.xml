@@ -6,51 +6,28 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/startButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/red_full_button"
-        android:layout_marginTop="30dp"
-        android:padding="8dp"
-        android:text="@string/accept_challenge"
-        android:textColor="@color/white_on_black" />
-
-    <Button
         android:id="@+id/viewRouteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/startButton"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/red_border_button"
         android:layout_marginTop="20dp"
+        android:background="@drawable/red_border_button"
         android:padding="8dp"
         android:text="@string/view_route"
         android:textColor="@color/white_on_black" />
 
-    <Button
-        android:id="@+id/changeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewRouteButton"
-        android:layout_centerHorizontal="true"
 
-        android:background="@drawable/red_border_button"
-        android:layout_marginTop="20dp"
-        android:padding="8dp"
 
-        android:text="@string/change_route"
-        android:textColor="@color/white_on_black" />
 
     <TextView
         android:id="@+id/descriptionHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/changeButton"
+        android:layout_below="@+id/viewRouteButton"
         android:background="@drawable/red_underscore_button"
         android:paddingTop="20dp"
         android:text="@string/route_description"
-        android:paddingBottom="3dp"
+        android:paddingBottom="8dp"
         android:textColor="@color/white_on_black"
         android:textSize="18sp" />
 
@@ -59,7 +36,8 @@
         android:id="@+id/descriptionView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/descriptionHeader">
+        android:layout_below="@+id/descriptionHeader"
+        android:layout_above="@+id/startButton">
 
         <WebView
             android:id="@+id/descriptionText"
@@ -76,9 +54,22 @@
             android:textColor="@color/white_on_black" />
     </ScrollView>
 
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/red_full_button"
+        android:padding="15dp"
+        android:text="@string/accept_challenge"
+        android:textColor="@color/white_on_black" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/container"/>
+
+
 
 </RelativeLayout>

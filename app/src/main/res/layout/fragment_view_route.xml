@@ -19,28 +19,13 @@
             android:text="@string/map_loading"/>
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
         <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/red_full_button"
-            android:layout_marginRight="1dp"
-            android:text="@string/view_route_back"
-            android:textColor="@color/white_on_black"
-            android:id="@+id/view_route_back"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/red_full_button"
-            android:layout_marginLeft="1dp"
             android:text="@string/accept_challenge"
             android:textColor="@color/white_on_black"
-            android:id="@+id/view_route_choose"/>
-    </LinearLayout>
+            android:id="@+id/view_route_choose"
+            android:padding="15dp"/>
 
 </LinearLayout>
