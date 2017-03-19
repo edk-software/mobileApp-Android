@@ -3,8 +3,11 @@ package pl.org.edk.menu;
 import java.util.List;
 
 import pl.org.edk.R;
+
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -22,7 +25,10 @@ public abstract class ChooserActivity extends Activity implements OnItemClickLis
 		setContentView(R.layout.simple_item_list);
 		setTitle(getChooserTitle());
 		mainListView = (ListView) findViewById(R.id.mainListView);
-
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null){
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 		refresh(getItems());
 	}
 
@@ -41,5 +47,16 @@ public abstract class ChooserActivity extends Activity implements OnItemClickLis
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		onItemClick(position);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				onBackPressed();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 }

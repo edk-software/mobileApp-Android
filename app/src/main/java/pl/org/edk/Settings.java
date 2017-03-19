@@ -65,6 +65,9 @@ public class Settings extends SettingsBase {
         // Add default values
         if (getInt(Settings.REFLECTIONS_EDITION) == 0)
             set(Settings.REFLECTIONS_EDITION, Calendar.getInstance().get(Calendar.YEAR));
+        if(getBoolean(Settings.FOLLOW_LOCATION_ON_MAP, true)){
+            set(Settings.FOLLOW_LOCATION_ON_MAP, true);
+        }
     }
 
     // Getters
