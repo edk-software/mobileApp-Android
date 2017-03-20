@@ -1,6 +1,7 @@
 package pl.org.edk;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import pl.org.edk.fragments.MapFragment;
 import pl.org.edk.fragments.ReflectionsFragment;
 import pl.org.edk.fragments.RouteInfoFragment;
 import pl.org.edk.fragments.SettingsFragment;
+import pl.org.edk.services.GPSService;
 
 /**
  * Created by darekpap on 2015-11-30.
@@ -131,6 +133,16 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
             return;
         }
         fragment.selectStation(stationIndex);
+    }
+
+    public static void Start(Context context){
+        TempSettings.get(context).set(TempSettings.START_TIME, System.currentTimeMillis());
+        if (Settings.get(context).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)){
+            context.startService(new Intent(context, GPSService.class));
+        }
+        context.startActivity(new Intent(context, MainActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+
     }
 
 

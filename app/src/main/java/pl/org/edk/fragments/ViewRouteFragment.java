@@ -14,7 +14,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import pl.org.edk.MainActivity;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
-import pl.org.edk.TempSettings;
 
 /**
  * Created by wojciech stadnicki on 2017-03-06.
@@ -48,9 +47,7 @@ public class ViewRouteFragment extends MapFragment {
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TempSettings.get(getActivity()).set(TempSettings.START_TIME, System.currentTimeMillis());
-                startActivity(new Intent(getActivity(), MainActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                MainActivity.Start(getActivity());
             }
         });
 

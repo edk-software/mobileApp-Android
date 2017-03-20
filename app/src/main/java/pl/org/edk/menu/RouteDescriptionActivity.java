@@ -62,9 +62,7 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
         startButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                TempSettings.get(RouteDescriptionActivity.this).set(TempSettings.START_TIME, System.currentTimeMillis());
-                startActivity(new Intent(RouteDescriptionActivity.this, MainActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                MainActivity.Start(RouteDescriptionActivity.this);
             }
         });
 
