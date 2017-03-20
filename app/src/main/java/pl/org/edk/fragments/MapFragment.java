@@ -46,7 +46,7 @@ import pl.org.edk.util.NumConverter;
 /**
  * Created by darekpap on 2015-11-30.
  */
-public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraChangeListener,
+public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener,
         OnMapReadyCallback {
 
     public interface OnStationSelectListener {
@@ -57,7 +57,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
     private static final float NAVIGATION_DEFAULT_CAMERA_ZOOM = 16f;
 
-    private static final float OVERVIEW_CAMERA_ZOOM = 10f;
+    protected static final float OVERVIEW_CAMERA_ZOOM = 9.5f;
 
     private Float lastCameraZoom = null;
 
@@ -111,23 +111,32 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
     }
 
     private void focusCameraOnLastLocation() {
-        KMLTracker tracker = getTracker();
-        LatLng center = null;
-            LatLng lastLoc = tracker.getLastLoc();
-            if (shouldFollowLocation() && lastLoc != null) {
-                center = lastLoc;
-            } else if (lastCameraPos != null) {
-                center = lastCameraPos;
-            }
-        if (center == null) {
-            List<LatLng> track = tracker.getTrack();
-            center = track.get(track.size() / 2);
-        }
-        float zoomToApply = OVERVIEW_CAMERA_ZOOM;
+        LatLng center = getCameraPos();
+        float zoomToApply = getInitialCameraZoom();
         if (lastCameraZoom != null) {
             zoomToApply = lastCameraZoom;
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoomToApply));
+    }
+
+    protected float getInitialCameraZoom() {
+        return NAVIGATION_DEFAULT_CAMERA_ZOOM;
+    }
+
+    protected LatLng getCameraPos() {
+        KMLTracker tracker = getTracker();
+        LatLng center = null;
+        LatLng lastLoc = tracker.getLastLoc();
+        if (shouldFollowLocation() && lastLoc != null) {
+            center = lastLoc;
+        } else if (lastCameraPos != null) {
+            center = lastCameraPos;
+        }
+        if (center == null) {
+            List<LatLng> track = tracker.getTrack();
+            center = track.get(0);
+        }
+        return center;
     }
 
     private void decorateMap() {
@@ -189,9 +198,12 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
     }
 
     @Override
-    public void onCameraChange(CameraPosition camera) {
-        lastCameraZoom = camera.zoom;
-        lastCameraPos = camera.target;
+    public void onCameraIdle() {
+        if (mMap == null){
+            return;
+        }
+        lastCameraZoom = mMap.getCameraPosition().zoom;
+        lastCameraPos = mMap.getCameraPosition().target;
     }
 
     @Override
@@ -320,7 +332,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         settings.setMapToolbarEnabled(false);
         setMapPadding();
         mMap.setOnInfoWindowClickListener(this);
-        mMap.setOnCameraChangeListener(this);
+        mMap.setOnCameraIdleListener(this);
 
         if (verifyTracker()){
             return;

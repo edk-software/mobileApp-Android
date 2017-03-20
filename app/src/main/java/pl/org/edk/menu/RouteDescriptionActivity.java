@@ -55,6 +55,8 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         downloadRouteDetailsAsync();
+        TempSettings.get(this).set(TempSettings.CAMERA_ZOOM, -1);
+
     }
 
     private void initView(){
