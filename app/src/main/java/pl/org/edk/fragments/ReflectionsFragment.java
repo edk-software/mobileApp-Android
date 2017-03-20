@@ -149,7 +149,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         refreshViewItems();
 
         initializePlayerView(view);
-        if (mCurrentStation == -1 || !isAudioAvailable()) {
+        if (mCurrentStation == -1 || !isStationAudioAvailable()) {
             hidePlayer();
         }
 
@@ -209,7 +209,10 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         if (downloadedList.hasAllAudio()) {
             mReflectionList = downloadedList;
             message = activity.getString(R.string.reflections_audio_download_success);
-        } else {
+        } else if(downloadedList.hasAnyAudio()){
+            message = activity.getString(R.string.reflections_audio_download_missing);
+        }
+        else {
             message = activity.getString(R.string.reflections_audio_download_failed);
         }
         DialogUtil.showDialog(activity.getString(R.string.reflections_text_download_finished), message, activity, true, null);
@@ -413,7 +416,14 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private boolean isAudioAvailable() {
-        return mReflectionList != null && mReflectionList.hasAllAudio();
+        return mReflectionList != null && mReflectionList.hasAnyAudio();
+    }
+
+    private boolean isStationAudioAvailable(){
+        if (mCurrentStation == -1){
+            return false;
+        }
+        return mReflectionList.getReflection(mCurrentStation).hasAudio();
     }
 
     private void bindAudioService() {
@@ -432,7 +442,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private void showPlayerIfAvailable() {
-        if (!isAudioAvailable()) {
+        if (!isStationAudioAvailable()) {
             return;
         }
         mPlayerView.setVisibility(View.VISIBLE);
