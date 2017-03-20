@@ -59,14 +59,18 @@ public class Settings extends SettingsBase {
 
     public void init() {
         // TEMP: Constant values
-        set(Settings.APP_LANGUAGE, "pl");
-        set(Settings.CURRENT_EDITION, Calendar.getInstance().get(Calendar.YEAR));
+        set(APP_LANGUAGE, "pl");
+        set(CURRENT_EDITION, Calendar.getInstance().get(Calendar.YEAR));
 
         // Add default values
-        if (getInt(Settings.REFLECTIONS_EDITION) == 0)
-            set(Settings.REFLECTIONS_EDITION, Calendar.getInstance().get(Calendar.YEAR));
-        if(getBoolean(Settings.FOLLOW_LOCATION_ON_MAP, true)){
-            set(Settings.FOLLOW_LOCATION_ON_MAP, true);
+        if (getInt(REFLECTIONS_EDITION) == 0){
+            set(REFLECTIONS_EDITION, Calendar.getInstance().get(Calendar.YEAR));
+        }
+        if (getBoolean(FOLLOW_LOCATION_ON_MAP, true)){
+            set(FOLLOW_LOCATION_ON_MAP, true);
+        }
+        if (getBoolean(SHOW_ARCHIVE_ROUTES, true)){
+            set(SHOW_ARCHIVE_ROUTES, true);
         }
     }
 

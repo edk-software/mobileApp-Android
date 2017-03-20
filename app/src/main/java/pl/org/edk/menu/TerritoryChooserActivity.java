@@ -21,7 +21,7 @@ public class TerritoryChooserActivity extends ChooserActivity {
 
 	protected List<String> getItems() {
 		// Ask which routes to display, if needed
-		displayArchiveRoutesQuestion();
+//		displayArchiveRoutesQuestion();
 
 		// Get territories from DB
         mTerritories = DbManager.getInstance(this).getTerritoryService().getTerritories();
