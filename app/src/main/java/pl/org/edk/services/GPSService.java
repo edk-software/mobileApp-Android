@@ -38,17 +38,26 @@ public class GPSService extends Service implements TrackListener{
 
 		Settings settings = Settings.get(this);
 		settings.set(Settings.IS_BACKGROUND_TRACKING_ON, true);
-		initializeTracker();
-		startForeground(ONGOING_NOTIFICATION_ID, getNotificationBuilder().build());
+		if (initializeTracker()){
+			startForeground(ONGOING_NOTIFICATION_ID, getNotificationBuilder().build());
+		}
 
 		return START_NOT_STICKY;
 
 	}
 
-	private void initializeTracker() {
-		KMLTracker tracker = TrackerProvider.getTracker(this);
-		tracker.addListener(this);
-		tracker.start();
+	private boolean initializeTracker() {
+		try {
+			KMLTracker tracker = TrackerProvider.getTracker(this);
+			tracker.addListener(this);
+			tracker.start();
+			return true;
+		}catch (Exception e){
+			Log.e("EDK", "Invalid track", e);
+			stopSelf();
+			return false;
+		}
+
 	}
 
 	@Override
