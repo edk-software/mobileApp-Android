@@ -1,6 +1,11 @@
 package pl.org.edk.menu;
 
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import pl.org.edk.R;
 
@@ -18,8 +23,9 @@ public abstract class ChooserActivity extends Activity implements OnItemClickLis
 
 	private ListView mainListView;
 	private ArrayAdapter<String> listAdapter;
+    private ArrayList<String> initialItemsList;
 
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.simple_item_list);
@@ -33,9 +39,27 @@ public abstract class ChooserActivity extends Activity implements OnItemClickLis
 	}
 
 	protected void refresh(List<String> items){
+        initialItemsList = new ArrayList<>(items);
+		final Collator collator = Collator.getInstance(new Locale("pl", "PL"));
+		Collections.sort(items,new Comparator<String>() {
+			@Override
+			public int compare(String first, String second) {
+				if (containsPL(first) && !containsPL(second)){
+					return -1;
+				}
+				if (!containsPL(first) && containsPL(second)){
+					return 1;
+				}
+				return collator.compare(first,second);
+			}
+		});
 		listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, items);
 		mainListView.setAdapter(listAdapter);
 		mainListView.setOnItemClickListener(this);
+	}
+
+	private static boolean containsPL(String name){
+		return name.toUpperCase().contains("POLSKA");
 	}
 
 	protected abstract String getChooserTitle();
@@ -46,7 +70,9 @@ public abstract class ChooserActivity extends Activity implements OnItemClickLis
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		onItemClick(position);
+        String item = listAdapter.getItem(position);
+        int initialPos = initialItemsList.indexOf(item);
+        onItemClick(initialPos);
 	}
 
 	@Override
