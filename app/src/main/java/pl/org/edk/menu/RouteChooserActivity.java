@@ -76,7 +76,6 @@ public class RouteChooserActivity extends ChooserActivity {
         // Navigate forward, if there's only one item to display
         if (mRoutes.size() == 1) {
             startRouteDescriptionActivity(0);
-            return Collections.emptyList();
         }
 
         ArrayList<String> items = new ArrayList<>();
