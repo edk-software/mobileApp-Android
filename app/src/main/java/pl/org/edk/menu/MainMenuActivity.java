@@ -17,11 +17,13 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import pl.org.edk.BootStrap;
+import pl.org.edk.BuildConfig;
 import pl.org.edk.MainActivity;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.TempSettings;
 import pl.org.edk.database.DbManager;
+import pl.org.edk.services.GPSService;
 import pl.org.edk.util.DialogUtil;
 public class MainMenuActivity extends Activity {
     // ---------------------------------------
@@ -80,10 +82,10 @@ public class MainMenuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main2);
 
-        if (TempSettings.get(this).isUserOnTrack()) { // && Settings.get(this).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
-            //TODO ask the user whether to go to map or sth
-//			Intent serviceIntent = new Intent(this, GPSService.class);
-//			startService(serviceIntent);
+        if (TempSettings.get(this).isUserOnTrack()) {
+            if(Settings.get(this).getBoolean(Settings.IS_BACKGROUND_TRACKING_ON)) {
+                startService(new Intent(this, GPSService.class));
+            }
             long mStartTime = TempSettings.get(this).getLong(TempSettings.START_TIME, System.currentTimeMillis());
             if (System.currentTimeMillis() - mStartTime < SHOW_MAP_HOURS_FROM_START * 3600000) {
                 Intent intent = new Intent(this, MainActivity.class);
