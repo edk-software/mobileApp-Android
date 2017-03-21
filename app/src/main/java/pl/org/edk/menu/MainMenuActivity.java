@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import pl.org.edk.BootStrap;
 import pl.org.edk.BuildConfig;
@@ -97,6 +96,7 @@ public class MainMenuActivity extends Activity {
 
 		// Initialize application global stuff (singletons etc.)
 		BootStrap.initialize(getApplicationContext());
+        resetDbOnFirstRun();
 
 		initUI();
 	}
@@ -216,5 +216,16 @@ public class MainMenuActivity extends Activity {
         }
 
         return false;
+    }
+
+    private void resetDbOnFirstRun() {
+
+        int version = Settings.get(this).getInt(Settings.VERSION_CODE);
+        if (version == BuildConfig.VERSION_CODE){
+            return;
+        }
+        Settings.get(this).set(Settings.VERSION_CODE, BuildConfig.VERSION_CODE);
+        DbManager.getInstance(this).reset();
+
     }
 }

@@ -27,6 +27,7 @@ public class Settings extends SettingsBase {
 
     public static final int ROTATE_MAP_TO_WALK_DIRECTION = R.string.pref_rotate_map_to_walk_dir; // should map be oriented to travel direction or to north
 
+    public static final int VERSION_CODE = R.string.pref_versionCode;
     // Variables
 
     public static boolean CAN_USE_STORAGE = false; // if app has permission WRITE_EXTERNAL_STORAGE
