@@ -307,10 +307,6 @@ public class Track {
     }
 
     private void attachToTrack(LatLng checkpoint) {
-        if (track.contains(checkpoint)) {
-            return;
-        }
-
         Log.d("EDK", "attaching checkpoint to track");
         int index = getClosestIndex(checkpoint);
         if (isAfter(checkpoint, index)) {
