@@ -22,6 +22,7 @@ import pl.org.edk.util.NumConverter;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -32,11 +33,13 @@ public class Track {
     private static final String STATION_PL = "STACJA";
     private static final String TAG = "EDK";
     private LatLng[] checkpoints = new LatLng[16];
+    private Integer[] checkpointIndexes = new Integer[16];
     private List<LatLng> track = new ArrayList<LatLng>();
     private static HashSet<String> introStationNames = new HashSet<>();
     private static HashSet<String> summaryStationNames = new HashSet<>();
     private List<Placemark> mIgnoredPlacemarks = new ArrayList<>();
     private boolean mReversed = false;
+    private Status mStatus = Status.Ok;
 
     public Track(Placemarks placemarks) {
         createTrack(placemarks.getTrackPlacemarks());
@@ -123,7 +126,6 @@ public class Track {
             if (index != -1 && checkpoints[index] == null) {
                 LatLng checkpoint = placemark.getPoints().get(0);
                 checkpoints[index] = checkpoint;
-                attachToTrack(checkpoint);
             } else {
                 remainingPlacemarks.add(placemark);
             }
@@ -134,6 +136,7 @@ public class Track {
         // checkpoints[i] = remainingPlacemarks.remove(0).getPoints().get(0);
         // }
         // }
+        attachCheckpointsToTrack();
 
         if (!remainingPlacemarks.isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -145,17 +148,6 @@ public class Track {
             }
             Log.w(TAG, "Possible duplicates of placemarks " + sb.toString());
             // return;
-        }
-
-        // if (checkpoints[0] == null && !remainingPlacemarks.isEmpty()) {
-        // checkpoints[0] = remainingPlacemarks.remove(0).getPoints().get(0);
-        // }
-
-        if (checkpoints[14] != null && track.indexOf(checkpoints[14]) < track.indexOf(checkpoints[1])) {
-            if (checkpoints[13] != null && track.indexOf(checkpoints[13]) < track.indexOf(checkpoints[2])){
-                Collections.reverse(track);
-                mReversed = true;
-            }
         }
 
         if (checkpoints[0] == null) {
@@ -299,20 +291,69 @@ public class Track {
     }
 
     private void attachCheckpointsToTrack() {
-
-        for (LatLng checkpoint : checkpoints) {
-            attachToTrack(checkpoint);
+        attachCheckpointsToTrack(4, 11);
+        List<Integer> list = Arrays.asList(checkpointIndexes);
+        if(!areOrdered(list)){
+            //reverts also the indexes in the original checkpointIndexes array
+            Collections.reverse(list);
+            if (areOrdered(list)){
+                Collections.reverse(track);
+            } else{
+                mStatus = Status.OutOfOrder;
+            }
         }
-
+        attachCheckpointsToTrack(0, 3);
+        attachCheckpointsToTrack(12, 15);
+        list = Arrays.asList(checkpointIndexes);
+        if(!areOrdered(list)){
+            mStatus = Status.OutOfOrder;
+        }
     }
 
-    private void attachToTrack(LatLng checkpoint) {
+    private void attachCheckpointsToTrack(int from, int to) {
+        int previousCheckpointTrackIndex = 0;
+        if(from > 0 && checkpointIndexes[from - 1] != null){
+            previousCheckpointTrackIndex = checkpointIndexes[from - 1];
+        }
+        for (int i = from; i <= to; i++) {
+            LatLng checkpoint = checkpoints[i];
+            if (checkpoint == null) {
+                continue;
+            }
+            previousCheckpointTrackIndex = attackCheckpointToTrack(checkpoint, previousCheckpointTrackIndex);
+            checkpointIndexes[i] = previousCheckpointTrackIndex;
+        }
+        }
+
+    private boolean areOrdered(List<Integer> checkpointIndexes) {
+        int previous = -1;
+        for (Integer checkpointIndex : checkpointIndexes) {
+            if (checkpointIndex == null){
+                continue;
+            }
+            if(previous > checkpointIndex){
+                return false;
+            }
+            previous = checkpointIndex;
+        }
+        return true;
+    }
+
+    private int attackCheckpointToTrack(LatLng checkpoint, int startIndex) {
         Log.d("EDK", "attaching checkpoint to track");
-        int index = getClosestIndex(checkpoint);
+        Pair<Integer, Boolean> pair = getClosestIndex(checkpoint, startIndex);
+        if (!pair.second) {
+            Pair<Integer, Boolean> closestIndex = getClosestIndex(checkpoint, 0);
+            if (closestIndex.second) {
+                pair = closestIndex;
+            }
+        }
+        int index = pair.first;
         if (isAfter(checkpoint, index)) {
             index++;
         }
         track.add(index, checkpoint);
+        return index;
     }
 
     private boolean isAfter(LatLng checkpoint, int index) {
@@ -335,7 +376,7 @@ public class Track {
         return false;
     }
 
-    private int getClosestIndex(LatLng checkpoint) {
+    private Pair<Integer, Boolean> getClosestIndex(LatLng checkpoint, int startIndex) {
         double dist = Double.MAX_VALUE;
         int closeEnoughDist = 20;
         int locationsToCheckAfterCloseFound = 10;
@@ -343,9 +384,9 @@ public class Track {
         boolean closeEnoughFound = false;
 
         int index = 0;
-        for (int i = 0; i < track.size(); i++) {
+        for (int i = startIndex; i < track.size(); i++) {
             if ((closeEnoughFound && i - index > locationsToCheckAfterCloseFound)) {
-                return index;
+                return Pair.create(index, true);
             }
             LatLng point = track.get(i);
             double currDist = distanceBetween(point, checkpoint);
@@ -357,7 +398,7 @@ public class Track {
                 index = i;
             }
         }
-        return index;
+        return Pair.create(index, closeEnoughFound);
     }
 
     private double distanceBetween(LatLng point, LatLng checkpoint) {
