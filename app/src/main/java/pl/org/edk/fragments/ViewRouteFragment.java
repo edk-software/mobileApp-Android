@@ -96,6 +96,8 @@ public class ViewRouteFragment extends MapFragment {
         super.onPause();
         if (challengeAccepted){
             TempSettings.get(getActivity()).set(TempSettings.CAMERA_ZOOM, -1);
+        } else{
+            TempSettings.get(getActivity()).set(TempSettings.TRACK_WARNING_SHOWN, false);
         }
     }
 }

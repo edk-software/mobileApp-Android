@@ -122,7 +122,7 @@
 	<string name="settings_update_button_text">Aktualizuj teraz</string>
 
 	<string name="settings_maintenance_category">Utrzymanie</string>
-	<string name="settings_maintenance_cleanup">Usuń pliki</string>
+	<string name="settings_maintenance_cleanup">Usuń pliki audio</string>
 
 	<string name="reflections_audio_download_success">Zakończono pobieranie rozważań audio.</string>
 	<string name="reflections_audio_download_missing">Części plików nie udało się pobrać. Spróbuj zaktualizować później.</string>

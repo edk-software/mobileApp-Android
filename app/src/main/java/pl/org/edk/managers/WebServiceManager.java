@@ -12,6 +12,7 @@ import pl.org.edk.webServices.WebServiceAccess;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by pwawrzynek on 2016-02-11.
@@ -258,9 +259,10 @@ public class WebServiceManager {
 
     // Reflections
 
-    public boolean syncReflections(boolean includeAudio) {
+    public boolean syncReflections(boolean downloadAudio) {
         // TODO: Upload more than the default language
         String defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
+        int defaultEdition = Settings.get(mContext).getInt((Settings.REFLECTIONS_EDITION));
 
         // Get the WS list
         ArrayList<ReflectionList> wsLists = mWsClient.getReflectionLists(defaultLanguage);
@@ -271,7 +273,7 @@ public class WebServiceManager {
             try {
                 ReflectionList dbList = DbManager.getInstance(mContext)
                         .getReflectionService()
-                        .getReflectionList(defaultLanguage, wsList.getEdition(), false);
+                        .getReflectionList(defaultLanguage, wsList.getEdition(), true);
 
                 // This list doesn't exist locally
                 if (dbList == null) {
@@ -283,7 +285,7 @@ public class WebServiceManager {
 
                     dbList.setReleaseDate(wsList.getReleaseDate());
                     DbManager.getInstance(mContext).getReflectionService().insertReflectionList(dbList);
-                    if (includeAudio) {
+                    if (downloadAudio) {
                         getReflectionsAudioAsync(dbList, null);
                     }
                     continue;
@@ -291,8 +293,12 @@ public class WebServiceManager {
 
                 // This list is outdated
                 if (dbList.getReleaseDate().before(wsList.getReleaseDate())) {
-                    updateReflectionList(dbList.getLanguage(), dbList.getEdition(), wsList.getReleaseDate(), includeAudio);
+                    updateReflectionList(dbList.getLanguage(), dbList.getEdition(), wsList.getReleaseDate(), downloadAudio);
                     continue;
+                }
+                // Audio files were not downloaded and should be
+                else if(downloadAudio && dbList.getEdition() == defaultEdition && !dbList.hasAllAudio()){
+                    getReflectionsAudioAsync(dbList, null);
                 }
             }
             catch (Exception ex)

@@ -150,4 +150,11 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        TempSettings.get(this).set(TempSettings.TRACK_WARNING_SHOWN, false);
+    }
 }

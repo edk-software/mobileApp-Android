@@ -419,8 +419,8 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         return mReflectionList != null && mReflectionList.hasAnyAudio();
     }
 
-    private boolean isStationAudioAvailable(){
-        if (mCurrentStation == -1){
+    private boolean isStationAudioAvailable() {
+        if (mCurrentStation == -1) {
             return false;
         }
         return mReflectionList.getReflection(mCurrentStation).hasAudio();
@@ -443,6 +443,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     private void showPlayerIfAvailable() {
         if (!isStationAudioAvailable()) {
+            mPlayerView.setVisibility(View.GONE);
             return;
         }
         mPlayerView.setVisibility(View.VISIBLE);
