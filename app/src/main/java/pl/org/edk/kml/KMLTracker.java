@@ -32,6 +32,7 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
     private final double trackLength;
     private final List<Double> mStationsDistancesTraveled;
     private final List<Integer> mStationIndexes;
+    private final boolean mTrackComplete;
     private List<LatLng> track;
     private List<LatLng> checkpoints;
     private LatLng currentLoc = null;
@@ -57,9 +58,17 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
         mContext = context;
         this.track = track.getTrackPoints();
         this.checkpoints = track.getCheckpoints();
-        mStationIndexes = findStationIndexes();
-        mStationsDistancesTraveled = calculateDistancesForStations();
-        this.trackLength = trackDistanceBetween(0, this.track.size() - 1);
+        mTrackComplete = track.GetStatus() == Track.Status.Ok;
+        if (mTrackComplete){
+            mStationIndexes = findStationIndexes();
+            mStationsDistancesTraveled = calculateDistancesForStations();
+            this.trackLength = trackDistanceBetween(0, this.track.size() - 1);
+        } else{
+            mStationIndexes = null;
+            mStationsDistancesTraveled = null;
+            this.trackLength = 0;
+        }
+
     }
 
     private List<Integer> findStationIndexes() {
@@ -178,6 +187,9 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
     }
 
     public double[] getDistanceInfo() {
+        if (!mTrackComplete){
+            return new double[]{0, 0, 0};
+        }
         if (currentLoc == null) {
             double distanceToNext = trackDistanceBetween(0, mStationIndexes.get(0));
 
@@ -227,7 +239,7 @@ public class KMLTracker implements LocationListener, OnConnectionFailedListener,
                 return false;
             }
         }
-        return true;
+        return mTrackComplete;
 
     }
 
