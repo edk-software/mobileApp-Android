@@ -418,7 +418,8 @@ public class Track {
     }
 
     private boolean hasAllCheckpoints() {
-        for (LatLng latLng : checkpoints) {
+        for (int i = 1; i < checkpoints.length - 1; i++) {
+            LatLng latLng = checkpoints[i];
             if (latLng == null) {
                 return false;
             }
