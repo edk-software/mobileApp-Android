@@ -284,22 +284,19 @@ public class Track {
 
     private void attachCheckpointsToTrack() {
         attachCheckpointsToTrack(4, 11);
-        List<Integer> list = Arrays.asList(checkpointIndexes);
-        if(!areOrdered(list)){
-            //reverts also the indexes in the original checkpointIndexes array
-            Collections.reverse(list);
-            if (areOrdered(list)){
+        if(!areCheckpointsOrdered()){
+            reverseCheckpoints();
+            if (areCheckpointsOrdered()){
                 Collections.reverse(track);
             } else{
                 //revert back to original order
-                Collections.reverse(list);
+                reverseCheckpoints();
                 mStatus = Status.OutOfOrder;
             }
         }
         attachCheckpointsToTrack(0, 3);
         attachCheckpointsToTrack(12, 15);
-        list = Arrays.asList(checkpointIndexes);
-        if(!areOrdered(list)){
+        if(!areCheckpointsOrdered()){
             mStatus = Status.OutOfOrder;
         }
     }
@@ -319,7 +316,7 @@ public class Track {
         }
     }
 
-    private boolean areOrdered(List<Integer> checkpointIndexes) {
+    private boolean areCheckpointsOrdered() {
         int previous = -1;
         for (Integer checkpointIndex : checkpointIndexes) {
             if (checkpointIndex == null){
@@ -331,6 +328,15 @@ public class Track {
             previous = checkpointIndex;
         }
         return true;
+    }
+
+    private void reverseCheckpoints(){
+        for (int i = 0; i < checkpointIndexes.length; i++) {
+            if(checkpointIndexes[i] == null){
+                continue;
+            }
+            checkpointIndexes[i] = track.size() - 1 - checkpointIndexes[i];
+        }
     }
 
     private int attackCheckpointToTrack(LatLng checkpoint, int startIndex) {
