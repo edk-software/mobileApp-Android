@@ -124,7 +124,7 @@ public class KMLHandler extends DefaultHandler {
 		String name = null;
 
 		public void addAll(List<LatLng> points) {
-			this.points.addAll(points);
+			Track.addAllToTrack(this.points, points);
 		}
 
 		public void add(LatLng point) {

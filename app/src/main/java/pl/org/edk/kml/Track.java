@@ -108,9 +108,26 @@ public class Track {
     private void createTrack(List<Placemark> placemarks) {
         for (Placemark placemark : placemarks) {
             List<LatLng> points = placemark.getPoints();
-            if (points.size() > 15) {
-                track.addAll(points);
+            if (points.size() <= 15) {
+                continue;
             }
+            addAllToTrack(this.track, points);
+        }
+    }
+
+    static void addAllToTrack(List<LatLng> track, List<LatLng> points) {
+        if (track.size() == 0){
+            track.addAll(points);
+            return;
+        }
+        LatLng first = track.get(0);
+        LatLng last = track.get(track.size() - 1);
+        LatLng pointsFirst = points.get(0);
+        LatLng pointsLast = points.get(points.size() - 1);
+        if(distanceBetween(last, pointsFirst) > 5 * distanceBetween(first, pointsLast)){
+            track.addAll(0, points);
+        }else{
+            track.addAll(points);
         }
     }
 
@@ -401,7 +418,7 @@ public class Track {
         return Pair.create(index, closeEnoughFound);
     }
 
-    private double distanceBetween(LatLng point, LatLng checkpoint) {
+    private static double distanceBetween(LatLng point, LatLng checkpoint) {
         float[] results = new float[3];
         Location.distanceBetween(point.latitude, point.longitude, checkpoint.latitude, checkpoint.longitude, results);
         return results[0];
