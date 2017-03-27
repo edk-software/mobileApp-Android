@@ -46,10 +46,6 @@ public class Track {
             throw new IllegalArgumentException("Track was empty");
         }
         fillCheckpointsArray(placemarks.getSinglePlacemarks());
-        // if (!track.containsAll(Arrays.asList(checkpoints))) {
-        // attachCheckpointsToTrack();
-        // }
-        // orderCheckpoints();
     }
 
     static {
@@ -129,12 +125,6 @@ public class Track {
                 remainingPlacemarks.add(placemark);
             }
         }
-        // for (int i = 0; i < checkpoints.length; i++) {
-        // LatLng station = checkpoints[i];
-        // if (station == null && !remainingPlacemarks.isEmpty()){
-        // checkpoints[i] = remainingPlacemarks.remove(0).getPoints().get(0);
-        // }
-        // }
         if(!hasAllCheckpoints()){
             mStatus = Status.StationsMissing;
         }
