@@ -372,7 +372,7 @@ public class Track {
 
     private Pair<Integer, Boolean> getClosestIndex(LatLng checkpoint, int startIndex) {
         double dist = Double.MAX_VALUE;
-        int closeEnoughDist = 50;
+        int closeEnoughDist = 100;
         int locationsToCheckAfterCloseFound = 10;
 
         boolean closeEnoughFound = false;
