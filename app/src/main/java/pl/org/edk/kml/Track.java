@@ -291,6 +291,8 @@ public class Track {
             if (areOrdered(list)){
                 Collections.reverse(track);
             } else{
+                //revert back to original order
+                Collections.reverse(list);
                 mStatus = Status.OutOfOrder;
             }
         }
