@@ -28,9 +28,9 @@ public class TrackerTest extends InstrumentationTestCase {
 
         final List<Route> unloadedRoutes = new ArrayList<>();
         final List<Track> partialTracks = new ArrayList<>();
-        final List<Track> reversedTracks = new ArrayList<>();
+        final List<Track> outOfOrderTracks = new ArrayList<>();
         final List<Route> partialRoutes = new ArrayList<>();
-        final List<Route> reversedRoutes = new ArrayList<>();
+        final List<Route> outOfOrderRoutes = new ArrayList<>();
 
         final int[] successfulCount = {0};
         for (int routeId =0; routeId < 2000; routeId++) {
@@ -47,12 +47,12 @@ public class TrackerTest extends InstrumentationTestCase {
                         Track track = loadTrack(route);
                         if (track == null) {
                             unloadedRoutes.add(route);
-                        } else if (!track.isProperlyInitialized()) {
+                        } else if (track.GetStatus() == Track.Status.StationsMissing) {
                             partialTracks.add(track);
                             partialRoutes.add(route);
-                        } else if (track.GetStatus() == Track.Status.Reversed){
-                            reversedTracks.add(track);
-                            reversedRoutes.add(route);
+                        } else if (track.GetStatus() == Track.Status.OutOfOrder){
+                            outOfOrderTracks.add(track);
+                            outOfOrderRoutes.add(route);
                         }else{
                             Log.i("TEST", "route " + finalRouteId + " loaded successfully");
 
@@ -96,14 +96,14 @@ public class TrackerTest extends InstrumentationTestCase {
             sb.append(getLineSeparator());
 
         }
-        if (!reversedTracks.isEmpty()){
+        if (!outOfOrderTracks.isEmpty()){
             sb.append(getLineSeparator());
-            sb.append(String.format("%d routes reversed out of " + successfulCount[0], reversedTracks.size()));
+            sb.append(String.format("%d routes with incorrect stations order out of " + successfulCount[0], outOfOrderTracks.size()));
             sb.append(getLineSeparator());
         }
-        for (int i = 0; i < reversedTracks.size(); i++) {
-            Track track = reversedTracks.get(i);
-            Route route = reversedRoutes.get(i);
+        for (int i = 0; i < outOfOrderTracks.size(); i++) {
+            Track track = outOfOrderTracks.get(i);
+            Route route = outOfOrderRoutes.get(i);
             sb.append("Reversed route ");
             sb.append(getRouteInfo(route));
             sb.append(getLineSeparator());
@@ -114,6 +114,7 @@ public class TrackerTest extends InstrumentationTestCase {
             String msg = sb.toString();
             fail(msg);
         }
+        Log.i("EDK", "Successfully read " + successfulCount[0] + " routes");
     }
 
     private String getRouteInfo(Route route) {

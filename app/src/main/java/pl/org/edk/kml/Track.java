@@ -38,7 +38,6 @@ public class Track {
     private static HashSet<String> introStationNames = new HashSet<>();
     private static HashSet<String> summaryStationNames = new HashSet<>();
     private List<Placemark> mIgnoredPlacemarks = new ArrayList<>();
-    private boolean mReversed = false;
     private Status mStatus = Status.Ok;
 
     public Track(Placemarks placemarks) {
@@ -136,6 +135,9 @@ public class Track {
         // checkpoints[i] = remainingPlacemarks.remove(0).getPoints().get(0);
         // }
         // }
+        if(!hasAllCheckpoints()){
+            mStatus = Status.StationsMissing;
+        }
         attachCheckpointsToTrack();
 
         if (!remainingPlacemarks.isEmpty()) {
@@ -203,7 +205,7 @@ public class Track {
         if (summaryStationNames.contains(upperCaseName.trim())) {
             return 15;
         }
-        if (upperCaseName.contains(STATION) || upperCaseName.contains(STATION_SHORT)){
+        if (upperCaseName.contains(STATION) || upperCaseName.contains(STATION_SHORT)) {
             stationIndex = tryGetStationIndex(parts);
             if (stationIndex != -1) {
                 return stationIndex;
@@ -323,7 +325,7 @@ public class Track {
             previousCheckpointTrackIndex = attackCheckpointToTrack(checkpoint, previousCheckpointTrackIndex);
             checkpointIndexes[i] = previousCheckpointTrackIndex;
         }
-        }
+    }
 
     private boolean areOrdered(List<Integer> checkpointIndexes) {
         int previous = -1;
@@ -423,7 +425,7 @@ public class Track {
         return Arrays.asList(checkpoints);
     }
 
-    public boolean isProperlyInitialized() {
+    private boolean hasAllCheckpoints() {
         for (LatLng latLng : checkpoints) {
             if (latLng == null) {
                 return false;
@@ -432,18 +434,12 @@ public class Track {
         return true;
     }
 
-    public Status GetStatus(){
-        if (mReversed){
-            return Status.Reversed;
-        }
-        if (!isProperlyInitialized()){
-            return Status.StationsMissing;
-        }
-        return Status.Ok;
+    public Status GetStatus() {
+        return mStatus;
     }
 
-    public enum Status{
-        Ok, StationsMissing, Reversed
+    public enum Status {
+        Ok, StationsMissing, OutOfOrder, Reversed
     }
 
     public List<Placemark> getIgnoredPlacemarks() {
