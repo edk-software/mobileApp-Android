@@ -258,7 +258,7 @@ public class Track {
             return arabic2;
         }
         int parseInt = parseSafe(stationIndexString);
-        if (parseInt > 0 && parseInt < 16) {
+        if (parseInt > 0 && parseInt < 15) {
             return parseInt;
         }
         return -1;
