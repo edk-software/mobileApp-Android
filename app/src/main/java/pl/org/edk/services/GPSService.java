@@ -52,7 +52,7 @@ public class GPSService extends Service implements TrackListener{
 			tracker.addListener(this);
 			tracker.start();
 			return true;
-		}catch (Exception e){
+		} catch (Exception e){
 			Log.e("EDK", "Invalid track", e);
 			stopSelf();
 			return false;
@@ -65,19 +65,28 @@ public class GPSService extends Service implements TrackListener{
 		Log.i(TAG, "Service destroyed");
 		stopForeground(true);
 		Settings.get(this).set(Settings.IS_BACKGROUND_TRACKING_ON, false);
-		KMLTracker tracker = TrackerProvider.getTracker(this);
-		tracker.stop();
-		tracker.removeListener(this);
+		try {
+			KMLTracker tracker = TrackerProvider.getTracker(this);
+			tracker.stop();
+			tracker.removeListener(this);
+		} catch (Exception e){
+			Log.e("EDK", "Invalid track", e);
+		}
 		super.onDestroy();
 	}
 
 	@Override
 	public void onCheckpointReached(int checkpointId) {
+		if (checkpointId <= 0 || checkpointId >= 15){
+			return;
+		}
+
 		Intent intent = new Intent(this, MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		intent.putExtra(Extra.STATION_ID, checkpointId);
-		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent pIntent = PendingIntent.getActivity(this, 23, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		Builder builder = getNotificationBuilder();
-		String text = getString(R.string.near_checkpoint_message) + NumConverter.toRoman(checkpointId + 1);
+		String text = getString(R.string.near_checkpoint_message) + NumConverter.toRoman(checkpointId);
 		builder.setContentText(text);
 		builder.setTicker(text);
 		builder.setVibrate(new long[] { 0, 2000 });

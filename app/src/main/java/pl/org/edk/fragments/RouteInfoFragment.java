@@ -74,6 +74,7 @@ public class RouteInfoFragment extends TrackerFragment {
         mStartTime = TempSettings.get(getActivity()).getLong(TempSettings.START_TIME, System.currentTimeMillis());
 
         configureFinishButton(view);
+        updateDistances();
 
         return view;
     }

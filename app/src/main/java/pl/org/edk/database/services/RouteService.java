@@ -2,15 +2,13 @@ package pl.org.edk.database.services;
 
 import android.database.Cursor;
 
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
+
 import pl.org.edk.database.entities.DbEntityBase;
 import pl.org.edk.database.entities.Route;
 import pl.org.edk.database.entities.RouteDesc;
 import pl.org.edk.database.entities.Station;
-
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Created by pwawrzynek on 2015-12-16.
@@ -132,30 +130,46 @@ public class RouteService extends DbServiceBase {
     // Get
     // ---------------------------------------
     public ArrayList<Route> getAllRoutes() {
-        Cursor cursor = executeQueryGetAll(Route.TABLE_NAME, Route.getFullProjection());
+        return Execute(new CursorCommand<ArrayList<Route>>() {
+            @Override
+            public Cursor GetCursor() {
+                return executeQueryGetAll(Route.TABLE_NAME, Route.getFullProjection());
+            }
 
-        ArrayList<Route> routes = new ArrayList<>();
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            Route route = new Route();
-            if (route.readFromCursor(cursor))
-                routes.add(route);
-        }
+            @Override
+            public ArrayList<Route> Run(Cursor cursor) {
+                ArrayList<Route> routes = new ArrayList<>();
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    cursor.moveToPosition(i);
+                    Route route = new Route();
+                    if (route.readFromCursor(cursor))
+                        routes.add(route);
+                }
 
-        return routes;
+                return routes;
+            }
+        });
     }
 
-    public Route getRoute(long routeId) {
-        Cursor cursor = executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(), Route._ID, String.valueOf(routeId));
+    public Route getRoute(final long routeId) {
+        return Execute(new CursorCommand<Route>() {
+            @Override
+            public Cursor GetCursor() {
+                return executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(), Route._ID, String.valueOf(routeId));
+            }
 
-        // No Routes with this id found
-        if (cursor.getCount() == 0)
-            return null;
+            @Override
+            public Route Run(Cursor cursor) {
+                // No Routes with this id found
+                if (cursor.getCount() == 0)
+                    return null;
 
-        // Get this Route info
-        cursor.moveToFirst();
-        Route route = new Route();
-        return route.readFromCursor(cursor) ? route : null;
+                // Get this Route info
+                cursor.moveToFirst();
+                Route route = new Route();
+                return route.readFromCursor(cursor) ? route : null;
+            }
+        });
     }
 
     public Route getRoute(long routeId, String language) {
@@ -173,18 +187,27 @@ public class RouteService extends DbServiceBase {
         return route;
     }
 
-    public Route getRouteByServerID(long routeServerID) {
-        Cursor cursor = executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(),
-                DbEntityBase.COLUMN_NAME_SERVER_ID, String.valueOf(routeServerID));
+    public Route getRouteByServerID(final long routeServerID) {
+        return Execute(new CursorCommand<Route>() {
+            @Override
+            public Cursor GetCursor() {
+                return executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(),
+                        DbEntityBase.COLUMN_NAME_SERVER_ID, String.valueOf(routeServerID));
+            }
 
-        // No Routes with this id found
-        if (cursor.getCount() == 0)
-            return null;
+            @Override
+            public Route Run(Cursor cursor) {
 
-        // Get this Route info
-        cursor.moveToFirst();
-        Route route = new Route();
-        return route.readFromCursor(cursor) ? route : null;
+                // No Routes with this id found
+                if (cursor.getCount() == 0)
+                    return null;
+
+                // Get this Route info
+                cursor.moveToFirst();
+                Route route = new Route();
+                return route.readFromCursor(cursor) ? route : null;
+            }
+        });
     }
 
     public Route getRouteWithStations(long routeId) {
@@ -196,67 +219,93 @@ public class RouteService extends DbServiceBase {
         return route;
     }
 
-    public void getStationsForRoute(Route route) {
-        Cursor cursor = executeQueryWhere(Station.TABLE_NAME, Station.getFullProjection(),
-                Station.COLUMN_NAME_ROUTE_ID, String.valueOf(route.getId()));
+    public void getStationsForRoute(final Route route) {
+        Execute(new CursorCommand<Object>() {
+            @Override
+            public Cursor GetCursor() {
+                return executeQueryWhere(Station.TABLE_NAME, Station.getFullProjection(),
+                        Station.COLUMN_NAME_ROUTE_ID, String.valueOf(route.getId()));
+            }
 
-        ArrayList<Station> stations = new ArrayList<>();
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            Station nextStation = new Station();
-            if (nextStation.readFromCursor(cursor))
-                stations.add(nextStation);
-        }
-        route.setStations(stations);
+            @Override
+            public Object Run(Cursor cursor) {
+                ArrayList<Station> stations = new ArrayList<>();
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    cursor.moveToPosition(i);
+                    Station nextStation = new Station();
+                    if (nextStation.readFromCursor(cursor))
+                        stations.add(nextStation);
+                }
+                route.setStations(stations);
+                return null;
+            }
+        });
     }
 
     public RouteDesc getDescForRoute(long routeId, String language) {
-        ArrayList<String> whereColumns = new ArrayList<>();
+        final ArrayList<String> whereColumns = new ArrayList<>();
         whereColumns.add(RouteDesc.COLUMN_NAME_ROUTE_ID);
         whereColumns.add(RouteDesc.COLUMN_NAME_LANGUAGE);
-        String[] whereValues = {String.valueOf(routeId), language};
+        final String[] whereValues = {String.valueOf(routeId), language};
 
-        Cursor cursor = executeQueryWhere(RouteDesc.TABLE_NAME, RouteDesc.getFullProjection(), whereColumns, whereValues);
+        return Execute(new CursorCommand<RouteDesc>() {
+            @Override
+            public Cursor GetCursor() {
+                return executeQueryWhere(RouteDesc.TABLE_NAME, RouteDesc.getFullProjection(), whereColumns, whereValues);
+            }
 
-        // No Routes with this id found
-        if (cursor.getCount() == 0) {
-            return null;
-        }
+            @Override
+            public RouteDesc Run(Cursor cursor) {
+                // No Routes with this id found
+                if (cursor.getCount() == 0) {
+                    return null;
+                }
 
-        // Get this Route info
-        cursor.moveToFirst();
-        RouteDesc routeDesc = new RouteDesc();
-        return routeDesc.readFromCursor(cursor) ? routeDesc : null;
+                // Get this Route info
+                cursor.moveToFirst();
+                RouteDesc routeDesc = new RouteDesc();
+                return routeDesc.readFromCursor(cursor) ? routeDesc : null;
+            }
+        });
     }
 
-    public ArrayList<Route> getRoutesForArea(long areaId, boolean currentOnly, boolean includeStations) {
-        ArrayList<String> whereColumns = new ArrayList<>();
-        String[] whereArgs = new String[currentOnly ? 2 : 1];
+    public ArrayList<Route> getRoutesForArea(long areaId, boolean currentOnly, final boolean includeStations) {
+        final ArrayList<String> whereColumns = new ArrayList<>();
+        final String[] whereArgs = new String[currentOnly ? 2 : 1];
 
         whereColumns.add(Route.COLUMN_NAME_AREA_ID);
         whereArgs[0] = String.valueOf(areaId);
 
-        if(currentOnly) {
+        if (currentOnly) {
             whereColumns.add(Route.COLUMN_NAME_IS_CURRENT);
             whereArgs[1] = "1";
         }
 
-        Cursor cursor = executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(),whereColumns, whereArgs);
+        return Execute(new CursorCommand<ArrayList<Route>>() {
+            @Override
+            public Cursor GetCursor() {
+                return executeQueryWhere(Route.TABLE_NAME, Route.getFullProjection(), whereColumns, whereArgs);
+            }
 
-        ArrayList<Route> routes = new ArrayList<>();
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-            Route route = new Route();
-            if (route.readFromCursor(cursor))
-                routes.add(route);
-        }
+            @Override
+            public ArrayList<Route> Run(Cursor cursor) {
+                ArrayList<Route> routes = new ArrayList<>();
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    cursor.moveToPosition(i);
+                    Route route = new Route();
+                    if (route.readFromCursor(cursor))
+                        routes.add(route);
+                }
 
-        // Fetch Stations
-        if (includeStations) {
-            for (Route route : routes)
-                getStationsForRoute(route);
-        }
+                // Fetch Stations
+                if (includeStations) {
+                    for (Route route : routes)
+                        getStationsForRoute(route);
+                }
 
-        return routes;
+                return routes;
+            }
+        });
+
     }
 }
