@@ -52,7 +52,7 @@ public class GPSService extends Service implements TrackListener{
 			tracker.addListener(this);
 			tracker.start();
 			return true;
-		}catch (Exception e){
+		} catch (Exception e){
 			Log.e("EDK", "Invalid track", e);
 			stopSelf();
 			return false;
@@ -65,9 +65,13 @@ public class GPSService extends Service implements TrackListener{
 		Log.i(TAG, "Service destroyed");
 		stopForeground(true);
 		Settings.get(this).set(Settings.IS_BACKGROUND_TRACKING_ON, false);
-		KMLTracker tracker = TrackerProvider.getTracker(this);
-		tracker.stop();
-		tracker.removeListener(this);
+		try {
+			KMLTracker tracker = TrackerProvider.getTracker(this);
+			tracker.stop();
+			tracker.removeListener(this);
+		} catch (Exception e){
+			Log.e("EDK", "Invalid track", e);
+		}
 		super.onDestroy();
 	}
 
