@@ -208,6 +208,9 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
     @Override
     public void onCheckpointReached(int checkpointId) {
+        if (getActivity() == null) {
+            return;
+        }
         setNearCheckpointTitle(checkpointId);
         if (markers.isEmpty()) {
             Log.w(TAG, "Markers not initialized");
