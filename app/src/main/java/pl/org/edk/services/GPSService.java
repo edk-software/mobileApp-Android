@@ -80,9 +80,11 @@ public class GPSService extends Service implements TrackListener{
 		if (checkpointId <= 0 || checkpointId >= 15){
 			return;
 		}
+
 		Intent intent = new Intent(this, MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		intent.putExtra(Extra.STATION_ID, checkpointId);
-		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent pIntent = PendingIntent.getActivity(this, 23, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		Builder builder = getNotificationBuilder();
 		String text = getString(R.string.near_checkpoint_message) + NumConverter.toRoman(checkpointId);
 		builder.setContentText(text);
