@@ -112,11 +112,16 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
     private void focusCameraOnLastLocation() {
         LatLng center = getCameraPos();
+        float zoomToApply = getCameraZoomToApply();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoomToApply));
+    }
+
+    private float getCameraZoomToApply() {
         float zoomToApply = getInitialCameraZoom();
         if (lastCameraZoom != null) {
             zoomToApply = lastCameraZoom;
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoomToApply));
+        return zoomToApply;
     }
 
     protected float getInitialCameraZoom() {
@@ -254,7 +259,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
                 CameraPosition cameraPosition = new CameraPosition.Builder(mMap.getCameraPosition())
                         .target(location)      // Sets the center of the map
-                        .zoom(lastCameraZoom)                   // Sets the zoom
+                        .zoom(getCameraZoomToApply())                   // Sets the zoom
                         .bearing(currentBearing)                // Sets the orientation of the camera
                         //.tilt(30)                   // Sets the tilt of the camera to 30 degrees
                         .build();                   // Creates a CameraPosition from the builder
