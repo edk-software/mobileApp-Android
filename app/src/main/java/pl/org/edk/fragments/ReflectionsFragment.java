@@ -135,7 +135,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         // Load reflections from DB or download them
         if (!prepareListData()) {
             DialogUtil.showWarningDialog(
-                    mAudioService.getString(R.string.reflections_text_download_failed), getActivity(), true);
+                    getString(R.string.reflections_text_download_failed), getActivity(), true);
             return view;
         }
 
@@ -262,6 +262,10 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mAudioService == null){
+                    Log.e("EDK", "Audio service was null when play was requested");
+                    return;
+                }
                 if (mAudioService.isPlaying()) {
                     mAudioService.pause();
                     mPlayButton.setImageResource(R.drawable.play);
