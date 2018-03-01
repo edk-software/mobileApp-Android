@@ -101,7 +101,7 @@ public class DialogUtil {
 	 */
 	public static void closeBusyDialog(){
 		if(mDialog != null && mDialog.isShowing()) {
-			mDialog.hide();
+			mDialog.dismiss();
 			mDialog = null;
 		}
 	}
