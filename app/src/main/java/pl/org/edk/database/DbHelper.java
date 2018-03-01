@@ -42,6 +42,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public void delete(Context context) {
+        close();
         context.deleteDatabase(DB_FILE_NAME);
     }
 }

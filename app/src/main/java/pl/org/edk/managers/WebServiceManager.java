@@ -297,13 +297,13 @@ public class WebServiceManager {
                     continue;
                 }
                 // Audio files were not downloaded and should be
-                else if(downloadAudio && dbList.getEdition() == defaultEdition && !dbList.hasAllAudio()){
+                else if (downloadAudio && dbList.getEdition() == defaultEdition && !dbList.hasAllAudio()) {
                     getReflectionsAudioAsync(dbList, null);
                 }
             }
             catch (Exception ex)
             {
-                LogManager.logError("Exception during sync of "+ wsList.getEdition() + " reflections: " + ex.getMessage());
+                LogManager.logError("Exception during sync of " + wsList.getEdition() + " reflections: " + ex.getMessage());
                 continue;
             }
         }
@@ -311,7 +311,7 @@ public class WebServiceManager {
         return true;
     }
 
-    public ArrayList<Integer> getReflectionEditions(){
+    public ArrayList<Integer> getReflectionEditions() {
         // TODO: Upload more than the default language
         String defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
 
@@ -321,7 +321,7 @@ public class WebServiceManager {
             return null;
 
         ArrayList<Integer> editions = new ArrayList<>();
-        for(ReflectionList list : wsLists)
+        for (ReflectionList list : wsLists)
             editions.add(list.getEdition());
         return editions;
     }
@@ -362,6 +362,9 @@ public class WebServiceManager {
     }
 
     public void updateData(boolean includeAreas, boolean includeLocalRoutes, boolean includeReflections, boolean includeAudio) {
+        if (includeAreas || includeLocalRoutes || includeReflections){
+            DbManager.getInstance(mContext).reset();
+        }
         if (includeAreas) {
             syncAreas();
         }
@@ -482,14 +485,14 @@ public class WebServiceManager {
         }
     }
 
-    private void updateReflectionList(String language, int edition, Date releaseDate, boolean includeAudio){
+    private void updateReflectionList(String language, int edition, Date releaseDate, boolean includeAudio) {
         ReflectionList fullList = mWsClient.getReflectionList(language, edition);
-        if(fullList == null)
+        if (fullList == null)
             return;
 
         fullList.setReleaseDate(releaseDate);
         DbManager.getInstance(mContext).getReflectionService().updateReflectionListByVersion(fullList);
-        if (includeAudio){
+        if (includeAudio) {
             getReflectionsAudioAsync(fullList, null);
         }
     }
