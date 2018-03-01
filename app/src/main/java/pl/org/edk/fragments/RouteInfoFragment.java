@@ -164,6 +164,10 @@ public class RouteInfoFragment extends TrackerFragment {
             return;
         }
         double[] distanceInfo = getTracker().getDistanceInfo();
+        if (mDistanceTraveledView == null){
+            Log.d("EDK", "Update distances called before initialization of the views");
+            return;
+        }
         mDistanceTraveledView.setText(String.format(mDistanceFormat, distanceInfo[KMLTracker.DISTANCE_TRAVELED_INDEX] / 1000));
         mDistanceLeftView.setText(String.format(mDistanceFormat, distanceInfo[KMLTracker.DISTANCE_LEFT_INDEX] / 1000));
         mDistanceToNextView.setText(String.format(mDistanceFormat, distanceInfo[KMLTracker.DISTANCE_TO_NEXT_INDEX] / 1000));

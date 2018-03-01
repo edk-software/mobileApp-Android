@@ -187,6 +187,9 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     @Override
     public void onPlayerStop() {
+        if(mCurrentStation == -1){
+            return;
+        }
         preparePlayer(mCurrentStation);
     }
 
@@ -251,9 +254,14 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mAudioService.seekTo(progress);
+                if (!fromUser) {
+                    return;
                 }
+                if (mAudioService == null) {
+                    Log.d("EDK", "Audio service was null inside onProgressChanged");
+                    return;
+                }
+                mAudioService.seekTo(progress);
             }
         });
 
