@@ -143,6 +143,17 @@ public class Track {
             }
         }
         if(!hasAllCheckpoints()){
+            for (int i = remainingPlacemarks.size() - 1; i >= 0; i--) {
+                Placemark placemark = remainingPlacemarks.get(i);
+                int index = getStationIndexSimple(placemark);
+                if (index != -1 && checkpoints[index] == null) {
+                    LatLng checkpoint = placemark.getPoints().get(0);
+                    checkpoints[index] = checkpoint;
+                    remainingPlacemarks.remove(i);
+                }
+            }
+        }
+        if(!hasAllCheckpoints()){
             mStatus = Status.StationsMissing;
         }
         attachCheckpointsToTrack();
@@ -168,6 +179,22 @@ public class Track {
         if (checkpoints[15] == null) {
             checkpoints[15] = track.get(track.size() - 1);
         }
+    }
+
+    private int getStationIndexSimple(Placemark placemark){
+        String name = placemark.getName();
+        if (name == null) {
+            return -1;
+        }
+        String upperCaseName = name.toUpperCase();
+        String[] parts = splitIntoParts(upperCaseName);
+        for (String part : parts) {
+            int stationIndex = tryGetStationIndex(part);
+            if (stationIndex != -1) {
+                return stationIndex;
+            }
+        }
+        return -1;
     }
 
     private int getStationIndex(Placemark placemark) {
@@ -251,7 +278,7 @@ public class Track {
     @NonNull
     private String[] splitIntoParts(String upperCaseName) {
         String withFixedSpaces = replaceNonBreakingSpaceWithNormal(upperCaseName);
-        String[] parts = withFixedSpaces.split(" |,|\\.|_|-|–|:");
+        String[] parts = withFixedSpaces.split(" |,|\\.|_|-|–|:|\"");
         List<String> partsList = new ArrayList<>();
         for (int i = 0; i < parts.length; i++) {
             String trimmed = parts[i].trim();
