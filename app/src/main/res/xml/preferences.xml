@@ -44,7 +44,7 @@
 
         <ListPreference
             android:dialogTitle="@string/settings_reflections_language_select_dialog_title"
-            android:key="@string/pref_reflectionsLanguageEdition"
+            android:key="@string/pref_reflectionsLanguage"
             android:summary="%s"
             android:title="@string/settings_reflections_language_title"
             android:entries="@array/reflection_language"

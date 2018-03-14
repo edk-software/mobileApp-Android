@@ -429,7 +429,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private boolean canDownloadAudio() {
-        return Settings.get(getActivity()).get(Settings.APP_LANGUAGE).equals("pl");
+        return Settings.get(getActivity()).get(Settings.REFLECTIONS_LANGUAGE).equals("pl");
     }
 
     private boolean isAudioAvailable() {
@@ -522,7 +522,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     private boolean prepareListData() {
         // Get the data from local DB
-        String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
+        String language = Settings.get(getActivity()).get(Settings.REFLECTIONS_LANGUAGE);
         Integer edition = Settings.get(getActivity()).getInt(Settings.REFLECTIONS_EDITION);
         mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, edition, true);
 

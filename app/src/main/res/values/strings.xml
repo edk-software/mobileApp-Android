@@ -15,7 +15,7 @@
 	<string name="pref_language">Language</string>
 	<string name="pref_currentEdition">currentEdition</string>
 	<string name="pref_reflectionsEdition">reflectionsEdition</string>
-	<string name="pref_reflectionsLanguageEdition">reflectionsLanguageEdition</string>
+	<string name="pref_reflectionsLanguage">reflectionsLanguageEdition</string>
 	<string name="pref_update_areas">syncAreas</string>
 	<string name="pref_update_routes">syncRoutes</string>
 	<string name="pref_update_reflections">syncReflections</string>

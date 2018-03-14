@@ -121,7 +121,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         } else if (preference instanceof ListPreference) {
             String value = sharedPreferences.getString(preference.getKey(), "");
 
-            if (preference.getKey().equals(getResources().getString(R.string.pref_reflectionsLanguageEdition))) {
+            if (preference.getKey().equals(getResources().getString(R.string.pref_reflectionsLanguage))) {
                 String newValue = "";
                 if (value.equals(getResources().getString(R.string.pl_language))) {
                     newValue = "pl";
@@ -151,35 +151,29 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         ListPreference reflectionsYear = (ListPreference) findPreference(getString(R.string.pref_reflectionsEdition));
         reflectionsYear.setDefaultValue(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
 
+        String language = Settings.get(getContext()).get(Settings.REFLECTIONS_LANGUAGE);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String languageDef = preferences.getString(getContext().getResources().getString(R.string.pref_reflectionsLanguageEdition), "");
+        ListPreference reflectionsLanguage = (ListPreference) findPreference(getString(R.string.pref_reflectionsLanguage));
 
-        if (languageDef.length() == 0)
-            languageDef = Settings.get(getContext()).get(Settings.APP_LANGUAGE);
-
-        ListPreference reflectionsLanguage = (ListPreference) findPreference(getString(R.string.pref_reflectionsLanguageEdition));
-
-        String languagePref = "";
-        switch (languageDef) {
+        String langDisplayName = "";
+        switch (language) {
             case "pl":
-                languagePref = getResources().getString(R.string.pl_language);
+                langDisplayName = getResources().getString(R.string.pl_language);
                 break;
             case "en":
-                languagePref = getResources().getString(R.string.en_language);
+                langDisplayName = getResources().getString(R.string.en_language);
                 break;
             case "es":
-                languagePref = getResources().getString(R.string.es_language);
+                langDisplayName = getResources().getString(R.string.es_language);
                 break;
         }
-        reflectionsLanguage.setSummary(languagePref);
+        reflectionsLanguage.setSummary(langDisplayName);
 
         // Get years available on the server
         ArrayList<Integer> editions = WebServiceManager.getInstance(getContext()).getReflectionEditions();
 
         // If failed, check the local ones
         if (editions == null) {
-            String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
             ArrayList<ReflectionList> dbLists = DbManager.getInstance(getActivity()).getReflectionService().getReflectionLists(language, false);
             if (dbLists == null)
                 return;
