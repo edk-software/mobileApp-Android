@@ -26,6 +26,7 @@ import java.util.*;
 
 import pl.org.edk.R;
 import pl.org.edk.Settings;
+import pl.org.edk.TempSettings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;
@@ -132,10 +133,14 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             WebServiceManager.getInstance(getActivity()).addDownloadListener(this);
         }
 
+        initializePlayerView(view);
+        initializeDownloadButton(view);
+
         // Load reflections from DB or download them
         if (!prepareListData()) {
+            hidePlayer();
             DialogUtil.showWarningDialog(
-                    getString(R.string.reflections_text_download_failed), getActivity(), true);
+                    getString(R.string.reflections_text_download_failed), getActivity(), !TempSettings.get(getActivity()).isUserOnTrack());
             return view;
         }
 
@@ -148,12 +153,9 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
         refreshViewItems();
 
-        initializePlayerView(view);
         if (mCurrentStation == -1 || !isStationAudioAvailable()) {
             hidePlayer();
         }
-
-        initializeDownloadButton(view);
 
         return view;
     }
