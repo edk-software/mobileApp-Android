@@ -15,7 +15,6 @@
 	<string name="pref_language">Language</string>
 	<string name="pref_currentEdition">currentEdition</string>
 	<string name="pref_reflectionsEdition">reflectionsEdition</string>
-	<string name="pref_reflectionsLanguageEdition">reflectionsLanguageEdition</string>
 	<string name="pref_update_areas">syncAreas</string>
 	<string name="pref_update_routes">syncRoutes</string>
 	<string name="pref_update_reflections">syncReflections</string>
@@ -35,7 +34,7 @@
 	<string name="reflections">Rozważania</string>
 	<string name="about_edk_title">Informacje o EDK</string>
     <string name="go_to_settings">Przejdź do ustawień</string>
-    <string name="settings">Ustawienia</string>
+    <string name="settings">Settings</string>
 
 	<string name="about_edk_text">Droga Krzyżowa może zaboleć. Proponujemy Ci rozważanie jej na dystansie około 40 km, w nocy, w milczeniu i samotności. \nEDK to: Wyzwanie, Droga, Zmaganie, Spotkanie. \n \nW aplikacji i na naszej stronie proponujemy Ci przykładowe trasy, którymi możesz podążać. Możesz także wymyślić swoją trasę. \nJeśli masz pomysł na nową trasę lub chcesz stworzyć rejon EDK - skontaktuj się z nami. \n \nWięcej informacji znajdziesz na:</string>
 	<string-array name="considerations_years">
@@ -167,5 +166,4 @@
 		<item>@string/en_language</item>
 		<item>@string/es_language</item>
 	</string-array>
-
 </resources>

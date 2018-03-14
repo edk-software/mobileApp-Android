@@ -4,10 +4,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -22,7 +24,11 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 import pl.org.edk.R;
 import pl.org.edk.Settings;
@@ -143,8 +149,13 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         Settings settings = Settings.get(getActivity());
         boolean dialogShown = settings.getBoolean(Settings.AUDIO_DOWNLOAD_DIALOG_SHOWN, false);
         if (!isAudioAvailable() && !WebServiceManager.getInstance(getActivity()).isDownloadInProgress() && !dialogShown) {
-            showDownloadDialog();
-            settings.set(Settings.AUDIO_DOWNLOAD_DIALOG_SHOWN, true);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+            if (getContext() != null && preferences.getString(getContext().getResources().getString(R.string.pref_reflectionsLanguageEdition), "").equals("pl")) {
+                showDownloadDialog();
+                settings.set(Settings.AUDIO_DOWNLOAD_DIALOG_SHOWN, true);
+            }
         }
         refreshViewItems();
 
@@ -187,7 +198,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     @Override
     public void onPlayerStop() {
-        if(mCurrentStation == -1){
+        if (mCurrentStation == -1) {
             return;
         }
         preparePlayer(mCurrentStation);
@@ -212,10 +223,9 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         if (downloadedList.hasAllAudio()) {
             mReflectionList = downloadedList;
             message = activity.getString(R.string.reflections_audio_download_success);
-        } else if(downloadedList.hasAnyAudio()){
+        } else if (downloadedList.hasAnyAudio()) {
             message = activity.getString(R.string.reflections_audio_download_missing);
-        }
-        else {
+        } else {
             message = activity.getString(R.string.reflections_audio_download_failed);
         }
         DialogUtil.showDialog(activity.getString(R.string.reflections_text_download_finished), message, activity, true, null);
@@ -270,7 +280,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAudioService == null){
+                if (mAudioService == null) {
                     Log.e("EDK", "Audio service was null when play was requested");
                     return;
                 }
@@ -394,19 +404,26 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     private void initializeDownloadButton(View view) {
         mDownloadButton = (Button) view.findViewById(R.id.downloadButton);
-        mDownloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (WebServiceManager.getInstance(getActivity()).isDownloadInProgress()) {
-                    return;
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        if (getContext() != null && !preferences.getString(getContext().getResources().getString(R.string.pref_reflectionsLanguageEdition), "").equals("pl")) {
+            mDownloadButton.setVisibility(View.GONE);
+        } else {
+            mDownloadButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (WebServiceManager.getInstance(getActivity()).isDownloadInProgress()) {
+                        return;
+                    }
+
+                    showDownloadDialog();
+                    refreshViewItems();
                 }
+            });
 
-                showDownloadDialog();
-                refreshViewItems();
-            }
-        });
-
-        refreshDownloadButton(false);
+            refreshDownloadButton(false);
+        }
     }
 
     private void refreshDownloadButton(boolean forceHide) {
@@ -517,7 +534,14 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     private boolean prepareListData() {
         // Get the data from local DB
-        String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
+
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String language = preferences.getString(getContext().getResources().getString(R.string.pref_reflectionsLanguageEdition), "");
+
+        if (language.length() == 0)
+            language = Settings.get(getContext()).get(Settings.APP_LANGUAGE);
+
         Integer edition = Settings.get(getActivity()).getInt(Settings.REFLECTIONS_EDITION);
         mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, edition, true);
 
@@ -526,7 +550,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             // Update the local data and try again
             WebServiceManager.getInstance(getActivity()).syncReflections(false);
             mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, edition, true);
-            if(mReflectionList == null)
+            if (mReflectionList == null)
                 return false;
 
         }
@@ -587,7 +611,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             final Reflection reflection = reflections.get(i);
             String stationIndex = NumConverter.toRoman(i);
             String title = reflection.getDisplayName();
-            if (stationIndex != null){
+            if (stationIndex != null) {
                 title = stationIndex + " " + title;
             }
             listDataHeader.add(reflection.getStationIndex(), title);
