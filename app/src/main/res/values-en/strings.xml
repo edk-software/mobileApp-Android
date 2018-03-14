@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lorem_ipsum"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer id tempus massa, in faucibus magna. Pellentesque feugiat faucibus ex a efficitur. Phasellus velit enim, hendrerit vitae magna at, vulputate tincidunt nisi. Etiam id sagittis leo, vitae iaculis mi. Integer vel sapien purus. Proin est velit, dapibus et pulvinar in, porttitor eu odio. Sed tincidunt tincidunt urna, suscipit tincidunt quam scelerisque nec. Duis elementum tortor eu erat mollis pharetra. Integer egestas lorem ut turpis scelerisque pretium. Integer nec justo ut dui lobortis tincidunt non nec odio. Vivamus eu ligula eleifend, ornare leo nec, hendrerit dui. Sed convallis ex vel felis interdum aliquam. Donec quis velit et orci suscipit ornare eget eget purus. Curabitur lobortis ex eu enim finibus bibendum vel in libero.
+
+        Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin sodales ipsum orci, ut ornare purus congue molestie. Curabitur eu faucibus nisi, ultricies tempor orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus ut lobortis augue. Curabitur lobortis malesuada aliquet. Donec quis turpis vel enim fermentum dictum ac vitae nunc. Aliquam erat volutpat. Quisque rutrum in orci eu varius. Sed et quam sit amet ligula feugiat malesuada sed sit amet enim. Fusce ullamcorper feugiat commodo. Donec aliquam arcu quis nulla dictum commodo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </string>
+	<string name="map_loading">Map is loading...</string>
+	<string name="about_edk">Extreme Way of the Cross is a form of spirituality, which for many people becomes a way of life. The real Meeting with Him in the middle of the Struggle makes you don\'t want to live normally any more - but live extremely, which means: fully.\n\nExtreme Way of the Cross is a proposed form of spirituality.\n\nIt\'s not a pilgrimage.\nEWC consists in covering the chosen route during the night, contemplating reflections and struggling with ones\' weaknesses.\nIt\'s an event of individual kind; if any unpredictable things happen during your walk, you can rely only on yourself.\n\nMore info can be found on our website:</string>
+	<string name="about_app">This app helps you experience the Extreme Way of the Cross fully.\n\nGPS navigation and directions attached to each station let you focus on beating your weaknesses, not bothering about the details.\n\nHowever EWC is mainly a form of spirituality. Contemplation of attached reflections allows for closer Encounter with Him.\n\nThe author of the app is Paweł Wawrzynek. If you have any suggestions, let us know!</string>
+
+	<string name="pref_followLocationOnMap">FollowLocationOnMap</string>
+	<string name="pref_backgroundTrackingOn">trackingTurnedOn</string>
+	<string name="pref_audioDownloadDialogShown">audioDownloadDialogShown</string>
+    <string name="pref_kml_directory">KmlDirectory</string>
+    <string name="pref_audio_directory">AudioDirectory</string>
+	<string name="pref_language">Language</string>
+	<string name="pref_currentEdition">currentEdition</string>
+	<string name="pref_reflectionsEdition">reflectionsEdition</string>
+	<string name="pref_update_areas">syncAreas</string>
+	<string name="pref_update_routes">syncRoutes</string>
+	<string name="pref_update_reflections">syncReflections</string>
+	<string name="pref_update_reflections_audio">syncReflectionsAudio</string>
+	<string name="pref_update_button">syncButton</string>
+	<string name="pref_cleanup_button">cleanupButton</string>
+	<string name="pref_do_not_show_gps_dialog">doNotShowGpsDialog</string>
+	<string name="pref_show_archive_routes">showArchiveRoutes</string>
+	<string name="pref_archiveRoutesDialogShown">archiveRoutesDialogShown</string>
+	<string name="pref_rotate_map_to_walk_dir">rotateMapToWalkDirection</string>
+	<string name="pref_cat_location">prefCategoryLocation</string>
+	<string name="pref_cleanup_reflections">prefCleanupReflections</string>
+	<string name="pref_versionCode">prefVersionCode</string>
+
+    <string name="app_name">EWC</string>
+    <string name="routes">Routes</string>
+	<string name="reflections">Reflections</string>
+	<string name="about_edk_title">Info about EWC</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="settings">Settings</string>
+
+	<string name="about_edk_text">Way of the Cross can be painful. We propose, that you work it out at the distance of about 40 km, at night, in silence and loneliness. \nEWC is: Challenge, Way, Struggle, Encounter. \n \nExamples of routes to follow you can find here in the application as well as on our website. You can also create your own route. \nIf you have an idea of a new route or want to create an EWC area - please contact us. \n \nMore info to find at:</string>
+	<string-array name="considerations_years">
+		<item>2018</item>
+	</string-array>
+	<string name="out_of_track_message">You\'re out of track</string>
+	<string name="go_to_consideration">Go to reflections</string>
+	<string name="near_checkpoint_message">"You\'re near station "</string>
+	<string name="back_on_track_message">You\'re on track</string>
+	<string name="navigation_on_message">GPS is on</string>
+	<string name="end_dialog_message">Are you sure you want to quit?</string>
+	<string name="no">No</string>
+	<string name="yes">Yes</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Cancel</string>
+
+	<string name="waiting_for_position_message">Defining your position</string>
+	<string name="stop_listening">Stop</string>
+	<string name="GPS_off_warning_message">GPS is off - your position will not be precisely defined</string>
+	<string name="go_to_location_settings">Go to location settings</string>
+	<string name="ignore">Ignore</string>
+	<string name="station">"Station "</string>
+	<string name="no_info_about_track_message">No info about chosen route</string>
+	<string name="warning_dialog_title">Warning</string>
+	<string name="busy_dialog_title">Please wait</string>
+	<string name="download_dialog_message">Data download in progress</string>
+	<string name="unrecognized_error_while_reading_track">Unexpected error occurred when loading the route</string>
+	<string name="no_territories_found">No areas found. Connect to the internet and try again</string>
+	<string name="no_info_about_tracks_in_region">Info about routes in chosen area is unavailable</string>
+	<string name="instruction_how_to_end_app">Tap back key to exit</string>
+	<string name="track_chooser_title">Choose route:</string>
+	<string name="city_chooser_title">Choose city:</string>
+	<string name="county_chooser_title">Choose voivodeship:</string>
+
+	<string name="considerations_end_title">Summary</string>
+	<string name="considerations_start_title">Introduction</string>
+	<string name="stop_navigation_message">Stop</string>
+	<string name="downloading_message">Data download in progress...</string>
+	<string name="description_unavailable">Route description is temporarily unavailable</string>
+    <string name="stations_missing_warning_message">An error occurred during loading stations\' coordinates.</string>
+
+    <string name="accept_challenge">Take the challenge</string>
+    <string name="change_route">Change route</string>
+    <string name="route_description">Route description</string>
+
+    <string name="edk_website">www.edk.org.pl</string>
+
+    <string name="time_of_travel_title">You\'ve been walking since:</string>
+    <string name="time_of_travel_default_value">0:00:00</string>
+    <string name="distance_traveled_title">Covered distance:</string>
+    <string name="distance_to_next_title">Next station in:</string>
+    <string name="distance_left_title">Till the end:</string>
+    <string name="distance_default_value">0 km</string>
+    <string name="finish_application">Finish</string>
+
+	<string name="popup_archiveRoutes_title">Selection of routes</string>
+	<string name="popup_archiveRoutes_message">Do you want to see also routes from previous editions? (The choice can be changed in the settings)</string>
+
+    <string name="settings_location_category">Location</string>
+    <string name="settings_location_tracking_summary">Enables notifications about being out-of-route. Increases battery consumption.</string>
+    <string name="settings_location_tracking_title">Check location in the background</string>
+    <string name="settings_location_follow_summary">Automatic map panning to newest position.</string>
+    <string name="settings_location_follow_title">Center the map on current position</string>
+	<string name="settings_location_rotate_map_title">Rotate map to walk direction</string>
+	<string name="settings_location_rotate_map_summary">Rotates the map so that your walking direction points to the map top. Works only with centering turned on.</string>
+
+    <string name="settings_routes_category">Routes</string>
+	<string name="settings_routes_useArchive_title">Display archive</string>
+	<string name="settings_routes_useArchive_summary">Download routes from previous editions</string>
+	
+	<string name="settings_reflections_category">Reflections</string>
+    <string name="settings_reflections_year_select_dialog_title">Choose year of reflections:</string>
+    <string name="settings_reflections_year_title">Year of reflections</string>
+
+	<string name="settings_update_category">Update</string>
+	<string name="settings_update_areas">Areas list</string>
+	<string name="settings_update_areas_desc">Update list of voivodeships and cities, where EWC takes place</string>
+	<string name="settings_update_routes">Routes</string>
+	<string name="settings_update_routes_desc">Update details of already downloaded routes</string>
+	<string name="settings_update_reflections">Reflections</string>
+	<string name="settings_update_reflections_desc">Update reflection contents</string>
+	<string name="settings_update_reflections_audio">Audio reflections</string>
+	<string name="settings_update_reflections_audio_desc">Download newest audio files with recorded reflections</string>
+	<string name="settings_update_button_text">Update now</string>
+	
+	<string name="settings_maintenance_category">Maintenance</string>
+	<string name="settings_maintenance_cleanup">Delete audio files</string>
+
+	<string name="reflections_audio_download_success">Download of audio reflections has completed.</string>
+	<string name="reflections_audio_download_failed">Failed to download audio reflections. Please try again later.</string>
+	<string name="reflections_audio_download_missing">Some of the files could not be downloaded. Try to update later.</string>
+	<string name="reflections_audio_download_dialog_title">Downloading reflections</string>
+	<string name="reflections_audio_download_dialog_message">Audio reflections are available. Do you want to download them now (about 50MB)?</string>
+	<string name="reflections_text_download_failed">Failed to download reflections. Check internet connection and try again.</string>
+	<string name="reflections_audio_download_button_text">Download audio reflections</string>
+	<string name="reflections_audio_download_in_progress">Audio download in progress</string>
+	<string name="reflections_text_download_finished">Download finished</string>
+
+	<string name="update_download_finished_message">Data update finished (audio download can be done in background).</string>
+	<string name="update_in_progress_message">Data update in progress...</string>
+	<string name="do_not_show_gps_dialog">doNotShowGpsDialog</string>
+	<string name="google_api_unavailable_message">Google API is unavailable</string>
+	<string name="no_permission_title">No permissions</string>
+	<string name="no_permission_message">App needs all permissions to work properly. In order to use it, change the settings</string>
+
+	<string name="file_access_error">Cannot play audio file - access error.</string>
+	<string name="no_permission_message_yesno">App needs all permissions to work properly. Do you want to go to settings section and change permissions?</string>
+	<string name="no_storage_permission_message_yesno">App has no permission to write to device storage. This permission is necessary to be able to use audio reflections. Do you want to go to settings section and change permissions?</string>
+	<string name="no_gps_permission_message_yesno">App has no permission to use GPS. This permission is necessary to be able to use maps. Do you want to go to settings section and change permissions?</string>
+
+	<string name="about_edk_activity">About EWC</string>
+
+	<string name="view_route">Route preview</string>
+</resources>

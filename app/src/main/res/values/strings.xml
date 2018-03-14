@@ -38,7 +38,7 @@
 
 	<string name="about_edk_text">Droga Krzyżowa może zaboleć. Proponujemy Ci rozważanie jej na dystansie około 40 km, w nocy, w milczeniu i samotności. \nEDK to: Wyzwanie, Droga, Zmaganie, Spotkanie. \n \nW aplikacji i na naszej stronie proponujemy Ci przykładowe trasy, którymi możesz podążać. Możesz także wymyślić swoją trasę. \nJeśli masz pomysł na nową trasę lub chcesz stworzyć rejon EDK - skontaktuj się z nami. \n \nWięcej informacji znajdziesz na:</string>
 	<string-array name="considerations_years">
-		<item>2017</item>
+		<item>2018</item>
 	</string-array>
 	<string name="out_of_track_message">Jesteś poza trasą</string>
 	<string name="go_to_consideration">Przejdź do rozważań</string>
@@ -91,8 +91,7 @@
     <string name="finish_application">Zakończ</string>
 
 	<string name="popup_archiveRoutes_title">Wybór tras</string>
-	<string name="popup_archiveRoutes_message">Czy chcesz, aby wyświetlane były również trasy z poprzednich edycji?
-		(Wybór można zmienić w ustawieniach)</string>
+	<string name="popup_archiveRoutes_message">Czy chcesz, aby wyświetlane były również trasy z poprzednich edycji? (Wybór można zmienić w ustawieniach)</string>
 
     <string name="settings_location_category">Lokalizacja</string>
     <string name="settings_location_tracking_summary">Pozwala na powiadomienie o opuszczeniu trasy. Zwiększa zużycie baterii.</string>
@@ -128,12 +127,8 @@
 	<string name="reflections_audio_download_missing">Części plików nie udało się pobrać. Spróbuj zaktualizować później.</string>
 	<string name="reflections_audio_download_failed">Nie udało się pobrać rozważań audio. Spróbuj ponownie poźniej.</string>
 	<string name="reflections_audio_download_dialog_title">Pobieranie rozważań</string>
-	<string name="reflections_audio_download_dialog_message">Dostępne są rozważania w formie audio. Czy mają zostać
-		teraz pobrane (ok. 50MB)?
-	</string>
-	<string name="reflections_text_download_failed">Nie udało się pobrać rozważań. Sprawdź połączenie z internetem i
-		spróbuj ponownie.
-	</string>
+	<string name="reflections_audio_download_dialog_message">Dostępne są rozważania w formie audio. Czy mają zostać teraz pobrane (ok. 50MB)?</string>
+	<string name="reflections_text_download_failed">Nie udało się pobrać rozważań. Sprawdź połączenie z internetem i spróbuj ponownie.</string>
 	<string name="reflections_audio_download_button_text">Pobierz rozważania audio</string>
 	<string name="reflections_audio_download_in_progress">Trwa pobieranie audio</string>
 	<string name="reflections_text_download_finished">Pobieranie zakończone</string>
