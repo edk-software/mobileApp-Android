@@ -60,7 +60,8 @@ public class Settings extends SettingsBase {
 
     public void init() {
         // TEMP: Constant values
-        set(APP_LANGUAGE, "pl");
+
+        set(APP_LANGUAGE, getCurrentSupportedLanguage());
         set(CURRENT_EDITION, Calendar.getInstance().get(Calendar.YEAR));
 
         // Add default values

@@ -142,7 +142,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         // Ask about audio reflections
         Settings settings = Settings.get(getActivity());
         boolean dialogShown = settings.getBoolean(Settings.AUDIO_DOWNLOAD_DIALOG_SHOWN, false);
-        if (!isAudioAvailable() && !WebServiceManager.getInstance(getActivity()).isDownloadInProgress() && !dialogShown) {
+        if (!isAudioAvailable() && !WebServiceManager.getInstance(getActivity()).isDownloadInProgress() && !dialogShown && canDownloadAudio()) {
             showDownloadDialog();
             settings.set(Settings.AUDIO_DOWNLOAD_DIALOG_SHOWN, true);
         }
@@ -410,7 +410,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private void refreshDownloadButton(boolean forceHide) {
-        if (forceHide || isAudioAvailable()) {
+        if (forceHide || isAudioAvailable() || !canDownloadAudio()) {
             mDownloadButton.setVisibility(View.GONE);
             return;
         }
@@ -425,6 +425,10 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             mDownloadButton.setVisibility(View.VISIBLE);
             mDownloadButton.setText(activity.getString(R.string.reflections_audio_download_button_text));
         }
+    }
+
+    private boolean canDownloadAudio() {
+        return Settings.get(getActivity()).get(Settings.APP_LANGUAGE).equals("pl");
     }
 
     private boolean isAudioAvailable() {
