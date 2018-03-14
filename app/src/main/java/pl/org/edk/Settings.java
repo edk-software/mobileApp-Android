@@ -65,13 +65,13 @@ public class Settings extends SettingsBase {
         set(CURRENT_EDITION, Calendar.getInstance().get(Calendar.YEAR));
 
         // Add default values
-        if (getInt(REFLECTIONS_EDITION) == 0){
+        if (getInt(REFLECTIONS_EDITION) == 0) {
             set(REFLECTIONS_EDITION, Calendar.getInstance().get(Calendar.YEAR));
         }
-        if (getBoolean(FOLLOW_LOCATION_ON_MAP, true)){
+        if (getBoolean(FOLLOW_LOCATION_ON_MAP, true)) {
             set(FOLLOW_LOCATION_ON_MAP, true);
         }
-        if (getBoolean(SHOW_ARCHIVE_ROUTES, true)){
+        if (getBoolean(SHOW_ARCHIVE_ROUTES, true)) {
             set(SHOW_ARCHIVE_ROUTES, true);
         }
     }
@@ -92,10 +92,10 @@ public class Settings extends SettingsBase {
     }
 
     public int getInt(int resId, int defaultValue) {
-        try{
+        try {
             String stringValue = get(resId);
             return Integer.parseInt(stringValue);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return defaultValue;
         }
     }

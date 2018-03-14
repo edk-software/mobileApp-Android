@@ -1,8 +1,11 @@
 package pl.org.edk.managers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 
+import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.*;
@@ -260,8 +263,13 @@ public class WebServiceManager {
     // Reflections
 
     public boolean syncReflections(boolean downloadAudio) {
-        // TODO: Upload more than the default language
-        String defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String defaultLanguage = preferences.getString(mContext.getResources().getString(R.string.pref_reflectionsLanguageEdition), "");
+
+        if (defaultLanguage.length() == 0)
+            defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
+
         int defaultEdition = Settings.get(mContext).getInt((Settings.REFLECTIONS_EDITION));
 
         // Get the WS list

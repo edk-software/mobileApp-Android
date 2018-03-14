@@ -15,6 +15,7 @@
 	<string name="pref_language">Language</string>
 	<string name="pref_currentEdition">currentEdition</string>
 	<string name="pref_reflectionsEdition">reflectionsEdition</string>
+	<string name="pref_reflectionsLanguageEdition">reflectionsLanguageEdition</string>
 	<string name="pref_update_areas">syncAreas</string>
 	<string name="pref_update_routes">syncRoutes</string>
 	<string name="pref_update_reflections">syncReflections</string>
@@ -107,7 +108,9 @@
 
     <string name="settings_reflections_category">Rozważania</string>
     <string name="settings_reflections_year_select_dialog_title">Wybierz rocznik rozważań:</string>
+	<string name="settings_reflections_language_select_dialog_title">Wybierz język rozważań:</string>
     <string name="settings_reflections_year_title">Rocznik rozważań</string>
+	<string name="settings_reflections_language_title">Język rozważań</string>
 
 	<string name="settings_update_category">Aktualizacja</string>
 	<string name="settings_update_areas">Lista regionów</string>
@@ -148,4 +151,16 @@
 	<string name="about_edk_activity">O EDK</string>
 
 	<string name="view_route">Podgląd trasy</string>
+
+	<string name="pl_language">Polski</string>
+	<string name="en_language">Angielski</string>
+	<string name="es_language">Hiszpański</string>
+
+
+	<string-array name="reflection_language">
+		<item>@string/pl_language</item>
+		<item>@string/en_language</item>
+		<item>@string/es_language</item>
+	</string-array>
+
 </resources>

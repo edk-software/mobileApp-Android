@@ -189,7 +189,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     @Override
     public void onPlayerStop() {
-        if(mCurrentStation == -1){
+        if (mCurrentStation == -1) {
             return;
         }
         preparePlayer(mCurrentStation);
@@ -214,10 +214,9 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         if (downloadedList.hasAllAudio()) {
             mReflectionList = downloadedList;
             message = activity.getString(R.string.reflections_audio_download_success);
-        } else if(downloadedList.hasAnyAudio()){
+        } else if (downloadedList.hasAnyAudio()) {
             message = activity.getString(R.string.reflections_audio_download_missing);
-        }
-        else {
+        } else {
             message = activity.getString(R.string.reflections_audio_download_failed);
         }
         DialogUtil.showDialog(activity.getString(R.string.reflections_text_download_finished), message, activity, true, null);
@@ -272,7 +271,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAudioService == null){
+                if (mAudioService == null) {
                     Log.e("EDK", "Audio service was null when play was requested");
                     return;
                 }
@@ -593,7 +592,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             final Reflection reflection = reflections.get(i);
             String stationIndex = NumConverter.toRoman(i);
             String title = reflection.getDisplayName();
-            if (stationIndex != null){
+            if (stationIndex != null) {
                 title = stationIndex + " " + title;
             }
             listDataHeader.add(reflection.getStationIndex(), title);

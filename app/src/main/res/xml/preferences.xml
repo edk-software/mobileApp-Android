@@ -42,6 +42,14 @@
             android:summary="%s"
             android:title="@string/settings_reflections_year_title" />
 
+        <ListPreference
+            android:dialogTitle="@string/settings_reflections_language_select_dialog_title"
+            android:key="@string/pref_reflectionsLanguageEdition"
+            android:summary="%s"
+            android:title="@string/settings_reflections_language_title"
+            android:entries="@array/reflection_language"
+            android:entryValues="@array/reflection_language"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

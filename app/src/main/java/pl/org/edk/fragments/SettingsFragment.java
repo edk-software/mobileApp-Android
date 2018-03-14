@@ -120,8 +120,25 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             ((CheckBoxPreference) preference).setChecked(sharedPreferences.getBoolean(preference.getKey(), false));
         } else if (preference instanceof ListPreference) {
             String value = sharedPreferences.getString(preference.getKey(), "");
-            ((ListPreference) preference).setValue(value);
-            preference.setSummary(value);
+
+            if (preference.getKey().equals(getResources().getString(R.string.pref_reflectionsLanguageEdition))) {
+                String newValue = "";
+                if (value.equals(getResources().getString(R.string.pl_language))) {
+                    newValue = "pl";
+                } else if (value.equals(getResources().getString(R.string.es_language))) {
+                    newValue = "es";
+                } else if (value.equals(getResources().getString(R.string.en_language))) {
+                    newValue = "en";
+                }
+
+                if (newValue.length() > 0) {
+                    ((ListPreference) preference).setValue(newValue);
+                    preference.setSummary(value);
+                }
+            } else {
+                ((ListPreference) preference).setValue(value);
+                preference.setSummary(value);
+            }
         }
     }
 
@@ -130,36 +147,59 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         initUpdateSection();
     }
 
-    private void initReflectionSection(){
+    private void initReflectionSection() {
         ListPreference reflectionsYear = (ListPreference) findPreference(getString(R.string.pref_reflectionsEdition));
         reflectionsYear.setDefaultValue(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String languageDef = preferences.getString(getContext().getResources().getString(R.string.pref_reflectionsLanguageEdition), "");
+
+        if (languageDef.length() == 0)
+            languageDef = Settings.get(getContext()).get(Settings.APP_LANGUAGE);
+
+        ListPreference reflectionsLanguage = (ListPreference) findPreference(getString(R.string.pref_reflectionsLanguageEdition));
+
+        String languagePref = "";
+        switch (languageDef) {
+            case "pl":
+                languagePref = getResources().getString(R.string.pl_language);
+                break;
+            case "en":
+                languagePref = getResources().getString(R.string.en_language);
+                break;
+            case "es":
+                languagePref = getResources().getString(R.string.es_language);
+                break;
+        }
+        reflectionsLanguage.setSummary(languagePref);
 
         // Get years available on the server
         ArrayList<Integer> editions = WebServiceManager.getInstance(getContext()).getReflectionEditions();
 
         // If failed, check the local ones
-        if(editions == null){
+        if (editions == null) {
             String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
             ArrayList<ReflectionList> dbLists = DbManager.getInstance(getActivity()).getReflectionService().getReflectionLists(language, false);
-            if(dbLists == null)
+            if (dbLists == null)
                 return;
 
             editions = new ArrayList<>();
-            for(ReflectionList dbList : dbLists){
+            for (ReflectionList dbList : dbLists) {
                 editions.add(dbList.getEdition());
             }
         }
 
         // Add the fetched items to the list
         CharSequence[] editionItems = new CharSequence[editions.size()];
-        for(int i = 0; i < editions.size(); i++){
+        for (int i = 0; i < editions.size(); i++) {
             editionItems[i] = String.valueOf(editions.get(i));
         }
         reflectionsYear.setEntries(editionItems);
         reflectionsYear.setEntryValues(editionItems);
     }
 
-    private void initUpdateSection(){
+    private void initUpdateSection() {
         // Update reflections checkboxes
         final CheckBoxPreference reflectionsCheck = (CheckBoxPreference) findPreference(getString(R.string.pref_update_reflections));
         final CheckBoxPreference reflectionsAudioCheck = (CheckBoxPreference) findPreference(getString(R.string.pref_update_reflections_audio));
