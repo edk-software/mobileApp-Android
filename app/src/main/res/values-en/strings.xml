@@ -56,7 +56,7 @@
 	<string name="GPS_off_warning_message">GPS is off - your position will not be precisely defined</string>
 	<string name="go_to_location_settings">Go to location settings</string>
 	<string name="ignore">Ignore</string>
-	<string name="station">"Station "</string>
+	<string name="station">"Station"</string>
 	<string name="no_info_about_track_message">No info about chosen route</string>
 	<string name="warning_dialog_title">Warning</string>
 	<string name="busy_dialog_title">Please wait</string>

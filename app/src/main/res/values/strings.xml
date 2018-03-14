@@ -56,7 +56,7 @@
 	<string name="GPS_off_warning_message">GPS jest wyłączony - Twoja pozycja nie będzie dokładnie określana</string>
 	<string name="go_to_location_settings">Przejdź do ustawień lokalizacji</string>
 	<string name="ignore">Ignoruj</string>
-	<string name="station">"Stacja "</string>
+	<string name="station">"Stacja"</string>
 	<string name="no_info_about_track_message">Brak informacji o wybranej trasie</string>
 	<string name="warning_dialog_title">Powiadomienie</string>
 	<string name="busy_dialog_title">Proszę czekać</string>
