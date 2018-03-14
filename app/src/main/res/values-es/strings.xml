@@ -15,6 +15,7 @@
 	<string name="pref_language">Language</string>
 	<string name="pref_currentEdition">currentEdition</string>
 	<string name="pref_reflectionsEdition">reflectionsEdition</string>
+	<string name="pref_reflectionsLanguage">reflectionsLanguageEdition</string>
 	<string name="pref_update_areas">syncAreas</string>
 	<string name="pref_update_routes">syncRoutes</string>
 	<string name="pref_update_reflections">syncReflections</string>
@@ -107,7 +108,9 @@
 
     <string name="settings_reflections_category">Meditaciones</string>
     <string name="settings_reflections_year_select_dialog_title">Elija el año de las meditaciones</string>
+	<string name="settings_reflections_language_select_dialog_title">Elegir el lenguaje de las meditaciones</string>
     <string name="settings_reflections_year_title">Año de las meditaciones</string>
+	<string name="settings_reflections_language_title">Lenguaje de meditaciones</string>
 
 	<string name="settings_update_category">Actualización</string>
 	<string name="settings_update_areas">Lista de regiones</string>
@@ -148,4 +151,15 @@
 	<string name="about_edk_activity">Sobre VCE</string>
 
 	<string name="view_route">Vista previa de la ruta</string>
+	
+	<string name="pl_language">Polaco</string>
+	<string name="en_language">Inglés</string>
+	<string name="es_language">Español</string>
+
+
+	<string-array name="reflection_language">
+		<item>@string/pl_language</item>
+		<item>@string/en_language</item>
+		<item>@string/es_language</item>
+	</string-array>
 </resources>
