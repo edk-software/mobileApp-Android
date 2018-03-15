@@ -47,8 +47,7 @@
             android:key="@string/pref_reflectionsLanguage"
             android:summary="%s"
             android:title="@string/settings_reflections_language_title"
-            android:entries="@array/reflection_language"
-            android:entryValues="@array/reflection_language"/>
+            android:entryValues="@array/reflection_languages"/>
 
     </PreferenceCategory>
 

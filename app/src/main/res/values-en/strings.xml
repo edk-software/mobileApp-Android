@@ -156,10 +156,9 @@
 	<string name="en_language">English</string>
 	<string name="es_language">Spanish</string>
 
-
-	<string-array name="reflection_language">
-		<item>@string/pl_language</item>
-		<item>@string/en_language</item>
-		<item>@string/es_language</item>
+	<string-array name="reflection_languages">
+		<item>pl</item>
+		<item>en</item>
+		<item>es</item>
 	</string-array>
 </resources>

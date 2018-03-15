@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -120,23 +121,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             ((CheckBoxPreference) preference).setChecked(sharedPreferences.getBoolean(preference.getKey(), false));
         } else if (preference instanceof ListPreference) {
             String value = sharedPreferences.getString(preference.getKey(), "");
-
+            ((ListPreference) preference).setValue(value);
             if (preference.getKey().equals(getResources().getString(R.string.pref_reflectionsLanguage))) {
-                String newValue = "";
-                if (value.equals(getResources().getString(R.string.pl_language))) {
-                    newValue = "pl";
-                } else if (value.equals(getResources().getString(R.string.es_language))) {
-                    newValue = "es";
-                } else if (value.equals(getResources().getString(R.string.en_language))) {
-                    newValue = "en";
-                }
-
-                if (newValue.length() > 0) {
-                    ((ListPreference) preference).setValue(newValue);
-                    preference.setSummary(value);
-                }
+                preference.setSummary(getLangDisplayName(value));
             } else {
-                ((ListPreference) preference).setValue(value);
                 preference.setSummary(value);
             }
         }
@@ -155,19 +143,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         ListPreference reflectionsLanguage = (ListPreference) findPreference(getString(R.string.pref_reflectionsLanguage));
 
-        String langDisplayName = "";
-        switch (language) {
-            case "pl":
-                langDisplayName = getResources().getString(R.string.pl_language);
-                break;
-            case "en":
-                langDisplayName = getResources().getString(R.string.en_language);
-                break;
-            case "es":
-                langDisplayName = getResources().getString(R.string.es_language);
-                break;
-        }
+        String langDisplayName = getLangDisplayName(language);
         reflectionsLanguage.setSummary(langDisplayName);
+        String[] langs = getResources().getStringArray(R.array.reflection_languages);
+        CharSequence[] langNames = new CharSequence[langs.length];
+        for (int i = 0; i < langs.length; i++) {
+            langNames[i] = getLangDisplayName(langs[i]);
+        }
+        reflectionsLanguage.setEntries(langNames);
 
         // Get years available on the server
         ArrayList<Integer> editions = WebServiceManager.getInstance(getContext()).getReflectionEditions();
@@ -191,6 +174,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
         reflectionsYear.setEntries(editionItems);
         reflectionsYear.setEntryValues(editionItems);
+    }
+
+    @NonNull
+    private String getLangDisplayName(String language) {
+        switch (language) {
+            case "pl":
+                return getResources().getString(R.string.pl_language);
+            case "en":
+                return getResources().getString(R.string.en_language);
+            case "es":
+                return getResources().getString(R.string.es_language);
+                default:
+                    throw new IllegalArgumentException("Unknown language used");
+        }
     }
 
     private void initUpdateSection() {
