@@ -64,7 +64,7 @@
 	<string name="download_dialog_message">Data download in progress</string>
 	<string name="unrecognized_error_while_reading_track">Unexpected error occurred when loading the route</string>
 	<string name="no_territories_found">No areas found. Connect to the internet and try again</string>
-	<string name="no_info_about_tracks_in_region">Info about routes in chosen area is unavailable</string>
+	<string name="no_info_about_routes_in_area">Info about routes in chosen area is unavailable</string>
 	<string name="instruction_how_to_end_app">Tap back key to exit</string>
 	<string name="track_chooser_title">Choose route:</string>
 	<string name="city_chooser_title">Choose city:</string>
