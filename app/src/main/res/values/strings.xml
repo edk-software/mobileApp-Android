@@ -15,6 +15,7 @@
 	<string name="pref_language">Language</string>
 	<string name="pref_currentEdition">currentEdition</string>
 	<string name="pref_reflectionsEdition">reflectionsEdition</string>
+	<string name="pref_reflectionsLanguage">reflectionsLanguageEdition</string>
 	<string name="pref_update_areas">syncAreas</string>
 	<string name="pref_update_routes">syncRoutes</string>
 	<string name="pref_update_reflections">syncReflections</string>
@@ -38,7 +39,7 @@
 
 	<string name="about_edk_text">Droga Krzyżowa może zaboleć. Proponujemy Ci rozważanie jej na dystansie około 40 km, w nocy, w milczeniu i samotności. \nEDK to: Wyzwanie, Droga, Zmaganie, Spotkanie. \n \nW aplikacji i na naszej stronie proponujemy Ci przykładowe trasy, którymi możesz podążać. Możesz także wymyślić swoją trasę. \nJeśli masz pomysł na nową trasę lub chcesz stworzyć rejon EDK - skontaktuj się z nami. \n \nWięcej informacji znajdziesz na:</string>
 	<string-array name="considerations_years">
-		<item>2017</item>
+		<item>2018</item>
 	</string-array>
 	<string name="out_of_track_message">Jesteś poza trasą</string>
 	<string name="go_to_consideration">Przejdź do rozważań</string>
@@ -56,7 +57,7 @@
 	<string name="GPS_off_warning_message">GPS jest wyłączony - Twoja pozycja nie będzie dokładnie określana</string>
 	<string name="go_to_location_settings">Przejdź do ustawień lokalizacji</string>
 	<string name="ignore">Ignoruj</string>
-	<string name="station">"Stacja "</string>
+	<string name="station">"Stacja"</string>
 	<string name="no_info_about_track_message">Brak informacji o wybranej trasie</string>
 	<string name="warning_dialog_title">Powiadomienie</string>
 	<string name="busy_dialog_title">Proszę czekać</string>
@@ -91,8 +92,7 @@
     <string name="finish_application">Zakończ</string>
 
 	<string name="popup_archiveRoutes_title">Wybór tras</string>
-	<string name="popup_archiveRoutes_message">Czy chcesz, aby wyświetlane były również trasy z poprzednich edycji?
-		(Wybór można zmienić w ustawieniach)</string>
+	<string name="popup_archiveRoutes_message">Czy chcesz, aby wyświetlane były również trasy z poprzednich edycji? (Wybór można zmienić w ustawieniach)</string>
 
     <string name="settings_location_category">Lokalizacja</string>
     <string name="settings_location_tracking_summary">Pozwala na powiadomienie o opuszczeniu trasy. Zwiększa zużycie baterii.</string>
@@ -108,7 +108,9 @@
 
     <string name="settings_reflections_category">Rozważania</string>
     <string name="settings_reflections_year_select_dialog_title">Wybierz rocznik rozważań:</string>
+	<string name="settings_reflections_language_select_dialog_title">Wybierz język rozważań:</string>
     <string name="settings_reflections_year_title">Rocznik rozważań</string>
+	<string name="settings_reflections_language_title">Język rozważań</string>
 
 	<string name="settings_update_category">Aktualizacja</string>
 	<string name="settings_update_areas">Lista regionów</string>
@@ -128,12 +130,8 @@
 	<string name="reflections_audio_download_missing">Części plików nie udało się pobrać. Spróbuj zaktualizować później.</string>
 	<string name="reflections_audio_download_failed">Nie udało się pobrać rozważań audio. Spróbuj ponownie poźniej.</string>
 	<string name="reflections_audio_download_dialog_title">Pobieranie rozważań</string>
-	<string name="reflections_audio_download_dialog_message">Dostępne są rozważania w formie audio. Czy mają zostać
-		teraz pobrane (ok. 50MB)?
-	</string>
-	<string name="reflections_text_download_failed">Nie udało się pobrać rozważań. Sprawdź połączenie z internetem i
-		spróbuj ponownie.
-	</string>
+	<string name="reflections_audio_download_dialog_message">Dostępne są rozważania w formie audio. Czy mają zostać teraz pobrane (ok. 50MB)?</string>
+	<string name="reflections_text_download_failed">Nie udało się pobrać rozważań. Sprawdź połączenie z internetem i spróbuj ponownie.</string>
 	<string name="reflections_audio_download_button_text">Pobierz rozważania audio</string>
 	<string name="reflections_audio_download_in_progress">Trwa pobieranie audio</string>
 	<string name="reflections_text_download_finished">Pobieranie zakończone</string>
@@ -153,4 +151,15 @@
 	<string name="about_edk_activity">O EDK</string>
 
 	<string name="view_route">Podgląd trasy</string>
+
+	<string name="pl_language">Polski</string>
+	<string name="en_language">Angielski</string>
+	<string name="es_language">Hiszpański</string>
+
+	<string-array name="reflection_languages">
+		<item>pl</item>
+		<item>en</item>
+		<item>es</item>
+	</string-array>
+
 </resources>

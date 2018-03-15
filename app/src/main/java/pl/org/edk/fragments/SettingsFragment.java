@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -121,7 +122,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         } else if (preference instanceof ListPreference) {
             String value = sharedPreferences.getString(preference.getKey(), "");
             ((ListPreference) preference).setValue(value);
-            preference.setSummary(value);
+            if (preference.getKey().equals(getResources().getString(R.string.pref_reflectionsLanguage))) {
+                preference.setSummary(getLangDisplayName(value));
+            } else {
+                preference.setSummary(value);
+            }
         }
     }
 
@@ -130,36 +135,62 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         initUpdateSection();
     }
 
-    private void initReflectionSection(){
+    private void initReflectionSection() {
         ListPreference reflectionsYear = (ListPreference) findPreference(getString(R.string.pref_reflectionsEdition));
         reflectionsYear.setDefaultValue(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
+
+        String language = Settings.get(getContext()).get(Settings.REFLECTIONS_LANGUAGE);
+
+        ListPreference reflectionsLanguage = (ListPreference) findPreference(getString(R.string.pref_reflectionsLanguage));
+
+        String langDisplayName = getLangDisplayName(language);
+        reflectionsLanguage.setSummary(langDisplayName);
+        String[] langs = getResources().getStringArray(R.array.reflection_languages);
+        CharSequence[] langNames = new CharSequence[langs.length];
+        for (int i = 0; i < langs.length; i++) {
+            langNames[i] = getLangDisplayName(langs[i]);
+        }
+        reflectionsLanguage.setEntries(langNames);
 
         // Get years available on the server
         ArrayList<Integer> editions = WebServiceManager.getInstance(getContext()).getReflectionEditions();
 
         // If failed, check the local ones
-        if(editions == null){
-            String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
+        if (editions == null) {
             ArrayList<ReflectionList> dbLists = DbManager.getInstance(getActivity()).getReflectionService().getReflectionLists(language, false);
-            if(dbLists == null)
+            if (dbLists == null)
                 return;
 
             editions = new ArrayList<>();
-            for(ReflectionList dbList : dbLists){
+            for (ReflectionList dbList : dbLists) {
                 editions.add(dbList.getEdition());
             }
         }
 
         // Add the fetched items to the list
         CharSequence[] editionItems = new CharSequence[editions.size()];
-        for(int i = 0; i < editions.size(); i++){
+        for (int i = 0; i < editions.size(); i++) {
             editionItems[i] = String.valueOf(editions.get(i));
         }
         reflectionsYear.setEntries(editionItems);
         reflectionsYear.setEntryValues(editionItems);
     }
 
-    private void initUpdateSection(){
+    @NonNull
+    private String getLangDisplayName(String language) {
+        switch (language) {
+            case "pl":
+                return getResources().getString(R.string.pl_language);
+            case "en":
+                return getResources().getString(R.string.en_language);
+            case "es":
+                return getResources().getString(R.string.es_language);
+                default:
+                    throw new IllegalArgumentException("Unknown language used");
+        }
+    }
+
+    private void initUpdateSection() {
         // Update reflections checkboxes
         final CheckBoxPreference reflectionsCheck = (CheckBoxPreference) findPreference(getString(R.string.pref_update_reflections));
         final CheckBoxPreference reflectionsAudioCheck = (CheckBoxPreference) findPreference(getString(R.string.pref_update_reflections_audio));

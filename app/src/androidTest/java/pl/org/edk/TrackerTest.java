@@ -1,15 +1,20 @@
 package pl.org.edk;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +27,18 @@ import pl.org.edk.managers.WebServiceManager;
  * Created by darekpap on 2016-02-22.
  */
 public class TrackerTest extends InstrumentationTestCase {
+
+    @Test
+    public void testResourceFiles() throws IOException {
+        Context testContext = getInstrumentation().getContext();
+        AssetManager assetManager = testContext.getAssets();
+
+        InputStream stream = assetManager.open("edk-gps-route-1635.kml");
+
+        Track track = Track.fromStream(stream);
+        Assert.assertNotNull(track);
+        Assert.assertEquals(Track.Status.Ok, track.GetStatus());
+    }
 
     @Test
     public void test() throws IOException {

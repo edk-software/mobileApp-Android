@@ -14,6 +14,7 @@ public class Settings extends SettingsBase {
     public static final int APP_LANGUAGE = R.string.pref_language;
     public static final int CURRENT_EDITION = R.string.pref_currentEdition;
     public static final int REFLECTIONS_EDITION = R.string.pref_reflectionsEdition;
+    public static final int REFLECTIONS_LANGUAGE = R.string.pref_reflectionsLanguage;
     public static final int APP_DIRECTORY_KML = R.string.pref_kml_directory;
     public static final int APP_DIRECTORY_AUDIO = R.string.pref_audio_directory;
 
@@ -60,17 +61,21 @@ public class Settings extends SettingsBase {
 
     public void init() {
         // TEMP: Constant values
-        set(APP_LANGUAGE, "pl");
+
+        set(APP_LANGUAGE, getCurrentSupportedLanguage());
         set(CURRENT_EDITION, Calendar.getInstance().get(Calendar.YEAR));
 
         // Add default values
-        if (getInt(REFLECTIONS_EDITION) == 0){
+        if (get(REFLECTIONS_LANGUAGE) == null){
+            set(REFLECTIONS_LANGUAGE, getCurrentSupportedLanguage());
+        }
+        if (getInt(REFLECTIONS_EDITION) == 0) {
             set(REFLECTIONS_EDITION, Calendar.getInstance().get(Calendar.YEAR));
         }
-        if (getBoolean(FOLLOW_LOCATION_ON_MAP, true)){
+        if (getBoolean(FOLLOW_LOCATION_ON_MAP, true)) {
             set(FOLLOW_LOCATION_ON_MAP, true);
         }
-        if (getBoolean(SHOW_ARCHIVE_ROUTES, true)){
+        if (getBoolean(SHOW_ARCHIVE_ROUTES, true)) {
             set(SHOW_ARCHIVE_ROUTES, true);
         }
     }
@@ -91,10 +96,10 @@ public class Settings extends SettingsBase {
     }
 
     public int getInt(int resId, int defaultValue) {
-        try{
+        try {
             String stringValue = get(resId);
             return Integer.parseInt(stringValue);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return defaultValue;
         }
     }

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lorem_ipsum"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer id tempus massa, in faucibus magna. Pellentesque feugiat faucibus ex a efficitur. Phasellus velit enim, hendrerit vitae magna at, vulputate tincidunt nisi. Etiam id sagittis leo, vitae iaculis mi. Integer vel sapien purus. Proin est velit, dapibus et pulvinar in, porttitor eu odio. Sed tincidunt tincidunt urna, suscipit tincidunt quam scelerisque nec. Duis elementum tortor eu erat mollis pharetra. Integer egestas lorem ut turpis scelerisque pretium. Integer nec justo ut dui lobortis tincidunt non nec odio. Vivamus eu ligula eleifend, ornare leo nec, hendrerit dui. Sed convallis ex vel felis interdum aliquam. Donec quis velit et orci suscipit ornare eget eget purus. Curabitur lobortis ex eu enim finibus bibendum vel in libero.
+
+        Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin sodales ipsum orci, ut ornare purus congue molestie. Curabitur eu faucibus nisi, ultricies tempor orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus ut lobortis augue. Curabitur lobortis malesuada aliquet. Donec quis turpis vel enim fermentum dictum ac vitae nunc. Aliquam erat volutpat. Quisque rutrum in orci eu varius. Sed et quam sit amet ligula feugiat malesuada sed sit amet enim. Fusce ullamcorper feugiat commodo. Donec aliquam arcu quis nulla dictum commodo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </string>
+	<string name="map_loading">Cargando mapa…</string>
+	<string name="about_edk">Vía Crucis Extremo es una forma de espiritualidad que para muchos se convierte en una forma de vida. El verdadero Encuentro con Él en medio de la lucha le hace ya no querer vivir normalmente, sino extramadamente, lo que significa: plenamente.\n\nVía Crucis Extremo es una forma propuesta de espiritualidad.\n\nNo es una peregrinación.\nVCE consiste de vencer por la noche una ruta elegida, reflexionar sobre las meditaciones y luchar con sus propias debilidades.\n Tiene un carácter individual; durante el camino en su ruta elegida, en caso de cualquier evento imprevisto, puede contar solo consigo mismo.\n\nPara obtener más información, visite nuestro sitio web:</string>
+	<string name="about_app">La aplicación ayuda a los participantes del Vía Crucis Extremo a experimentarlo plenamente.\n\nLas indicaciones publicadas en cada estación y navegación GPS le permitirán concentrarse en superar sus debilidades sin tener que preocuparse por los detalles.\n\nSin embargo, VCE es sobre todo una forma de espiritualidad. Reflexión sobre las meditaciones adjuntas permitirá realizar un Encuentro aún más cercano con Él.\n\nEl autor de la aplicación es Paweł Wawrzynek. Si tiene alguna sugerencia, ¡escribe!</string>
+
+	<string name="pref_followLocationOnMap">FollowLocationOnMap</string>
+	<string name="pref_backgroundTrackingOn">trackingTurnedOn</string>
+	<string name="pref_audioDownloadDialogShown">audioDownloadDialogShown</string>
+    <string name="pref_kml_directory">KmlDirectory</string>
+    <string name="pref_audio_directory">AudioDirectory</string>
+	<string name="pref_language">Language</string>
+	<string name="pref_currentEdition">currentEdition</string>
+	<string name="pref_reflectionsEdition">reflectionsEdition</string>
+	<string name="pref_reflectionsLanguage">reflectionsLanguageEdition</string>
+	<string name="pref_update_areas">syncAreas</string>
+	<string name="pref_update_routes">syncRoutes</string>
+	<string name="pref_update_reflections">syncReflections</string>
+	<string name="pref_update_reflections_audio">syncReflectionsAudio</string>
+	<string name="pref_update_button">syncButton</string>
+	<string name="pref_cleanup_button">cleanupButton</string>
+	<string name="pref_do_not_show_gps_dialog">doNotShowGpsDialog</string>
+	<string name="pref_show_archive_routes">showArchiveRoutes</string>
+	<string name="pref_archiveRoutesDialogShown">archiveRoutesDialogShown</string>
+	<string name="pref_rotate_map_to_walk_dir">rotateMapToWalkDirection</string>
+	<string name="pref_cat_location">prefCategoryLocation</string>
+	<string name="pref_cleanup_reflections">prefCleanupReflections</string>
+	<string name="pref_versionCode">prefVersionCode</string>
+
+    <string name="app_name">VCE</string>
+    <string name="routes">Rutas</string>
+	<string name="reflections">Meditaciones</string>
+	<string name="about_edk_title">Informaciones sobre VCE</string>
+    <string name="go_to_settings">Ir a configuración</string>
+    <string name="settings">Configuración</string>
+
+	<string name="about_edk_text">Vía Crucis puede doler. Le proponemos que lo medite durante una distancia de unos 40 km, por la noche, en silencio y en soledad. \nVCE es: Desafío, Camino, Lucha, Encuentro. \n\nEn la aplicación y en nuestro sitio web, le ofrecemos rutas de ejemplo que puede seguir. También puede inventar su ruta. \nSi tiene una idea para una ruta nueva o si desea crear una región del VCE, contáctenos. \n\nMás información en:</string>
+	<string-array name="considerations_years">
+		<item>2018</item>
+	</string-array>
+	<string name="out_of_track_message">Está fuera de la ruta</string>
+	<string name="go_to_consideration">Ir a meditaciones</string>
+	<string name="near_checkpoint_message">"Está cerca de la estación"</string>
+	<string name="back_on_track_message">Está en la ruta</string>
+	<string name="navigation_on_message">Navegación GPS habilitada</string>
+	<string name="end_dialog_message">¿Seguro que quiere salir de la aplicación?</string>
+	<string name="no">No</string>
+	<string name="yes">Si</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Cancelar</string>
+
+	<string name="waiting_for_position_message">Determinando su ubicación</string>
+	<string name="stop_listening">Detener</string>
+	<string name="GPS_off_warning_message">GPS está deshabilitado - su ubicación no se determinará con precisión</string>
+	<string name="go_to_location_settings">Ir a configuración de ubicación</string>
+	<string name="ignore">Ignorar</string>
+	<string name="station">"Estación"</string>
+	<string name="no_info_about_track_message">No hay información disponible sobre la ruta elegida</string>
+	<string name="warning_dialog_title">Notificación</string>
+	<string name="busy_dialog_title">Por favor espere</string>
+	<string name="download_dialog_message">Descargando los datos</string>
+	<string name="unrecognized_error_while_reading_track">Se produjo un error inesperado al intentar cargar la ruta</string>
+	<string name="no_territories_found">No se pueden encontrar ningunas regiones. Conéctese a Internet y vuelva a intentarlo</string>
+	<string name="no_info_about_routes_in_area">Información sobre rutas en la área elegida no está disponible</string>
+	<string name="instruction_how_to_end_app">Aprete el botón regresar para salir</string>
+	<string name="track_chooser_title">Elige una ruta:</string>
+	<string name="city_chooser_title">Elige una ciudad:</string>
+	<string name="county_chooser_title">Elige una provincia:</string>
+
+	<string name="considerations_end_title">Resumen</string>
+	<string name="considerations_start_title">Introducción</string>
+	<string name="stop_navigation_message">Detener</string>
+	<string name="downloading_message">Descargando los datos</string>
+	<string name="description_unavailable">Descripción de la ruta no está disponible temporalmente</string>
+    <string name="stations_missing_warning_message">Se produjo un error al leer las coordenadas de algunas estaciones.</string>
+
+    <string name="accept_challenge">Acepte el desafío</string>
+    <string name="change_route">Cambiar</string>
+    <string name="route_description">Descripción de la ruta</string>
+
+    <string name="edk_website">www.edk.org.pl</string>
+
+    <string name="time_of_travel_title">Estás en camino desde:</string>
+    <string name="time_of_travel_default_value">0:00:00</string>
+    <string name="distance_traveled_title">Distancia cubierta:</string>
+    <string name="distance_to_next_title">Siguiente estación en:</string>
+    <string name="distance_left_title">Hasta el final:</string>
+    <string name="distance_default_value">0 km</string>
+    <string name="finish_application">Terminar</string>
+
+	<string name="popup_archiveRoutes_title">Selección de rutas</string>
+	<string name="popup_archiveRoutes_message">¿Desea ver también las rutas de las ediciones anteriores? (La selección se puede cambiar en la configuración)</string>
+
+    <string name="settings_location_category">Ubicación</string>
+    <string name="settings_location_tracking_summary">Permite avisar sobre el abandono de la ruta. Aumenta el consumo de batería.</string>
+    <string name="settings_location_tracking_title">Verifica la ubicación en el fondo</string>
+    <string name="settings_location_follow_summary">Desplazo automático del mapa a la posición más reciente.</string>
+    <string name="settings_location_follow_title">Centre el mapa en su posición actual</string>
+	<string name="settings_location_rotate_map_title">Oriente el mapa hacia la dirección de la marcha</string>
+	<string name="settings_location_rotate_map_summary">Gira el mapa para que la parte superior coincida con la dirección de la marcha. Funciona con el centrado del mapa habilitado.</string>
+
+	<string name="settings_routes_category">Rutas</string>
+	<string name="settings_routes_useArchive_title">Visualización de archivo</string>
+	<string name="settings_routes_useArchive_summary">Descargar rutas de ediciones anteriores</string>
+
+    <string name="settings_reflections_category">Meditaciones</string>
+    <string name="settings_reflections_year_select_dialog_title">Elija el año de las meditaciones</string>
+	<string name="settings_reflections_language_select_dialog_title">Elegir el lenguaje de las meditaciones</string>
+    <string name="settings_reflections_year_title">Año de las meditaciones</string>
+	<string name="settings_reflections_language_title">Lenguaje de meditaciones</string>
+
+	<string name="settings_update_category">Actualización</string>
+	<string name="settings_update_areas">Lista de regiones</string>
+	<string name="settings_update_areas_desc">Actualizar la lista de provincias y ciudades donde se celebra VCE</string>
+	<string name="settings_update_routes">Rutas</string>
+	<string name="settings_update_routes_desc">Actualizar detalles de rutas previamente descargadas</string>
+	<string name="settings_update_reflections">Meditaciones</string>
+	<string name="settings_update_reflections_desc">Actualizar el contenido de meditaciones</string>
+	<string name="settings_update_reflections_audio">Meditaciones de audio</string>
+	<string name="settings_update_reflections_audio_desc">Descargar los últimos archivos de audio con grabaciones de meditaciones</string>
+	<string name="settings_update_button_text">Actualizar ahora</string>
+
+	<string name="settings_maintenance_category">Mantenimiento</string>
+	<string name="settings_maintenance_cleanup">Eliminar archivos de audio</string>
+
+	<string name="reflections_audio_download_success">La descarga de meditaciones de audio ha sido completada.</string>
+	<string name="reflections_audio_download_missing">Partes de los archivos no pudieron descargarse. Intente actualizar más tarde.</string>
+	<string name="reflections_audio_download_failed">Error al descargar meditaciones de audio. Intente de nuevo más tarde.</string>
+	<string name="reflections_audio_download_dialog_title">Descargando las meditaciones</string>
+	<string name="reflections_audio_download_dialog_message">Están disponibles las meditaciones de audio. ¿Deberían descargarse ahora (alrededor de 50MB)?</string>
+	<string name="reflections_text_download_failed">Error al descargar meditaciones. Verifique la conexión a Internet y vuelva a intentarlo.</string>
+	<string name="reflections_audio_download_button_text">Descargar meditaciones de audio</string>
+	<string name="reflections_audio_download_in_progress">Descargando el audio</string>
+	<string name="reflections_text_download_finished">Descarga ha sido completada</string>
+
+	<string name="update_download_finished_message">Actualización de datos ha sido completada (la descarga de archivos de audio se puede hacer en segundo plano).</string>
+	<string name="update_in_progress_message">Los datos se están actualizando ...</string>
+	<string name="do_not_show_gps_dialog">doNotShowGpsDialog</string>
+	<string name="google_api_unavailable_message">Google API no está disponible</string>
+	<string name="no_permission_title">No tiene permisos</string>
+	<string name="no_permission_message">La aplicación no puede funcionar sin la aceptación de todos los permisos. Para poder usarla, cambie la configuración</string>
+
+	<string name="file_access_error">El archivo de audio no se puede reproducir - error de acceso.</string>
+	<string name="no_permission_message_yesno">La aplicación no puede funcionar sin la aceptación de todos los permisos. ¿Quiere ir a configuración para cambiar los permisos?</string>
+	<string name="no_storage_permission_message_yesno">La aplicación no tiene permisos para registrarse en la memoria del dispositivo. Este permiso es necesario para usar meditaciones de audio. ¿Quiere ir a configuración para cambiar los permisos?</string>
+	<string name="no_gps_permission_message_yesno">La aplicación no tiene permiso para usar el GPS. Este permiso es necesario para usar los mapas. ¿Quiere ir a configuración para cambiar los permisos?</string>
+
+	<string name="about_edk_activity">Sobre VCE</string>
+
+	<string name="view_route">Vista previa de la ruta</string>
+	
+	<string name="pl_language">Polaco</string>
+	<string name="en_language">Inglés</string>
+	<string name="es_language">Español</string>
+
+	<string-array name="reflection_languages">
+		<item>pl</item>
+		<item>en</item>
+		<item>es</item>
+	</string-array>
+</resources>

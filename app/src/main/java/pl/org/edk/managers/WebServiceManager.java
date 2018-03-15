@@ -3,16 +3,19 @@ package pl.org.edk.managers;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
-import pl.org.edk.database.entities.*;
+import pl.org.edk.database.entities.Area;
+import pl.org.edk.database.entities.Reflection;
+import pl.org.edk.database.entities.ReflectionList;
+import pl.org.edk.database.entities.Route;
+import pl.org.edk.database.entities.RouteDesc;
+import pl.org.edk.database.entities.Territory;
 import pl.org.edk.webServices.FileDownloader;
 import pl.org.edk.webServices.WebServiceAccess;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by pwawrzynek on 2016-02-11.
@@ -260,12 +263,13 @@ public class WebServiceManager {
     // Reflections
 
     public boolean syncReflections(boolean downloadAudio) {
-        // TODO: Upload more than the default language
-        String defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
-        int defaultEdition = Settings.get(mContext).getInt((Settings.REFLECTIONS_EDITION));
+
+        String language = Settings.get(mContext).get(Settings.REFLECTIONS_LANGUAGE);
+
+        int edition = Settings.get(mContext).getInt((Settings.REFLECTIONS_EDITION));
 
         // Get the WS list
-        ArrayList<ReflectionList> wsLists = mWsClient.getReflectionLists(defaultLanguage);
+        ArrayList<ReflectionList> wsLists = mWsClient.getReflectionLists(language);
         if (wsLists == null)
             return false;
 
@@ -273,7 +277,7 @@ public class WebServiceManager {
             try {
                 ReflectionList dbList = DbManager.getInstance(mContext)
                         .getReflectionService()
-                        .getReflectionList(defaultLanguage, wsList.getEdition(), true);
+                        .getReflectionList(language, wsList.getEdition(), true);
 
                 // This list doesn't exist locally
                 if (dbList == null) {
@@ -297,7 +301,7 @@ public class WebServiceManager {
                     continue;
                 }
                 // Audio files were not downloaded and should be
-                else if (downloadAudio && dbList.getEdition() == defaultEdition && !dbList.hasAllAudio()) {
+                else if (downloadAudio && dbList.getEdition() == edition && !dbList.hasAllAudio()) {
                     getReflectionsAudioAsync(dbList, null);
                 }
             }
@@ -312,11 +316,10 @@ public class WebServiceManager {
     }
 
     public ArrayList<Integer> getReflectionEditions() {
-        // TODO: Upload more than the default language
-        String defaultLanguage = Settings.get(mContext).get(Settings.APP_LANGUAGE);
+        String language = Settings.get(mContext).get(Settings.REFLECTIONS_LANGUAGE);
 
         // Get the WS list
-        ArrayList<ReflectionList> wsLists = mWsClient.getReflectionLists(defaultLanguage);
+        ArrayList<ReflectionList> wsLists = mWsClient.getReflectionLists(language);
         if (wsLists == null)
             return null;
 

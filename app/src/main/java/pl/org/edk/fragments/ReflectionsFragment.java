@@ -26,6 +26,7 @@ import java.util.*;
 
 import pl.org.edk.R;
 import pl.org.edk.Settings;
+import pl.org.edk.TempSettings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Reflection;
 import pl.org.edk.database.entities.ReflectionList;
@@ -132,28 +133,29 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             WebServiceManager.getInstance(getActivity()).addDownloadListener(this);
         }
 
+        initializePlayerView(view);
+        initializeDownloadButton(view);
+
         // Load reflections from DB or download them
         if (!prepareListData()) {
+            hidePlayer();
             DialogUtil.showWarningDialog(
-                    getString(R.string.reflections_text_download_failed), getActivity(), true);
+                    getString(R.string.reflections_text_download_failed), getActivity(), !TempSettings.get(getActivity()).isUserOnTrack());
             return view;
         }
 
         // Ask about audio reflections
         Settings settings = Settings.get(getActivity());
         boolean dialogShown = settings.getBoolean(Settings.AUDIO_DOWNLOAD_DIALOG_SHOWN, false);
-        if (!isAudioAvailable() && !WebServiceManager.getInstance(getActivity()).isDownloadInProgress() && !dialogShown) {
+        if (!isAudioAvailable() && !WebServiceManager.getInstance(getActivity()).isDownloadInProgress() && !dialogShown && canDownloadAudio()) {
             showDownloadDialog();
             settings.set(Settings.AUDIO_DOWNLOAD_DIALOG_SHOWN, true);
         }
         refreshViewItems();
 
-        initializePlayerView(view);
         if (mCurrentStation == -1 || !isStationAudioAvailable()) {
             hidePlayer();
         }
-
-        initializeDownloadButton(view);
 
         return view;
     }
@@ -187,7 +189,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     @Override
     public void onPlayerStop() {
-        if(mCurrentStation == -1){
+        if (mCurrentStation == -1) {
             return;
         }
         preparePlayer(mCurrentStation);
@@ -212,10 +214,9 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         if (downloadedList.hasAllAudio()) {
             mReflectionList = downloadedList;
             message = activity.getString(R.string.reflections_audio_download_success);
-        } else if(downloadedList.hasAnyAudio()){
+        } else if (downloadedList.hasAnyAudio()) {
             message = activity.getString(R.string.reflections_audio_download_missing);
-        }
-        else {
+        } else {
             message = activity.getString(R.string.reflections_audio_download_failed);
         }
         DialogUtil.showDialog(activity.getString(R.string.reflections_text_download_finished), message, activity, true, null);
@@ -270,7 +271,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAudioService == null){
+                if (mAudioService == null) {
                     Log.e("EDK", "Audio service was null when play was requested");
                     return;
                 }
@@ -410,7 +411,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private void refreshDownloadButton(boolean forceHide) {
-        if (forceHide || isAudioAvailable()) {
+        if (forceHide || isAudioAvailable() || !canDownloadAudio()) {
             mDownloadButton.setVisibility(View.GONE);
             return;
         }
@@ -425,6 +426,10 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             mDownloadButton.setVisibility(View.VISIBLE);
             mDownloadButton.setText(activity.getString(R.string.reflections_audio_download_button_text));
         }
+    }
+
+    private boolean canDownloadAudio() {
+        return Settings.get(getActivity()).get(Settings.REFLECTIONS_LANGUAGE).equals("pl");
     }
 
     private boolean isAudioAvailable() {
@@ -517,7 +522,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
 
     private boolean prepareListData() {
         // Get the data from local DB
-        String language = Settings.get(getActivity()).get(Settings.APP_LANGUAGE);
+        String language = Settings.get(getActivity()).get(Settings.REFLECTIONS_LANGUAGE);
         Integer edition = Settings.get(getActivity()).getInt(Settings.REFLECTIONS_EDITION);
         mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, edition, true);
 
@@ -587,7 +592,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             final Reflection reflection = reflections.get(i);
             String stationIndex = NumConverter.toRoman(i);
             String title = reflection.getDisplayName();
-            if (stationIndex != null){
+            if (stationIndex != null) {
                 title = stationIndex + " " + title;
             }
             listDataHeader.add(reflection.getStationIndex(), title);

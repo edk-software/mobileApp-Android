@@ -1,6 +1,8 @@
 package pl.org.edk.webServices;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -161,6 +163,7 @@ public class WebServiceAccess {
 
     public ReflectionList getReflectionList(String lang, int edition) {
         HashMap<String, String> params = new HashMap<>(2);
+
         params.put("language", lang);
         params.put("edition", String.valueOf(edition));
 

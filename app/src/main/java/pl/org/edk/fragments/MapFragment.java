@@ -170,7 +170,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
                 continue;
             }
             marker.position(position);
-            marker.title(getString(R.string.station) + NumConverter.toRoman(i));
+            marker.title(getString(R.string.station) + " " + NumConverter.toRoman(i));
             markerOptions.add(marker);
         }
         markerOptions.add(new MarkerOptions().position(checkpoints.get(15)).title(getString(R.string.considerations_end_title)));
