@@ -45,6 +45,7 @@ public class FileDownloader {
         mNotifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new NotificationCompat.Builder(mContext);
         mBuilder.setContentTitle(title)
+                .setContentText("")
                 .setSmallIcon(icon);
 
         mProgressText = progressText;
@@ -163,7 +164,15 @@ public class FileDownloader {
             // Display the progress bar
             if(mDisplayNotification) {
                 mBuilder.setProgress(100, 0, false);
+                notifySafe();
+            }
+        }
+
+        private void notifySafe() {
+            try {
                 mNotifyManager.notify(1, mBuilder.build());
+            } catch (IllegalArgumentException iae){
+                Log.w("EDK", "Notification exception ignored", iae);
             }
         }
 
@@ -175,7 +184,7 @@ public class FileDownloader {
             if(mDisplayNotification) {
                 mBuilder.setProgress(100, values[0], false)
                         .setContentText(mProgressText + " (" + String.valueOf(values[0]) + "%)");
-                mNotifyManager.notify(1, mBuilder.build());
+                notifySafe();
             }
         }
 
@@ -187,7 +196,7 @@ public class FileDownloader {
             if(mDisplayNotification) {
                 mBuilder.setContentText(mFinishedText);
                 mBuilder.setProgress(0, 0, false);
-                mNotifyManager.notify(1, mBuilder.build());
+                notifySafe();
             }
 
             if(mListener != null)
