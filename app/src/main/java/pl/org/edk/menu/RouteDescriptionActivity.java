@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import pl.org.edk.MainActivity;
 import pl.org.edk.R;
@@ -31,6 +32,7 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
 
     private Route mRoute;
     private WebView mDescriptionTextView;
+    private TextView mDescriptionHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,8 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
 
         initView();
 
-        mDescriptionTextView = (WebView) findViewById(R.id.descriptionText);
+        mDescriptionTextView = findViewById(R.id.descriptionText);
+        mDescriptionHeader = findViewById(R.id.descriptionHeader);
 
         long routeId = TempSettings.get(this).getLong(TempSettings.SELECTED_ROUTE_ID, -1);
         mRoute = DbManager.getInstance(this).getRouteService().getRoute(routeId, "pl");
@@ -108,7 +111,9 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
     private void setRouteDescription() {
         String descriptionHtml = mRoute.getDescriptions().get(0).getDescription();
         if (descriptionHtml == null || descriptionHtml.isEmpty()) {
-            descriptionHtml = getString(R.string.description_unavailable);
+            mDescriptionHeader.setVisibility(View.GONE);
+            mDescriptionTextView.setVisibility(View.GONE);
+            return;
         }
 
         String text = decorateHtmlWithColors(descriptionHtml);
