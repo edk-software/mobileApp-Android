@@ -111,7 +111,6 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
             return;
         }
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            BootStrap.initStorage(this);
             permissionGranted();
         }else{
             permissionDenied();
@@ -124,6 +123,7 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
 
     private void permissionGranted() {
         DialogUtil.showBusyDialog(R.string.downloading_message, this);
+        BootStrap.initStorage(this);
         WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
             @Override
             public void onOperationFinished(Object result) {
@@ -141,7 +141,7 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
 
     private void showRouteUnavailableWarning() {
         DialogUtil.showWarningDialog("Szczegóły tej trasy aktualnie nie są dostępne, proszę spróbować później.",
-                RouteDescriptionActivity.this, false);
+                RouteDescriptionActivity.this, true);
     }
 
     private void setRouteDescription() {
