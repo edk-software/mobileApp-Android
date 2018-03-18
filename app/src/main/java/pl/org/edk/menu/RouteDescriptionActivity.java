@@ -1,15 +1,15 @@
 package pl.org.edk.menu;
 
+import android.Manifest;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +17,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import pl.org.edk.BootStrap;
 import pl.org.edk.MainActivity;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
@@ -30,6 +31,7 @@ import pl.org.edk.util.DialogUtil;
 
 public class RouteDescriptionActivity extends FragmentActivity implements MapFragment.OnStationSelectListener {
 
+    private static final int REQUEST_CODE = 4;
     private Route mRoute;
     private WebView mDescriptionTextView;
     private TextView mDescriptionHeader;
@@ -84,23 +86,57 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
 
     private void downloadRouteDetailsAsync() {
         if (!mRoute.isDownloaded()) {
-            DialogUtil.showBusyDialog(R.string.downloading_message, this);
-            WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
-                @Override
-                public void onOperationFinished(Object result) {
-                    DialogUtil.closeBusyDialog();
-                    if (result != null && ((Route) result).isDownloaded()) {
-                        mRoute = (Route) result;
-                        setRouteDescription();
-                    } else {
-                        showRouteUnavailableWarning();
-                    }
-                }
-            };
-            WebServiceManager.getInstance(this).syncRouteAsync(mRoute.getServerID(), listener);
+            checkPermission();
         } else {
             setRouteDescription();
         }
+    }
+
+    private void checkPermission() {
+        boolean canUseStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if (canUseStorage){
+            permissionGranted();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != REQUEST_CODE) {
+            return;
+        }
+        if (grantResults.length == 0) {
+            return;
+        }
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            BootStrap.initStorage(this);
+            permissionGranted();
+        }else{
+            permissionDenied();
+        }
+    }
+
+    private void permissionDenied() {
+        DialogUtil.showWarningDialog(R.string.no_storage_permission_message_yesno, this, true);
+    }
+
+    private void permissionGranted() {
+        DialogUtil.showBusyDialog(R.string.downloading_message, this);
+        WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
+            @Override
+            public void onOperationFinished(Object result) {
+                DialogUtil.closeBusyDialog();
+                if (result != null && ((Route) result).isDownloaded()) {
+                    mRoute = (Route) result;
+                    setRouteDescription();
+                } else {
+                    showRouteUnavailableWarning();
+                }
+            }
+        };
+        WebServiceManager.getInstance(this).syncRouteAsync(mRoute.getServerID(), listener);
     }
 
     private void showRouteUnavailableWarning() {

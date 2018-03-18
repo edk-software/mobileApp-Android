@@ -58,10 +58,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onResume() {
         super.onResume();
 
-        Settings.CAN_USE_GPS = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        PreferenceCategory category = (PreferenceCategory) findPreference(getString(R.string.pref_cat_location));
-        category.setEnabled(Settings.CAN_USE_GPS);
-
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            boolean canUseGPS = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+            PreferenceCategory category = (PreferenceCategory) findPreference(getString(R.string.pref_cat_location));
+            category.setEnabled(canUseGPS);
+        }
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         if (isVisible() && isMenuVisible()) {
             refreshPreferenceView();

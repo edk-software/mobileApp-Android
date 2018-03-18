@@ -74,14 +74,6 @@ public class MainActivity extends AppCompatActivity implements MapFragment.OnSta
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Settings.CAN_USE_STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        Settings.CAN_USE_GPS = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        //Toast.makeText(getApplicationContext(),"main start storage: "+Settings.CAN_USE_STORAGE,Toast.LENGTH_SHORT).show();
-    }
-
     private void processIntent(Intent intent) {
         int stationId = intent.getIntExtra(Extra.STATION_ID, -1);
         if (stationId != -1) {

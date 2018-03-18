@@ -1,15 +1,19 @@
 package pl.org.edk.fragments;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +26,13 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
+import pl.org.edk.BootStrap;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.TempSettings;
@@ -42,6 +51,7 @@ import pl.org.edk.util.NumConverter;
  */
 public class ReflectionsFragment extends Fragment implements OnPlayerStopListener, WebServiceManager.OnOperationFinishedEventListener {
     public static final String FRAGMENT_TAG = "reflectionsFragment";
+    private static final int REQUEST_CODE = 5;
 
     private ExpandableListView expListView;
     private List<String> listDataHeader;
@@ -285,7 +295,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                         Log.i("EDK", "Audio service reflection was null when clicked play");
                         mAudioService.setReflection(mReflectionList.getReflections().get(mCurrentStation));
                     }
-                    if (Settings.CAN_USE_STORAGE) {
+                    if (canUseStorage()) {
                         mAudioService.play();
                         if (mAudioService.isPrepareAsyncOK()) {
                             mPlayButton.setImageResource(R.drawable.pause);
@@ -533,7 +543,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             // Update the local data and try again
             WebServiceManager.getInstance(getActivity()).syncReflections(false);
             mReflectionList = DbManager.getInstance(getActivity()).getReflectionService().getReflectionList(language, edition, true);
-            if(mReflectionList == null)
+            if (mReflectionList == null)
                 return false;
 
         }
@@ -545,27 +555,50 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
                 getActivity(), new DialogUtil.OnSelectedEventListener() {
                     @Override
                     public void onAccepted() {
-                        if (Settings.CAN_USE_STORAGE) {
-                            WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, ReflectionsFragment.this);
-                            refreshDownloadButton(true);
-                        } else {
-                            DialogUtil.showYesNoDialog(R.string.no_permission_title, R.string.no_storage_permission_message_yesno, getActivity(), new DialogUtil.OnSelectedEventListener() {
-                                @Override
-                                public void onAccepted() {
-                                    startAppSettingsActivity();
-                                }
-
-                                @Override
-                                public void onRejected() {
-                                    //no action for now
-                                }
-                            });
-                        }
+                        downloadIfPermissionGranted();
                     }
 
                     @Override
                     public void onRejected() { /* Just close */ }
                 });
+    }
+
+    private void downloadIfPermissionGranted() {
+        if (canUseStorage()) {
+            permissionGranted();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        }
+    }
+
+    private boolean canUseStorage() {
+        FragmentActivity activity = getActivity();
+
+        return activity != null && ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != REQUEST_CODE) {
+            return;
+        }
+        if (grantResults.length != 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                permissionGranted();
+            } else {
+                permissionDenied();
+            }
+        }
+    }
+
+    private void permissionDenied() {
+        DialogUtil.showWarningDialog(R.string.no_storage_permission_message_yesno, getActivity(), false);
+    }
+
+    private void permissionGranted() {
+        BootStrap.initStorage(getContext());
+        WebServiceManager.getInstance(getActivity()).getReflectionsAudioAsync(mReflectionList, ReflectionsFragment.this);
+        refreshDownloadButton(true);
     }
 
     private void startAppSettingsActivity() {
