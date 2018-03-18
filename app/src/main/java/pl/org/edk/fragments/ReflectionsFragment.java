@@ -592,7 +592,7 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
     }
 
     private void permissionDenied() {
-        DialogUtil.showWarningDialog(R.string.no_storage_permission_message_yesno, getActivity(), false);
+        DialogUtil.showWarningDialog(R.string.no_storage_permission_message, getActivity(), false);
     }
 
     private void permissionGranted() {

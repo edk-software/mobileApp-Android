@@ -390,7 +390,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
                 BootStrap.initStorage(getContext());
                 initTrackerRelatedMapStuff();
             } else {
-                DialogUtil.showWarningDialog(R.string.no_storage_permission_message_yesno, getActivity(), false);
+                DialogUtil.showWarningDialog(R.string.no_storage_permission_message, getActivity(), false);
             }
         }
     }

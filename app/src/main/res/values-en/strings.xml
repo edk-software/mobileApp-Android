@@ -145,7 +145,8 @@
 
 	<string name="file_access_error">Cannot play audio file - access error.</string>
 	<string name="no_permission_message_yesno">App needs all permissions to work properly. Do you want to go to settings section and change permissions?</string>
-	<string name="no_storage_permission_message_yesno">App has no permission to write to device storage. This permission is necessary to be able to use audio reflections. Do you want to go to settings section and change permissions?</string>
+	<string name="no_storage_permission_message">App has no permission to write to device storage. This permission is necessary to be able to show track on map and to use audio reflections.</string>
+	<string name="no_storage_permission_message_yesno">App has no permission to write to device storage. This permission is necessary to be able to show track on map and to use audio reflections. Do you want to go to settings section and change permissions?</string>
 	<string name="no_gps_permission_message_yesno">App has no permission to use GPS. This permission is necessary to be able to use maps. Do you want to go to settings section and change permissions?</string>
 
 	<string name="about_edk_activity">About EWC</string>

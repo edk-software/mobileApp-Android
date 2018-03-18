@@ -119,7 +119,7 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
     }
 
     private void permissionDenied() {
-        DialogUtil.showWarningDialog(R.string.no_storage_permission_message_yesno, this, true);
+        DialogUtil.showWarningDialog(R.string.no_storage_permission_message, this, true);
     }
 
     private void permissionGranted() {
