@@ -231,10 +231,10 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             Log.d("EDK", "List not ready");
             return;
         }
-        if (listDataHeader.isEmpty()) {
+        if (mReflectionList == null || mReflectionList.getReflections().isEmpty()) {
             return;
         }
-        if (listDataHeader.size() == 14) {
+        if (mReflectionList.getReflections().size() == 14) {
             Log.d("EDK", "There are only 14 reflections available");
             stationIndex = Math.min(13, Math.max(0, stationIndex - 1));
         }
