@@ -54,7 +54,7 @@
 
 	<string name="waiting_for_position_message">Determinando su ubicación</string>
 	<string name="stop_listening">Detener</string>
-	<string name="GPS_off_warning_message">GPS está deshabilitado - su ubicación no se determinará con precisión</string>
+	<string name="GPS_off_warning_message">GPS está deshabilitado - su ubicación no se determinará con precisión. Habilite el acceso a su ubicación y configure el modo para usar GPS (alta precisión)</string>
 	<string name="go_to_location_settings">Ir a configuración de ubicación</string>
 	<string name="ignore">Ignorar</string>
 	<string name="station">"Estación"</string>
