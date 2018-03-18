@@ -133,11 +133,11 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
             WebServiceManager.getInstance(getActivity()).addDownloadListener(this);
         }
 
-        initializePlayerView(view);
-        initializeDownloadButton(view);
 
         // Load reflections from DB or download them
         if (!prepareListData()) {
+            initializePlayerView(view);
+            initializeDownloadButton(view);
             hidePlayer();
             DialogUtil.showWarningDialog(
                     getString(R.string.reflections_text_download_failed), getActivity(), !TempSettings.get(getActivity()).isUserOnTrack());
@@ -153,10 +153,12 @@ public class ReflectionsFragment extends Fragment implements OnPlayerStopListene
         }
         refreshViewItems();
 
+        initializePlayerView(view);
         if (mCurrentStation == -1 || !isStationAudioAvailable()) {
             hidePlayer();
         }
 
+        initializeDownloadButton(view);
         return view;
     }
 
