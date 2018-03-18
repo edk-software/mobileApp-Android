@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import java.util.ArrayList;
 import java.util.Date;
 
+import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.database.DbManager;
 import pl.org.edk.database.entities.Area;
@@ -459,8 +460,8 @@ public class WebServiceManager {
         // Start the download and trigger the next one, when finished
         FileDownloader manager = new FileDownloader(mContext);
         int totalReflectionsCount = list.getReflections().size();
-        manager.setNotificationDetails(mNotificationIcon, "Pobieranie rozważań",
-                totalReflectionsCount + 1 - mReflectionsToDownload.size() + "/" + totalReflectionsCount, "Rozważania pobrane");
+        manager.setNotificationDetails(mNotificationIcon, mContext.getString(R.string.reflections_audio_download_dialog_title),
+                totalReflectionsCount + 1 - mReflectionsToDownload.size() + "/" + totalReflectionsCount, mContext.getString(R.string.reflections_audio_download_success));
         manager.setListener(new FileDownloader.OnDownloadEventListener() {
             @Override
             public void onDownloadFinished(FileDownloader.DownloadResult result) {

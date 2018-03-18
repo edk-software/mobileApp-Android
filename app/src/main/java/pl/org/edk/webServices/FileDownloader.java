@@ -12,6 +12,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import pl.org.edk.Settings;
+
 /**
  * Created by pwawrzynek on 2016-02-10.
  */
@@ -43,7 +45,7 @@ public class FileDownloader {
         mDisplayNotification = true;
 
         mNotifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(mContext);
+        mBuilder = new NotificationCompat.Builder(mContext, Settings.NOTIFICATION_CHANNEL_ID);
         mBuilder.setContentTitle(title)
                 .setContentText("")
                 .setSmallIcon(icon);

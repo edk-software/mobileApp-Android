@@ -155,8 +155,10 @@
 	<string name="pl_language">Polski</string>
 	<string name="en_language">Angielski</string>
 	<string name="es_language">Hiszpański</string>
+    <string name="channel_name">Powiadomienia</string>
+    <string name="channel_description">Wszystkie powiadomienia aplikacji</string>
 
-	<string-array name="reflection_languages">
+    <string-array name="reflection_languages">
 		<item>pl</item>
 		<item>en</item>
 		<item>es</item>
