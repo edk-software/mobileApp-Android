@@ -8,8 +8,8 @@ android {
         applicationId "pl.org.edk"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 14
-        versionName "5.1"
+        versionCode 15
+        versionName "5.2"
     }
     buildTypes {
         release {
