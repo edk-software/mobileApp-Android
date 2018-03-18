@@ -126,6 +126,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             ((ListPreference) preference).setValue(value);
             if (preference.getKey().equals(getResources().getString(R.string.pref_reflectionsLanguage))) {
                 preference.setSummary(getLangDisplayName(value));
+                updateReflectionsYear(value);
             } else {
                 preference.setSummary(value);
             }
@@ -138,10 +139,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     private void initReflectionSection() {
-        ListPreference reflectionsYear = (ListPreference) findPreference(getString(R.string.pref_reflectionsEdition));
-        reflectionsYear.setDefaultValue(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
-
-        String language = Settings.get(getContext()).get(Settings.REFLECTIONS_LANGUAGE);
+        final String language = Settings.get(getContext()).get(Settings.REFLECTIONS_LANGUAGE);
 
         ListPreference reflectionsLanguage = (ListPreference) findPreference(getString(R.string.pref_reflectionsLanguage));
 
@@ -154,28 +152,41 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
         reflectionsLanguage.setEntries(langNames);
 
+        updateReflectionsYear(language);
+    }
+
+    private void updateReflectionsYear(final String language) {
+        final ListPreference reflectionsYear = (ListPreference) findPreference(getString(R.string.pref_reflectionsEdition));
+        reflectionsYear.setDefaultValue(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
         // Get years available on the server
-        ArrayList<Integer> editions = WebServiceManager.getInstance(getContext()).getReflectionEditions();
+        DialogUtil.showBusyDialog(R.string.downloading_message, getActivity());
+        WebServiceManager.getInstance(getContext()).getReflectionEditionsAsync(new WebServiceManager.OnOperationFinishedEventListener<ArrayList<Integer>>() {
+            @Override
+            public void onOperationFinished(ArrayList<Integer> editions) {
+                DialogUtil.closeBusyDialog();
+                // If failed, check the local ones
+                if (editions == null) {
+                    editions = new ArrayList<>();
+                    ArrayList<ReflectionList> dbLists = DbManager.getInstance(getActivity()).getReflectionService().getReflectionLists(language, false);
+                    if (dbLists != null) {
+                        for (ReflectionList dbList : dbLists) {
+                            editions.add(dbList.getEdition());
+                        }
+                    } else {
+                        editions.add(Calendar.getInstance().get(Calendar.YEAR));
+                    }
+                }
 
-        // If failed, check the local ones
-        if (editions == null) {
-            ArrayList<ReflectionList> dbLists = DbManager.getInstance(getActivity()).getReflectionService().getReflectionLists(language, false);
-            if (dbLists == null)
-                return;
-
-            editions = new ArrayList<>();
-            for (ReflectionList dbList : dbLists) {
-                editions.add(dbList.getEdition());
+                // Add the fetched items to the list
+                CharSequence[] editionItems = new CharSequence[editions.size()];
+                for (int i = 0; i < editions.size(); i++) {
+                    editionItems[i] = String.valueOf(editions.get(i));
+                }
+                reflectionsYear.setEntries(editionItems);
+                reflectionsYear.setEntryValues(editionItems);
+                reflectionsYear.setSummary(reflectionsYear.getValue());
             }
-        }
-
-        // Add the fetched items to the list
-        CharSequence[] editionItems = new CharSequence[editions.size()];
-        for (int i = 0; i < editions.size(); i++) {
-            editionItems[i] = String.valueOf(editions.get(i));
-        }
-        reflectionsYear.setEntries(editionItems);
-        reflectionsYear.setEntryValues(editionItems);
+        });
     }
 
     @NonNull
@@ -187,8 +198,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 return getResources().getString(R.string.en_language);
             case "es":
                 return getResources().getString(R.string.es_language);
-                default:
-                    throw new IllegalArgumentException("Unknown language used");
+            default:
+                throw new IllegalArgumentException("Unknown language used");
         }
     }
 

@@ -330,6 +330,25 @@ public class WebServiceManager {
         return editions;
     }
 
+    public void getReflectionEditionsAsync(final OnOperationFinishedEventListener<ArrayList<Integer>> listener) {
+        AsyncTask<Long, Integer, ArrayList<Integer>> downloadTask = new AsyncTask<Long, Integer, ArrayList<Integer>>() {
+            @Override
+            protected ArrayList<Integer> doInBackground(Long... params) {
+                return getReflectionEditions();
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<Integer> editions) {
+                super.onPostExecute(editions);
+
+                if (listener != null) {
+                    listener.onOperationFinished(editions);
+                }
+            }
+        };
+        downloadTask.execute();
+    }
+
     public void getReflectionsAudioAsync(ReflectionList list, final OnOperationFinishedEventListener listener) {
         if (mDownloadInProgress) {
             return;
