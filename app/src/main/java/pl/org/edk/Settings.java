@@ -30,7 +30,8 @@ public class Settings extends SettingsBase {
 
     public static final int VERSION_CODE = R.string.pref_versionCode;
 
-    public static final String NOTIFICATION_CHANNEL_ID = "EdkChannel";
+    public static final String NOTIFICATION_MAIN_CHANNEL_ID = "EdkChannel";
+    public static final String NOTIFICATION_LOW_PRIORITY_CHANNEL_ID = "EdkChannelLowPriority";
     // Variables
 
     public static boolean CAN_USE_STORAGE = false; // if app has permission WRITE_EXTERNAL_STORAGE

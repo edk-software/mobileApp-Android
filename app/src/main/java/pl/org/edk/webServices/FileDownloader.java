@@ -45,10 +45,11 @@ public class FileDownloader {
         mDisplayNotification = true;
 
         mNotifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(mContext, Settings.NOTIFICATION_CHANNEL_ID);
+        mBuilder = new NotificationCompat.Builder(mContext, Settings.NOTIFICATION_LOW_PRIORITY_CHANNEL_ID);
         mBuilder.setContentTitle(title)
                 .setContentText("")
-                .setSmallIcon(icon);
+                .setSmallIcon(icon)
+                .setPriority(NotificationCompat.PRIORITY_LOW);
 
         mProgressText = progressText;
         mFinishedText = finishedText;

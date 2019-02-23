@@ -123,7 +123,7 @@ public class ReflectionsAudioService extends Service implements
         if (mReflection == null) {
             throw new IllegalStateException("Reflection was not set");
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Settings.NOTIFICATION_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Settings.NOTIFICATION_MAIN_CHANNEL_ID)
                 .setContentTitle(mReflection.getDisplayName())
                 .setContentText("")
                 .setSmallIcon(R.mipmap.ic_launcher)
