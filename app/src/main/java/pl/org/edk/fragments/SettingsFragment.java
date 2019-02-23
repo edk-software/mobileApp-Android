@@ -135,7 +135,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     private void initView() {
         initReflectionSection();
-        initUpdateSection();
+        if (TempSettings.get(getContext()).isUserOnTrack()) {
+            PreferenceScreen preferenceScreen = (PreferenceScreen) findPreference(getString(R.string.pref_screen));
+            PreferenceCategory updateCategory = (PreferenceCategory) findPreference(getString(R.string.pref_cat_update));
+            preferenceScreen.removePreference(updateCategory);
+        } else {
+            initUpdateSection();
+        }
     }
 
     private void initReflectionSection() {

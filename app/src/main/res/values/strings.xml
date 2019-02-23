@@ -7,6 +7,7 @@
 	<string name="about_edk">Ekstremalna Droga Krzyzowa to forma duchowości, która dla wielu staje się sposobem na życie. Prawdziwe Spotkanie z Nim pośrodku Zmagania sprawia, że nie chce się już żyć normalnie, tylko ekstremalnie, czyli w pełni.\n\nEkstremalna Droga Krzyżowa jest proponowaną formą duchowości.\n\nNie jest to pielgrzymka.\nEDK polega na pokonaniu w nocy wybranej trasy, medytowaniu rozważań i zmaganiu się z własnymi słabościami.\nMa charakter indywidualny, podczas przejścia wybraną trasą, w razie jakichkolwiek nieprzewidzianych zdarzeń, jesteś zdany wyłącznie na własne siły.\n\nWiecej informacji znajdziesz na naszej stronie:</string>
 	<string name="about_app">Aplikacja pomaga uczestnikom Ekstremalnej Drogi Krzyżowej przeżyć ją w pełni.\n\nZamieszczone przy każdej stacji wskazówki oraz nawigacja GPS pozwolą skupić się na pokonywaniu własnych słabości, bez konieczności przejmowania się szczegółami.\n\nEDK to jednak przede wszystkim forma duchowości. Medytacja załączonych rozważań pozwoli na jeszcze bliższe Spotkanie z Nim.\n\nAutorem aplikacji jest Paweł Wawrzynek. Jeżeli masz jakiekolwiek sugestie, napisz!</string>
 
+	<string name="pref_screen">PrefScreen</string>
 	<string name="pref_followLocationOnMap">FollowLocationOnMap</string>
 	<string name="pref_backgroundTrackingOn">trackingTurnedOn</string>
 	<string name="pref_audioDownloadDialogShown">audioDownloadDialogShown</string>
@@ -21,6 +22,7 @@
 	<string name="pref_update_reflections">syncReflections</string>
 	<string name="pref_update_reflections_audio">syncReflectionsAudio</string>
 	<string name="pref_update_button">syncButton</string>
+	<string name="pref_cat_update">syncCategory</string>
 	<string name="pref_cleanup_button">cleanupButton</string>
 	<string name="pref_do_not_show_gps_dialog">doNotShowGpsDialog</string>
 	<string name="pref_show_archive_routes">showArchiveRoutes</string>
