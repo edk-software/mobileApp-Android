@@ -54,7 +54,7 @@
 
 	<string name="waiting_for_position_message">Defining your position</string>
 	<string name="stop_listening">Stop</string>
-	<string name="GPS_off_warning_message">GPS is off - your position will not be precisely defined</string>
+	<string name="GPS_off_warning_message">GPS is off - your position will not be precisely defined. Enable access to your location and set mode to use GPS (high accuracy)</string>
 	<string name="go_to_location_settings">Go to location settings</string>
 	<string name="ignore">Ignore</string>
 	<string name="station">"Station"</string>
@@ -145,7 +145,8 @@
 
 	<string name="file_access_error">Cannot play audio file - access error.</string>
 	<string name="no_permission_message_yesno">App needs all permissions to work properly. Do you want to go to settings section and change permissions?</string>
-	<string name="no_storage_permission_message_yesno">App has no permission to write to device storage. This permission is necessary to be able to use audio reflections. Do you want to go to settings section and change permissions?</string>
+	<string name="no_storage_permission_message">App has no permission to write to device storage. This permission is necessary to be able to show track on map and to use audio reflections.</string>
+	<string name="no_storage_permission_message_yesno">App has no permission to write to device storage. This permission is necessary to be able to show track on map and to use audio reflections. Do you want to go to settings section and change permissions?</string>
 	<string name="no_gps_permission_message_yesno">App has no permission to use GPS. This permission is necessary to be able to use maps. Do you want to go to settings section and change permissions?</string>
 
 	<string name="about_edk_activity">About EWC</string>
@@ -155,6 +156,8 @@
 	<string name="pl_language">Polish</string>
 	<string name="en_language">English</string>
 	<string name="es_language">Spanish</string>
+    <string name="channel_name">Notifications</string>
+	<string name="channel_description">All application notifications</string>
 
 	<string-array name="reflection_languages">
 		<item>pl</item>

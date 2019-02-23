@@ -29,7 +29,7 @@ public final class BootStrap {
         mIsInitialized = true;
     }
 
-    private static void initStorage(Context context){
+    public static void initStorage(Context context){
         String path = Environment.getExternalStorageDirectory() + "/edk";
         File folder = new File(path);
         if(!folder.exists()) {

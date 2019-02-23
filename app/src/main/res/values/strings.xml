@@ -54,7 +54,7 @@
 
 	<string name="waiting_for_position_message">Określanie Twojej pozycji</string>
 	<string name="stop_listening">Zatrzymaj</string>
-	<string name="GPS_off_warning_message">GPS jest wyłączony - Twoja pozycja nie będzie dokładnie określana</string>
+	<string name="GPS_off_warning_message">GPS jest wyłączony - Twoja pozycja nie będzie dokładnie określana. Włącz dostęp do swojej lokalizacji i ustaw tryb wykorzystujący GPS (wysoka dokładność)</string>
 	<string name="go_to_location_settings">Przejdź do ustawień lokalizacji</string>
 	<string name="ignore">Ignoruj</string>
 	<string name="station">"Stacja"</string>
@@ -145,7 +145,8 @@
 
 	<string name="file_access_error">Nie można odtworzyć pliku audio - błąd dostępu.</string>
 	<string name="no_permission_message_yesno">Aplikacja nie może działać bez akceptacji wszystkich uprawnień. Czy chcesz przejść do ustawień aby zmienić uprawnienia?</string>
-	<string name="no_storage_permission_message_yesno">Aplikacja nie ma uprawnień do zapisu do pamięci urządzenia. Uprawnienie to jest konieczne do korzystania z rozważań audio. Czy chcesz przejść do ustawień aby zmienić uprawnienia?</string>
+	<string name="no_storage_permission_message">Aplikacja nie ma uprawnień do zapisu do pamięci urządzenia. Uprawnienie to jest konieczne do wyświetlania trasy na mapie oraz korzystania z rozważań audio.</string>
+	<string name="no_storage_permission_message_yesno">Aplikacja nie ma uprawnień do zapisu do pamięci urządzenia. Uprawnienie to jest konieczne do wyświetlania trasy na mapie oraz korzystania z rozważań audio. Czy chcesz przejść do ustawień aby zmienić uprawnienia?</string>
 	<string name="no_gps_permission_message_yesno">Aplikacja nie ma uprawnień do korzystania z GPS. Uprawnienie to jest konieczne do korzystania z map. Czy chcesz przejść do ustawień aby zmienić uprawnienia?</string>
 
 	<string name="about_edk_activity">O EDK</string>
@@ -155,8 +156,10 @@
 	<string name="pl_language">Polski</string>
 	<string name="en_language">Angielski</string>
 	<string name="es_language">Hiszpański</string>
+    <string name="channel_name">Powiadomienia</string>
+    <string name="channel_description">Wszystkie powiadomienia aplikacji</string>
 
-	<string-array name="reflection_languages">
+    <string-array name="reflection_languages">
 		<item>pl</item>
 		<item>en</item>
 		<item>es</item>

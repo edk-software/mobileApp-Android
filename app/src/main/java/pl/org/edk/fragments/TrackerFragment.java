@@ -1,13 +1,17 @@
 package pl.org.edk.fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,11 +107,15 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
         if (!mTrackerAvailable) {
             return true;
         }
-        TempSettings tempSettings = TempSettings.get(getActivity());
+        FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return true;
+        }
+        TempSettings tempSettings = TempSettings.get(activity);
         try {
             KMLTracker tracker = getTracker();
             if (!tracker.isComplete() && !tempSettings.getBoolean(TempSettings.TRACK_WARNING_SHOWN) && isFragmentVisible()) {
-                DialogUtil.showWarningDialog(R.string.stations_missing_warning_message, getActivity(), false);
+                DialogUtil.showWarningDialog(R.string.stations_missing_warning_message, activity, false);
                 tempSettings.set(TempSettings.TRACK_WARNING_SHOWN, true);
             }
             return false;
@@ -115,7 +123,7 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
             mTrackerAvailable = false;
             Log.e("EDK", "Invalid track", e);
             if (isFragmentVisible() && !tempSettings.getBoolean(TempSettings.TRACK_WARNING_SHOWN)) {
-                DialogUtil.showWarningDialog(R.string.unrecognized_error_while_reading_track, getActivity(), false);
+                DialogUtil.showWarningDialog(R.string.unrecognized_error_while_reading_track, activity, false);
                 tempSettings.set(TempSettings.TRACK_WARNING_SHOWN, true);
             }
             return true;
@@ -123,7 +131,17 @@ public abstract class TrackerFragment extends Fragment implements KMLTracker.Tra
     }
 
     private void verifyWhetherGPSIsEnabled() {
-        final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        FragmentActivity activity = getActivity();
+        if (activity == null){
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED){
+            return;
+        }
+        final LocationManager manager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        if (manager == null){
+            return;
+        }
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }

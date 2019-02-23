@@ -1,21 +1,23 @@
 package pl.org.edk.menu;
 
+import android.Manifest;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.TextView;
 
+import pl.org.edk.BootStrap;
 import pl.org.edk.MainActivity;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
@@ -29,8 +31,10 @@ import pl.org.edk.util.DialogUtil;
 
 public class RouteDescriptionActivity extends FragmentActivity implements MapFragment.OnStationSelectListener {
 
+    private static final int REQUEST_CODE = 4;
     private Route mRoute;
     private WebView mDescriptionTextView;
+    private TextView mDescriptionHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,8 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
 
         initView();
 
-        mDescriptionTextView = (WebView) findViewById(R.id.descriptionText);
+        mDescriptionTextView = findViewById(R.id.descriptionText);
+        mDescriptionHeader = findViewById(R.id.descriptionHeader);
 
         long routeId = TempSettings.get(this).getLong(TempSettings.SELECTED_ROUTE_ID, -1);
         mRoute = DbManager.getInstance(this).getRouteService().getRoute(routeId, "pl");
@@ -81,34 +86,70 @@ public class RouteDescriptionActivity extends FragmentActivity implements MapFra
 
     private void downloadRouteDetailsAsync() {
         if (!mRoute.isDownloaded()) {
-            DialogUtil.showBusyDialog(R.string.downloading_message, this);
-            WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
-                @Override
-                public void onOperationFinished(Object result) {
-                    DialogUtil.closeBusyDialog();
-                    if (result != null && ((Route) result).isDownloaded()) {
-                        mRoute = (Route) result;
-                        setRouteDescription();
-                    } else {
-                        showRouteUnavailableWarning();
-                    }
-                }
-            };
-            WebServiceManager.getInstance(this).syncRouteAsync(mRoute.getServerID(), listener);
+            checkPermission();
         } else {
             setRouteDescription();
         }
     }
 
+    private void checkPermission() {
+        boolean canUseStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if (canUseStorage){
+            permissionGranted();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != REQUEST_CODE) {
+            return;
+        }
+        if (grantResults.length == 0) {
+            return;
+        }
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            permissionGranted();
+        }else{
+            permissionDenied();
+        }
+    }
+
+    private void permissionDenied() {
+        DialogUtil.showWarningDialog(R.string.no_storage_permission_message, this, true);
+    }
+
+    private void permissionGranted() {
+        DialogUtil.showBusyDialog(R.string.downloading_message, this);
+        BootStrap.initStorage(this);
+        WebServiceManager.OnOperationFinishedEventListener listener = new WebServiceManager.OnOperationFinishedEventListener() {
+            @Override
+            public void onOperationFinished(Object result) {
+                DialogUtil.closeBusyDialog();
+                if (result != null && ((Route) result).isDownloaded()) {
+                    mRoute = (Route) result;
+                    setRouteDescription();
+                } else {
+                    showRouteUnavailableWarning();
+                }
+            }
+        };
+        WebServiceManager.getInstance(this).syncRouteAsync(mRoute.getServerID(), listener);
+    }
+
     private void showRouteUnavailableWarning() {
         DialogUtil.showWarningDialog("Szczegóły tej trasy aktualnie nie są dostępne, proszę spróbować później.",
-                RouteDescriptionActivity.this, false);
+                RouteDescriptionActivity.this, true);
     }
 
     private void setRouteDescription() {
         String descriptionHtml = mRoute.getDescriptions().get(0).getDescription();
         if (descriptionHtml == null || descriptionHtml.isEmpty()) {
-            descriptionHtml = getString(R.string.description_unavailable);
+            mDescriptionHeader.setVisibility(View.GONE);
+            mDescriptionTextView.setVisibility(View.GONE);
+            return;
         }
 
         String text = decorateHtmlWithColors(descriptionHtml);

@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -19,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.org.edk.BootStrap;
 import pl.org.edk.R;
 import pl.org.edk.Settings;
 import pl.org.edk.TempSettings;
@@ -48,6 +49,9 @@ import pl.org.edk.util.NumConverter;
  */
 public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener,
         OnMapReadyCallback {
+
+    private static final int REQUEST_CODE_MAP = 3;
+    private static final int REQUEST_CODE_STORAGE = 2;
 
     public interface OnStationSelectListener {
         void onStationSelect(int stationIndex);
@@ -166,7 +170,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         for (int i = 1; i < checkpoints.size() - 1; i++) {
             MarkerOptions marker = new MarkerOptions();
             LatLng position = checkpoints.get(i);
-            if (position == null){
+            if (position == null) {
                 continue;
             }
             marker.position(position);
@@ -204,7 +208,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
     @Override
     public void onCameraIdle() {
-        if (mMap == null){
+        if (mMap == null) {
             return;
         }
         lastCameraZoom = mMap.getCameraPosition().zoom;
@@ -242,7 +246,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
     @Override
     public void onLocationChanged(LatLng location) {
-        if (getActivity() == null){
+        if (getActivity() == null) {
             return;
         }
         if (mMap != null && shouldFollowLocation()) {
@@ -252,10 +256,10 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
             } else { // map oriented to walk direction
 
-                if(lastUserPosition == null){
+                if (lastUserPosition == null) {
                     lastUserPosition = getTracker().getLastLoc();
                 }
-                float currentBearing = getBearing(lastUserPosition,location);
+                float currentBearing = getBearing(lastUserPosition, location);
 
                 CameraPosition cameraPosition = new CameraPosition.Builder(mMap.getCameraPosition())
                         .target(location)      // Sets the center of the map
@@ -263,7 +267,7 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
                         .bearing(currentBearing)                // Sets the orientation of the camera
                         //.tilt(30)                   // Sets the tilt of the camera to 30 degrees
                         .build();                   // Creates a CameraPosition from the builder
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),500,null);
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 500, null);
                 //Toast.makeText(getContext(),"bearing "+currentBearing,Toast.LENGTH_SHORT).show();
                 lastUserPosition = location;
 
@@ -274,27 +278,28 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
 
     /**
      * Method for calculating bearing (walk direction) between two locations. North = 0, East = 90 deg
-     * @param prevLocation - previous location
+     *
+     * @param prevLocation    - previous location
      * @param currentLocation - current location
      * @return walk bearing in degrees. If both locations are equal, returns 0.
      */
-    public float getBearing(LatLng prevLocation, LatLng currentLocation){
+    public float getBearing(LatLng prevLocation, LatLng currentLocation) {
         double output;
         double dX = currentLocation.latitude - prevLocation.latitude;
         double dY = currentLocation.longitude - prevLocation.longitude;
         try {
-            if(dY == 0){
+            if (dY == 0) {
                 return (dX >= 0) ? 0 : 180;
             }
-            if(dX == 0){
+            if (dX == 0) {
                 return (dY >= 0) ? 90 : 270;
             }
-            output = Math.atan(dY/dX) * 180 / Math.PI;
-            if(dX < 0){
-                return (float)(output+180);
+            output = Math.atan(dY / dX) * 180 / Math.PI;
+            if (dX < 0) {
+                return (float) (output + 180);
             }
-            if(dY < 0){
-                return (float)(output+360);
+            if (dY < 0) {
+                return (float) (output + 360);
             }
             return 0;
         } catch (Exception e) {
@@ -313,44 +318,13 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         Log.i(TAG, "Map initialization");
         Log.i(TAG, "isVisible() " + isVisible() + " isMenuVisible()" + isMenuVisible());
 
-        Settings.CAN_USE_GPS = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        if (Settings.CAN_USE_GPS) {
+        boolean permissionGranted = useLocationIfPermissionGranted();
 
-            mMap.setMyLocationEnabled(isFragmentVisible());
-
-        } else {
-
-            buildAlertMessageNoGpsPermissions();
-            /*DialogUtil.showYesNoDialog(R.string.no_permission_title, R.string.no_gps_permission_message_yesno, getActivity(), new DialogUtil.OnSelectedEventListener() {
-                @Override
-                public void onAccepted() {
-                    startAppSettingsActivity();
-                }
-                @Override
-                public void onRejected() {
-                    //no action for now
-                }
-            });*/
-        }
-
-        UiSettings settings = mMap.getUiSettings();
-        settings.setCompassEnabled(true);
-        settings.setZoomControlsEnabled(true);
-        settings.setAllGesturesEnabled(true);
-        settings.setMapToolbarEnabled(false);
-        setMapPadding();
-        mMap.setOnInfoWindowClickListener(this);
-        mMap.setOnCameraIdleListener(this);
-
-        if (verifyTracker()){
+        if (permissionGranted) {
+            initMap();
             return;
         }
-
-        decorateMap();
-        focusCameraOnLastLocation();
-
-        changeLocationUpdates(isFragmentVisible());
-
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_MAP);
     }
 
     private void setMapPadding() {
@@ -382,10 +356,72 @@ public class MapFragment extends TrackerFragment implements GoogleMap.OnInfoWind
         if (mMap == null) {
             return;
         }
-        Settings.CAN_USE_GPS = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        if (Settings.CAN_USE_GPS) {
+        useLocationIfPermissionGranted();
+    }
+
+    private boolean useLocationIfPermissionGranted() {
+        FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return false;
+        }
+        boolean canUseGPS = ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        if (canUseGPS) {
             mMap.setMyLocationEnabled(isFragmentVisible());
         }
+        return canUseGPS;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != REQUEST_CODE_MAP && requestCode != REQUEST_CODE_STORAGE) {
+            return;
+        }
+        if (grantResults.length == 0) {
+            return;
+        }
+        if (permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                initMap();
+            } else {
+                buildAlertMessageNoGpsPermissions();
+            }
+        } else if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                BootStrap.initStorage(getContext());
+                initTrackerRelatedMapStuff();
+            } else {
+                DialogUtil.showWarningDialog(R.string.no_storage_permission_message, getActivity(), false);
+            }
+        }
+    }
+
+    private void initMap() {
+        UiSettings settings = mMap.getUiSettings();
+        settings.setCompassEnabled(true);
+        settings.setZoomControlsEnabled(true);
+        settings.setAllGesturesEnabled(true);
+        settings.setMapToolbarEnabled(false);
+        setMapPadding();
+        mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnCameraIdleListener(this);
+
+        FragmentActivity activity = getActivity();
+        if (activity != null && ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE);
+        }
+
+        initTrackerRelatedMapStuff();
+    }
+
+    private void initTrackerRelatedMapStuff() {
+        if (verifyTracker()) {
+            return;
+        }
+
+        decorateMap();
+        focusCameraOnLastLocation();
+
+        changeLocationUpdates(isFragmentVisible());
     }
 
     @NonNull

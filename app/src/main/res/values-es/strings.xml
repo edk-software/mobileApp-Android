@@ -54,7 +54,7 @@
 
 	<string name="waiting_for_position_message">Determinando su ubicación</string>
 	<string name="stop_listening">Detener</string>
-	<string name="GPS_off_warning_message">GPS está deshabilitado - su ubicación no se determinará con precisión</string>
+	<string name="GPS_off_warning_message">GPS está deshabilitado - su ubicación no se determinará con precisión. Habilite el acceso a su ubicación y configure el modo para usar GPS (alta precisión)</string>
 	<string name="go_to_location_settings">Ir a configuración de ubicación</string>
 	<string name="ignore">Ignorar</string>
 	<string name="station">"Estación"</string>
@@ -145,7 +145,8 @@
 
 	<string name="file_access_error">El archivo de audio no se puede reproducir - error de acceso.</string>
 	<string name="no_permission_message_yesno">La aplicación no puede funcionar sin la aceptación de todos los permisos. ¿Quiere ir a configuración para cambiar los permisos?</string>
-	<string name="no_storage_permission_message_yesno">La aplicación no tiene permisos para registrarse en la memoria del dispositivo. Este permiso es necesario para usar meditaciones de audio. ¿Quiere ir a configuración para cambiar los permisos?</string>
+	<string name="no_storage_permission_message">La aplicación no tiene permisos para registrarse en la memoria del dispositivo. Este permiso es necesario para poder mostrar la ruta en el mapa y para usar meditaciones de audio.</string>
+	<string name="no_storage_permission_message_yesno">La aplicación no tiene permisos para registrarse en la memoria del dispositivo. Este permiso es necesario para poder mostrar la ruta en el mapa y para usar meditaciones de audio. ¿Quiere ir a configuración para cambiar los permisos?</string>
 	<string name="no_gps_permission_message_yesno">La aplicación no tiene permiso para usar el GPS. Este permiso es necesario para usar los mapas. ¿Quiere ir a configuración para cambiar los permisos?</string>
 
 	<string name="about_edk_activity">Sobre VCE</string>
@@ -155,8 +156,10 @@
 	<string name="pl_language">Polaco</string>
 	<string name="en_language">Inglés</string>
 	<string name="es_language">Español</string>
+    <string name="channel_name">Notificaciones</string>
+    <string name="channel_description">Todas las notificaciones de aplicaciones</string>
 
-	<string-array name="reflection_languages">
+    <string-array name="reflection_languages">
 		<item>pl</item>
 		<item>en</item>
 		<item>es</item>
