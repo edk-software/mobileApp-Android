@@ -7,6 +7,7 @@
 	<string name="about_edk">Extreme Way of the Cross is a form of spirituality, which for many people becomes a way of life. The real Meeting with Him in the middle of the Struggle makes you don\'t want to live normally any more - but live extremely, which means: fully.\n\nExtreme Way of the Cross is a proposed form of spirituality.\n\nIt\'s not a pilgrimage.\nEWC consists in covering the chosen route during the night, contemplating reflections and struggling with ones\' weaknesses.\nIt\'s an event of individual kind; if any unpredictable things happen during your walk, you can rely only on yourself.\n\nMore info can be found on our website:</string>
 	<string name="about_app">This app helps you experience the Extreme Way of the Cross fully.\n\nGPS navigation and directions attached to each station let you focus on beating your weaknesses, not bothering about the details.\n\nHowever EWC is mainly a form of spirituality. Contemplation of attached reflections allows for closer Encounter with Him.\n\nThe author of the app is Paweł Wawrzynek. If you have any suggestions, let us know!</string>
 
+	<string name="pref_screen">PrefScreen</string>
 	<string name="pref_followLocationOnMap">FollowLocationOnMap</string>
 	<string name="pref_backgroundTrackingOn">trackingTurnedOn</string>
 	<string name="pref_audioDownloadDialogShown">audioDownloadDialogShown</string>
@@ -21,6 +22,7 @@
 	<string name="pref_update_reflections">syncReflections</string>
 	<string name="pref_update_reflections_audio">syncReflectionsAudio</string>
 	<string name="pref_update_button">syncButton</string>
+	<string name="pref_cat_update">syncCategory</string>
 	<string name="pref_cleanup_button">cleanupButton</string>
 	<string name="pref_do_not_show_gps_dialog">doNotShowGpsDialog</string>
 	<string name="pref_show_archive_routes">showArchiveRoutes</string>

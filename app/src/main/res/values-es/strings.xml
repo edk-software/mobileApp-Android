@@ -7,6 +7,7 @@
 	<string name="about_edk">Vía Crucis Extremo es una forma de espiritualidad que para muchos se convierte en una forma de vida. El verdadero Encuentro con Él en medio de la lucha le hace ya no querer vivir normalmente, sino extramadamente, lo que significa: plenamente.\n\nVía Crucis Extremo es una forma propuesta de espiritualidad.\n\nNo es una peregrinación.\nVCE consiste de vencer por la noche una ruta elegida, reflexionar sobre las meditaciones y luchar con sus propias debilidades.\n Tiene un carácter individual; durante el camino en su ruta elegida, en caso de cualquier evento imprevisto, puede contar solo consigo mismo.\n\nPara obtener más información, visite nuestro sitio web:</string>
 	<string name="about_app">La aplicación ayuda a los participantes del Vía Crucis Extremo a experimentarlo plenamente.\n\nLas indicaciones publicadas en cada estación y navegación GPS le permitirán concentrarse en superar sus debilidades sin tener que preocuparse por los detalles.\n\nSin embargo, VCE es sobre todo una forma de espiritualidad. Reflexión sobre las meditaciones adjuntas permitirá realizar un Encuentro aún más cercano con Él.\n\nEl autor de la aplicación es Paweł Wawrzynek. Si tiene alguna sugerencia, ¡escribe!</string>
 
+	<string name="pref_screen">PrefScreen</string>
 	<string name="pref_followLocationOnMap">FollowLocationOnMap</string>
 	<string name="pref_backgroundTrackingOn">trackingTurnedOn</string>
 	<string name="pref_audioDownloadDialogShown">audioDownloadDialogShown</string>
@@ -21,6 +22,7 @@
 	<string name="pref_update_reflections">syncReflections</string>
 	<string name="pref_update_reflections_audio">syncReflectionsAudio</string>
 	<string name="pref_update_button">syncButton</string>
+	<string name="pref_cat_update">syncCategory</string>
 	<string name="pref_cleanup_button">cleanupButton</string>
 	<string name="pref_do_not_show_gps_dialog">doNotShowGpsDialog</string>
 	<string name="pref_show_archive_routes">showArchiveRoutes</string>

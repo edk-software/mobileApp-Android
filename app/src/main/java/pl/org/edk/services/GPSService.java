@@ -139,7 +139,7 @@ public class GPSService extends Service implements TrackListener{
 		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		intent.putExtra(Extra.GO_TO_MAP, true);
 		PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-		Builder builder = new NotificationCompat.Builder(this, Settings.NOTIFICATION_CHANNEL_ID)
+		Builder builder = new NotificationCompat.Builder(this, Settings.NOTIFICATION_MAIN_CHANNEL_ID)
 				.setContentTitle(getString(R.string.navigation_on_message))
 				.setContentText("")
 				.setSmallIcon(R.mipmap.ic_launcher)
